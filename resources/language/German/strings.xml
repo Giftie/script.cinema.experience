@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+    <!-- translated by mad-max -->
+<strings>
+    <!-- Title/Credit strings -->
+    <string id="32000">Cinema Experience</string>
+    <string id="32002">nuka1195</string>
+
+    <!-- Movie Trailers settings -->
+    <string id="32100">Movie Trailers</string>
+    <string id="32101">Keine</string>
+    <string id="32102">1 Trailer</string>
+    <string id="32103">2 Trailer</string>
+    <string id="32104">3 Trailer</string>
+    <string id="32105">4 Trailer</string>
+    <string id="32106">5 Trailer</string>
+    <string id="32107">10 Trailer</string>
+    <string id="32110">- Trailer Scraper</string>
+    <string id="32111">Apple Movie Trailers (Datenbank)</string>
+    <string id="32112">Apple Movie Trailers (Neuste)</string>
+    <string id="32113">Lokaler Ordern</string>
+    <string id="32120">   - Pfad zur Datenbank</string>
+    <string id="32130">   - Ordner</string>
+    <string id="32140">   - Limitiere Trailer durch Genre und MPAA Rating des Films</string>
+    <string id="32150">   - MPAA Rating Limit für Trailer</string>
+    <string id="32160">   - Wähle Trailer nur des neusten Genres</string>
+    <string id="32170">   - Bevorzugte Trailer Qualität</string>
+    <string id="32171">Standard</string>
+    <string id="32172">480p</string>
+    <string id="32173">720p</string>
+    <string id="32174">1080p</string>
+    <string id="32180">      - Wähle nur 720p/1080p Trailer</string>
+    <string id="32185">- Trailer Wiedergabe Modus</string>
+    <string id="32186">Stream</string>
+    <string id="32187">Download</string>
+    <string id="32190">- Wähle nur ungesehene Trailer</string>
+    <string id="32191">   - Gesehen Status der Trailer zurücksetzen</string>
+    <string id="32195">- Neue Werbung Intro</string>
+    <string id="32196">   - Datei</string>
+    <string id="32197">   - Ordner</string>
+    <string id="32198">- Neue Werbung Outro</string>
+
+    <!-- Trivia quiz settings -->
+    <string id="32200">Trivia Slideshow Dauer</string>
+    <string id="32201">Keine</string>
+    <string id="32202">2 min</string>
+    <string id="32203">5 min</string>
+    <string id="32204">10 min</string>
+    <string id="32205">15 min</string>
+    <string id="32206">20 min</string>
+    <string id="32207">30 min</string>
+    <string id="32208">45 min</string>
+    <string id="32210">- Slides Ordner</string>
+    <string id="32220">- Laufzeit pro Slide</string>
+    <string id="32221">5 sek</string>
+    <string id="32222">10 sek</string>
+    <string id="32223">15 sek</string>
+    <string id="32224">20 sek</string>
+    <string id="32225">30 sek</string>
+    <string id="32230">- Musik Playlist</string>
+    <string id="32231">- Play Music During Trivia Slideshow</string>
+    <string id="32232">   - Adjust Volume During Slideshow?</string>
+    <string id="32240">      - Musik Lautstärke (% von Max Volume)</string>
+    <string id="32241">      - Fade Volume After Slideshow?</string>
+    <string id="32242">         - Fade Time(in seconds)</string>
+    <string id="32250">- Trivia Outro</string>
+    <string id="32260">- Trivia Outro Musik</string>
+    <string id="32270">- Wähle nur ungesehene Slides</string>
+    <string id="32271">   - Gesehen Status für Slides zurücksetzen</string>
+    <string id="32280">- Trivia Intro</string>
+    <string id="32281">Keines</string>
+    <string id="32282">Einzelnes Video/Bild</string>
+    <string id="32283">1 zufälliges Video/Bild</string>
+    <string id="32284">2 zufällige Videos/Bilder</string>
+    <string id="32285">3 zufällige Videos/Bilder</string>
+    <string id="32286">4 zufällige Videos/Bilder</string>
+    <string id="32287">5 zufällige Videos/Bilder</string>
+    <string id="32288">   - Video/Bild Datei</string>
+    <string id="32289">   - Video/Bilder Ordner</string>
+    <string id="32290">- Limitiere Slides durch MPAA Rating des Films [I](benötigt slides.xml)[/I]</string>
+    <string id="32291">- MPAA Rating Limit für Slides [I](benötigt slides.xml)[/I]</string>
+
+    <!-- Special videos settings -->
+    <string id="32300">Film Rating Ordner</string>
+    <string id="32320">Feature Presentation Intro</string>
+    <string id="32321">Keines</string>
+    <string id="32322">Einzelnes Video/Playlist</string>
+    <string id="32323">1 zufälliges Video</string>
+    <string id="32324">2 zufällige Videos</string>
+    <string id="32325">3 zufällige Videos</string>
+    <string id="32326">4 zufällige Videos</string>
+    <string id="32327">5 zufällige Videos</string>
+    <string id="32330">Feature Presentation Outro</string>
+    <string id="32340">- Datei</string>
+    <string id="32350">- Ordner</string>
+    <string id="32360">Dolby/DTS Ordner</string>
+    <string id="32370">Kino Intro Clips</string>
+    <string id="32380">Kino Outro Clips</string>
+    <string id="32390">Coundown Video File</string>
+
+    <!-- Misc settings -->
+    <string id="32400">Run script before videos start</string>
+    <string id="32401">Disable Auto Refresh Setting</string>
+    <string id="32402">  - Re-Enable Auto Refresh For Movie</string>
+    
+    <!-- Feature Presentation settings -->
+    <string id="32410">Number Of Features</string>
+    <string id="32411">1 Feature</string>
+    <string id="32412">2 Features</string>
+    <string id="32413">3 Features</string>
+    <string id="32414">4 Features</string>
+    <string id="32415">5 Features</string>
+    <string id="32420">Intermission Video Folder</string>
+
+    <!-- Messages -->
+    <string id="32500">Wähle zufällige Trailer...</string>
+    <string id="32510">Erstelle zufällige Slideshow...</string>
+    <string id="32520">Erzeuge Playlist...</string>
+    <string id="32530">Resette Liste der gesehenen Slides...</string>
+    <string id="32531">Status der gesehenen Slides zurückgesetzt!</string>
+    <string id="32532">Status der gesehenen Slides nicht zurückgesetzt!</string>
+    <string id="32540">Resette Liste der gesehenen Trailer...</string>
+    <string id="32541">Status der gesehenen Trailer zurückgesetzt!</string>
+    <string id="32542">Status der gesehenen Trailer nicht zurückgesetzt!</string>
+
+    <!-- Genre/Studio labels -->
+    <!-- Do not Translate -->
+    <string id="32600">Coming Attractions Intro</string>
+    <string id="32601">Feature Presentation Intro</string>
+    <string id="32602">Feature Presentation Outro</string>
+    <string id="32603">MPAA Rating</string>
+    <string id="32604">Home Theatre</string>
+    <string id="32605">Movie Trailer</string>
+    <string id="32606">Audio Format</string>
+    <string id="32607">Movie Theater Clips</string>
+    <string id="32608">Coming Attractions Outro</string>
+    <string id="32609">Trivia Intro</string>
+    <string id="32610">Trivia Outro</string>
+    <string id="32611">Countdown</string>
+    <string id="32612">Intermission</string>
+    <!-- Start Translating Again -->
+
+    <!-- compatible messages -->
+    <string id="32700">Version</string>
+    <string id="32701">Diese version von %s benötigt eine</string>
+    <string id="32702">XBMC revision von %s oder höher.</string>
+    <string id="32703">Bitte update XBMC.</string>
+
+    <!-- Label separators -->
+    <string id="32800">Film Trailers</string>
+    <string id="32801">Trivia Slideshow</string>
+    <string id="32802">Spezielle Videos</string>
+    <string id="32803">Weitere Einstellungen</string>
+
+</strings>
