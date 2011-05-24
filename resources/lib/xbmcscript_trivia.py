@@ -22,10 +22,17 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from folder import dirEntries
 from ce_playlist import build_music_playlist
-if _S_("pre_eden") == "true":
+
+try:
     from pre_eden_code import _rebuild_playlist
-else:
+    from xbmcvfs import delete as delete_file
+    from xbmcvfs import exists as exists
+    from xbmcvfs import copy as file_copy
+except:
     from dharma_code import _rebuild_playlist
+    from os import remove as delete_file
+    exists = os.path.exists
+    from shutil import copy as file_copy
 
 class Trivia( xbmcgui.WindowXML ):
     # base paths
@@ -45,7 +52,6 @@ class Trivia( xbmcgui.WindowXML ):
         # initialize our class variable
         self.plist = kwargs[ "plist" ]
         self.slide_playlist = kwargs[ "slide_playlist" ]
-        self.movie_db = kwargs[ "movie_db" ]
         self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
         self._init_variables()
         # turn screensaver off
@@ -74,15 +80,12 @@ class Trivia( xbmcgui.WindowXML ):
 
     def _get_current_volume( self ):
         # get the current volume
-        try: # first try jsonrpc
-            result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}')
-            match = re.search( '"result" : ([0-9]{1,3})', result )
-            if not match:
-                match = re.search( '"result":([0-9]{1,3})', result )
-            volume = int(match.group(1))
-        except: # Fall back onto httpapi
-            volume = int( xbmc.executehttpapi( "GetVolume" ).replace( "<li>", "" ) )
-        #xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGNOTICE)
+        result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}')
+        match = re.search( '"result" : ([0-9]{1,3})', result )
+        if not match:
+            match = re.search( '"result":([0-9]{1,3})', result )
+        volume = int(match.group(1))
+        xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume
 
     def _start_slideshow_music( self ):
@@ -110,6 +113,7 @@ class Trivia( xbmcgui.WindowXML ):
             self.slide_timer.cancel()
         # increment/decrement count
         self.image_count += slide
+        xbmc.log( "[script.cinema.experience] - Current Slide: %s" %, self.slide_playlist[ self.image_count ], level=xbmc.LOGDEBUG)
         # check for invalid count, TODO: make sure you don't want to reset timer
         # check to see if playlist has come to an end
         if not xbmc.Player().isPlayingAudio() and int(self.settings[ "trivia_music" ]) > 0:
@@ -164,8 +168,8 @@ class Trivia( xbmcgui.WindowXML ):
 
     def _reset_watched( self ):
         base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
-        if os.path.isfile( base_path ):
-            os.remove( base_path )
+        if exists( base_path ):
+            delete_file( base_path )
             self.watched = []
 
     def _get_slide_timer( self ):
@@ -177,7 +181,6 @@ class Trivia( xbmcgui.WindowXML ):
         self.global_timer.start()
 
     def _exit_trivia( self ):
-        #xbmcgui.Window( xbmcgui.getCurrentWindowId() ).setProperty( "Slide", self.slide_playlist[ 1 ] )
         import xbmcscript_player as script
         script.Main()
         # notify we are exiting

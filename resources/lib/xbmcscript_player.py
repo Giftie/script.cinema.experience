@@ -42,11 +42,8 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info
 if _S_("pre_eden") == "true":
     from pre_eden_code import _get_queued_video_info
-    from json_utils import retrieve_movie_db
-    movie_db = retrieve_movie_db()
 else:
     from dharma_code import _get_queued_video_info
-    movie_db = None
 
 class Main:
     def __init__( self ):
@@ -138,7 +135,7 @@ class Main:
                     mpaa, audio, genre, movie, equivalent_mpaa = self._add_intermission_videos()
             # otherwise just build for a single video
             else:
-                mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( movie_db=None, feature = 0 )
+                mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = 0 )
             self._create_playlist( mpaa, audio, genre, movie, equivalent_mpaa )
             # play the trivia slide show
         except:
@@ -149,7 +146,7 @@ class Main:
         count = 0
         index_count = 1
         for feature in range( 1, self.playlistsize ):
-            mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( movie_db=None, feature = index_count )
+            mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = index_count )
             #count = index_count
             # add intermission video
             if int( _S_( "intermission_video") ) > 0:
@@ -217,18 +214,6 @@ class Main:
         xbmc.log( "[script.cinema.experience] - Building Cinema Experience Playlist",level=xbmc.LOGNOTICE )
         # get Dolby/DTS videos
         xbmc.log( "[script.cinema.experience] - Adding Audio Format Video",level=xbmc.LOGNOTICE )
-        if ( _S_( "enable_audio" ) ) == "true" and ( _S_( "audio_videos_folder" ) ):
-            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-            _get_special_items(    playlist=self.playlist,
-                                      items=1 * ( _S_( "audio_videos_folder" ) != "" ),
-                                       path=xbmc.translatePath( _S_( "audio_videos_folder" ) ) + { "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD"  }.get( audio, "Other" ) + xbmc.translatePath( _S_( "audio_videos_folder" ) )[ -1 ],
-                                      genre=_L_( 32606 ),
-                                     writer=_L_( 32606 ),
-                                      index=0
-                               )
-            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
-                # Insert Audio Format Label into Trigger List
-                self.trigger_list.insert( 0, _L_( 32606 ) )
         # Add Countdown video
         xbmc.log( "[script.cinema.experience] - Adding Countdown Videos: %s Video(s)" % (0, 1, 1, 2, 3, 4, 5,)[ int( _S_( "countdown_video" ) ) ], level=xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -242,6 +227,18 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Countdown Label into Trigger List
             self.trigger_list.insert( 0, _L_( 32611 ) )
+        if ( _S_( "enable_audio" ) ) == "true" and ( _S_( "audio_videos_folder" ) ):
+            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
+            _get_special_items(    playlist=self.playlist,
+                                      items=1 * ( _S_( "audio_videos_folder" ) != "" ),
+                                       path=xbmc.translatePath( _S_( "audio_videos_folder" ) ) + { "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD"  }.get( audio, "Other" ) + xbmc.translatePath( _S_( "audio_videos_folder" ) )[ -1 ],
+                                      genre=_L_( 32606 ),
+                                     writer=_L_( 32606 ),
+                                      index=0
+                               )
+            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+                # Insert Audio Format Label into Trigger List
+                self.trigger_list.insert( 0, _L_( 32606 ) )
         # get rating video
         xbmc.log( "[script.cinema.experience] - Adding Ratings Video",level=xbmc.LOGNOTICE )
         if ( _S_( "enable_ratings" ) ) == "true" :

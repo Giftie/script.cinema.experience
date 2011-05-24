@@ -45,7 +45,7 @@ def activate_on( trigger = "None" ):
         xbmc.output( "[script.cinema.experience] - [ home_automation.py ] - %s Triggered" % _L_( 32600 ), level=xbmc.LOGNOTICE )
         # place code below this line
     # Trailer
-    elif trigger ==_L_( 32605 ) and _S_( "" ) == "true":
+    elif trigger ==_L_( 32605 ) and _S_( "ha_trailer_start" ) == "true":
         xbmc.output( "[script.cinema.experience] - [ home_automation.py ] - %s Triggered" % _L_( 32605 ), level=xbmc.LOGNOTICE )
         # place code below this line
     # Coming Attractions Outro

@@ -15,6 +15,31 @@ _L_ = _A_.getLocalizedString
 # settings method
 _S_ = _A_.getSetting
 
+def _build_playlist( movie_titles ):
+    for movie in movie_titles:
+        xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie, level=xbmc.LOGNOTICE )
+        xbmc.executehttpapi( "SetResponseFormat()" )
+        xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
+        # select Movie path from movieview Limit 1
+        sql = "SELECT movieview.c16, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
+        xbmc.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), level=xbmc.LOGDEBUG )
+        # query database for info dummy is needed as there are two </field> formatters
+        try:
+            movie_title, movie_path, movie_filename, thumb, genre, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql ), ).split( "</field>" )
+        except:
+            xbmc.log( "[script.cinema.experience] - Unable to match movie", level=xbmc.LOGERROR )
+            movie_title = movie_path = movie_filename = thumb = genre = dummy = ""
+        movie_full_path = os.path.join(movie_path, movie_filename).replace("\\\\" , "\\")
+        xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie_title, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - Movie Path: %s" % movie_path, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - Movie Filename: %s" % movie_filename, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie_full_path, level=xbmc.LOGNOTICE )
+        if movie_title:
+            listitem = xbmcgui.ListItem(movie_title, thumbnailImage=thumb)
+            listitem.setInfo('video', {'Title': movie_title, 'Genre': genre})
+            playlist.add(url=movie_full_path, listitem=listitem, )
+            xbmc.sleep( 50 )
+
 def _store_playlist():
     p_list = []
     try:
@@ -74,7 +99,7 @@ def _get_movie_details( movie_title="", thumbnail="", movie_full_path="" ):
     plot, plotoutline, runtime, mpaa, year, studio, genre, writer, director, tagline, votes, imdbcode, rating, top250, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql_query ), ).split( "</field>" )
     return plot, plotoutline, runtime, mpaa, year, studio, genre, writer, director, tagline, votes, imdbcode, rating, votes, top250
     
-def _get_queued_video_info( movie_db=None, feature = 0 ):
+def _get_queued_video_info( feature = 0 ):
     xbmc.log( "%s - _get_queued_video_info() Started" % log_message, level=xbmc.LOGDEBUG )
     equivalent_mpaa = "NR"
     try:

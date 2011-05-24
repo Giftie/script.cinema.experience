@@ -6,7 +6,8 @@ log_sep = "-"*70
 
 import xbmc, xbmcgui, xbmcaddon
 import traceback, os
-from json_utils import find_movie_details
+from urllib import quote_plus
+from json_utils import find_movie_details, retrieve_json_dict
 
 _A_ = xbmcaddon.Addon( __scriptID__ )
 # language method
@@ -14,23 +15,39 @@ _L_ = _A_.getLocalizedString
 # settings method
 _S_ = _A_.getSetting
 
+def _build_playlist( movie_titles ):
+    for movie in movie_titles:
+        xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie, level=xbmc.LOGNOTICE )
+        xbmc.executehttpapi( "SetResponseFormat()" )
+        xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
+        # select Movie path from movieview Limit 1
+        sql = "SELECT movieview.idMovie, movieview.c16, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
+        xbmc.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), level=xbmc.LOGDEBUG )
+        # query database for info dummy is needed as there are two </field> formatters
+        try:
+            movie_id, movie_title, movie_path, movie_filename, thumb, genre, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql ), ).split( "</field>" )
+            movie_id = int( movie_id )
+        except:
+            traceback.print_exc()
+            xbmc.log( "[script.cinema.experience] - Unable to match movie", level=xbmc.LOGERROR )
+            movie_id = 0
+            movie_title = movie_path = movie_filename = thumb = genre = dummy = ""
+        movie_full_path = os.path.join(movie_path, movie_filename).replace("\\\\" , "\\")
+        xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie_title, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - Movie Path: %s" % movie_path, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - Movie Filename: %s" % movie_filename, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie_full_path, level=xbmc.LOGNOTICE )
+        if not movie_id == 0:
+            json_command = '{"jsonrpc": "2.0", "method": "VideoPlaylist.Add", "params": {"item": {"movieid": %d} }, "id": 1}' % movie_id
+            json_response = xbmc.executeJSONRPC(json_command)
+            xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % movie_title, level=xbmc.LOGDEBUG )
+            xbmc.sleep( 50 )
+
 def _store_playlist():
     p_list = []
-    try:
-        xbmc.log( "[script.cinema.experience] - Storing Playlist", level=xbmc.LOGNOTICE )
-        true = True
-        false = False
-        null = None
-        json_query = '{"jsonrpc": "2.0", "method": "VideoPlaylist.GetItems", "params": {"fields": ["title", "file", "thumbnail", "plot", "plotoutline", "mpaa", "rating", "studio", "tagline", "top250", "votes", "year", "director", "writingcredits", "imdbnumber", "runtime", "genre"] }, "id": 1}'
-        json_response = xbmc.executeJSONRPC(json_query)
-        xbmc.log( "[script.cinema.experience] - JSONRPC -\n%s" % json_response, level=xbmc.LOGDEBUG )
-        response = json_response
-        if response.startswith( "{" ):
-            response = eval( response )
-        result = response['result']
-        p_list = result['items']
-    except:
-        xbmc.log( "[script.cinema.experience] - Error - Playlist Empty", level=xbmc.LOGNOTICE )
+    xbmc.log( "[script.cinema.experience] - Storing Playlist", level=xbmc.LOGNOTICE )
+    json_query = '{"jsonrpc": "2.0", "method": "VideoPlaylist.GetItems", "params": {"fields": ["title", "file", "thumbnail", "streamDetails", "mpaa", "genre"] }, "id": 1}'
+    p_list = retrieve_json_dict( json_query, items="items", force_log=False )
     return p_list
 
 def _rebuild_playlist( plist ): # rebuild movie playlist
@@ -43,39 +60,28 @@ def _rebuild_playlist( plist ): # rebuild movie playlist
             xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie["title"], level=xbmc.LOGDEBUG )
             xbmc.log( "[script.cinema.experience] - Movie Thumbnail: %s" % movie["thumbnail"], level=xbmc.LOGDEBUG )
             xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie["file"], level=xbmc.LOGDEBUG )
-            listitem = xbmcgui.ListItem( movie["title"], thumbnailImage=movie["thumbnail"] )
-            listitem.setInfo('Video', {'Title': movie["title"], 'Plot': movie["plot"], 'PlotOutline': movie["plotoutline"], 'MPAA': movie["mpaa"], 'Year': movie["year"], 'Studio': movie["studio"], 'Genre': movie["genre"], 'Writer': movie["writingcredits"], 'Director': movie["director"], 'Rating': movie["rating"], 'Code': movie["imdbnumber"], 'Top250': movie["top250"], 'Tagline': movie["tagline"], } )
-            playlist.add(url=movie["file"].replace("\\\\" , "\\"), listitem=listitem, )
+            json_command = '{"jsonrpc": "2.0", "method": "VideoPlaylist.Add", "params": {"item": {"movieid": %d} }, "id": 1}' % movie["id"]
+            json_response = xbmc.executeJSONRPC(json_command)
+            xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % movie["title"], level=xbmc.LOGDEBUG )
         except:
             traceback.print_exc()
         # give XBMC a chance to add to the playlist... May not be needed, but what's 50ms?
         xbmc.sleep( 50 )
 
-def obtain_audio_codec( movie_db, movie ):
-    """ obtain_audio_codec()
-    
-        Supplied with a movie from JSON RPC and retrives the first audio codec(normally the main one)
-       
-    """
-    matched_movie = find_movie_details( movie_db=movie_db, field="title", match_value=movie )
-    audio_codec = ['streamDetails']['audio'][0]['codec']
-    return audio_codec
-
-def _get_queued_video_info( movie_db=None, feature = 0 ):
+def _get_queued_video_info( feature = 0 ):
     xbmc.log( "%s - _get_queued_video_info() Started" % log_message, level=xbmc.LOGDEBUG )
     equivalent_mpaa = "NR"
-    if not movie_db:
-        from json_utils import retrieve_movie_db
     try:
         # get movie name
-        movie_title = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )[ feature ].getdescription()
-        # this is used to skip trailer for current movie selection
-        movie = os.path.splitext( os.path.basename( xbmc.PlayList( xbmc.PLAYLIST_VIDEO )[ feature ].getfilename() ) )[ 0 ]
-        movie_details = find_movie_details( movie_db=movie_db, field="title", match_value=movie_title )
-        mpaa = movie_details['mpaa']
-        genre = movie_details['genre']
-        audio = movie_details['streamDetails']['audio'][0]['codec']
-        path = movie_details['file']
+        plist = _store_playlist()
+        movie_title = plist[feature]['title']
+        path = plist[feature]['file']
+        mpaa = plist[feature]['mpaa']
+        genre = plist[feature]['genre']
+        try:
+            audio = plist[feature]['streamDetails']['audio'][0]['codec']
+        except:
+            audio = "other"
         if mpaa == "":
             mpaa = "NR"
         elif mpaa.startswith("Rated"):
@@ -112,4 +118,4 @@ def _get_queued_video_info( movie_db=None, feature = 0 ):
         xbmc.log( "%s - Folder: %s" % ( log_message, ( xbmc.translatePath( _S_( "audio_videos_folder" ) ) + { "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + xbmc.translatePath( _S_( "audio_videos_folder" ) )[ -1 ], ) ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s  %s" % ( log_message, log_sep ), level=xbmc.LOGDEBUG )
     # return results
-    return mpaa, audio, genre, movie, equivalent_mpaa
+    return mpaa, audio, genre, path, equivalent_mpaa

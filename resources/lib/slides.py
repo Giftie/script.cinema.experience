@@ -16,6 +16,19 @@ _L_ = _A_.getLocalizedString
 _S_ = _A_.getSetting
 
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
+BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+
+from folder import dirEntries, getFolders
+
+try:
+    from xbmcvfs import delete as delete_file
+    from xbmcvfs import exists as exists
+    from xbmcvfs import copy as file_copy
+except:
+    from os import remove as delete_file
+    exists = os.path.exists
+    from shutil import copy as file_copy
 
 def _fetch_slides( movie_mpaa ):
     # get watched list
@@ -43,8 +56,8 @@ def _load_watched_trivia_file():
 
 def _reset_watched():
     base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
-    if os.path.isfile( base_path ):
-        os.remove( base_path )
+    if exists( base_path ):
+        delete_file( base_path )
         watched = []
     return watched
 
@@ -57,7 +70,9 @@ def _get_slides( paths, movie_mpaa ):
     # enumerate thru paths and fetch slides recursively
     for path in paths:
         # get the directory listing
-        entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
+        entries = dirEntries( path, media_type="files", recursive="FALSE" )
+        if not entries:
+            entries = getFolders( path, recursive="FALSE" )
         # sort in case
         entries.sort()
         # get a slides.xml if it exists
@@ -72,11 +87,9 @@ def _get_slides( paths, movie_mpaa ):
         question = clue = answer = True
         # enumerate through our entries list and combine question, clue, answer
         for entry in entries:
-            # remove <li> from item
-            entry = entry.replace( "<li>", "" )
             # if folder add to our folder list to recursively fetch slides
             if ( entry.endswith( "/" ) or entry.endswith( "\\" ) ):
-                folders += [ entry.replace( "<li>", "" ) ]
+                folders += [ entry ]
             # sliders.xml was included, so check it
             elif ( slidesxml_exists ):
                 # question
@@ -107,7 +120,7 @@ def _get_slides( paths, movie_mpaa ):
 
 def _get_slides_xml( path ):
     # if no slides.xml exists return false
-    if ( not ( "True" in xbmc.executehttpapi( "FileExists(%sslides.xml)" % ( path, ) ) ) ):
+    if not exists( os.path.join( path, "slides.xml" ) ):
         return False, "", "", "", ""
     # fetch data
     xml = open( os.path.join( path, "slides.xml" ) ).read()

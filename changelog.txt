@@ -1,3 +1,9 @@
+1.0.47
+- more Ede-pre upgrades
+- separated Dharma code and Eden code
+- Moved Countdown Video to proper placement
+- a lot of internal reworking
+
 1.0.46
 - Fixed - Added missing movie details
 - Enhancement - Improved Debug logging
