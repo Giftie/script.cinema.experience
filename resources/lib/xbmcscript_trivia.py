@@ -20,7 +20,6 @@ _S_ = _A_.getSetting
 BASE_RESOURCE_PATH = os.path.join( xbmc.translatePath( _A_.getAddonInfo('path') ), 'resources' )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
-from folder import dirEntries
 from ce_playlist import build_music_playlist
 
 try:
@@ -28,8 +27,10 @@ try:
     from xbmcvfs import delete as delete_file
     from xbmcvfs import exists as exists
     from xbmcvfs import copy as file_copy
+    from folder import dirEntries
 except:
-    from dharma_code import _rebuild_playlist
+    from dharma_code import _rebuild_playlist, dirEntries
+
     from os import remove as delete_file
     exists = os.path.exists
     from shutil import copy as file_copy
@@ -84,6 +85,8 @@ class Trivia( xbmcgui.WindowXML ):
         match = re.search( '"result" : ([0-9]{1,3})', result )
         if not match:
             match = re.search( '"result":([0-9]{1,3})', result )
+            if not match:
+                match = re.search( '"result": ([0-9]{1,3})', result )
         volume = int(match.group(1))
         xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume
@@ -113,7 +116,6 @@ class Trivia( xbmcgui.WindowXML ):
             self.slide_timer.cancel()
         # increment/decrement count
         self.image_count += slide
-        xbmc.log( "[script.cinema.experience] - Current Slide: %s" %, self.slide_playlist[ self.image_count ], level=xbmc.LOGDEBUG)
         # check for invalid count, TODO: make sure you don't want to reset timer
         # check to see if playlist has come to an end
         if not xbmc.Player().isPlayingAudio() and int(self.settings[ "trivia_music" ]) > 0:

@@ -22,14 +22,15 @@ BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'),
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 from music import parse_playlist
-from folder import dirEntries
+
 try:
     from pre_eden_code import _rebuild_playlist
     from xbmcvfs import delete as delete_file
     from xbmcvfs import exists as exists
     from xbmcvfs import copy as file_copy
+    from folder import dirEntries
 except:
-    from dharma_code import _rebuild_playlist
+    from dharma_code import _rebuild_playlist, dirEntries
     from os import remove as delete_file
     exists = os.path.exists
     from shutil import copy as file_copy

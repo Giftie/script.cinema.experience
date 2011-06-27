@@ -2,6 +2,7 @@
 
 import sys, os, re
 import xbmc
+from json_utils import retrieve_json_dict
 
 def dirEntries( dir_name, media_type="files", recursive="FALSE", contains="" ):
     '''Returns a list of valid XBMC files from a given directory(folder)
@@ -15,22 +16,16 @@ def dirEntries( dir_name, media_type="files", recursive="FALSE", contains="" ):
     xbmc.log( "[folder.py] - dirEntries Activated", level=xbmc.LOGDEBUG )
     fileList = []
     json_query = '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "%s"}, "id": 1}' % ( escapeDirJSON( dir_name ), media_type )
-    json_folder_detail = xbmc.executeJSONRPC(json_query)
-    xbmc.log( "[folder.py] - json_folder_detail -\n%s" % json_folder_detail, level=xbmc.LOGDEBUG )
-    file_detail = re.compile( "{(.*?)}", re.DOTALL ).findall(json_folder_detail)
-    for f in file_detail:
-        match = re.search( '"file" : "(.*?)",', f )
-        if not match:
-            match = re.search( '"file":"(.*?)",', f )
-        if match:
-            if match.group(1).endswith( "/" ) or match.group(1).endswith( "\\" ):
-                if recursive == "TRUE":
-                    fileList.extend( dirEntries( match.group(1), media_type, recursive, contains ) )
-            elif not contains or ( contains and (contains in match.group(1) ) ):
-                fileList.append( match.group(1) )
-            xbmc.log( "[folder.py] - File Path: %s" % match.group(1), level=xbmc.LOGDEBUG ) 
-        else:
-            continue
+    json_folder_detail = retrieve_json_dict(json_query, items='files', force_log=True)
+    if json_folder_detail:
+        for f in json_folder_detail:
+            if recursive == "TRUE" and f["filetype"] == "directory":
+                fileList.extend( dirEntries( f["file"], media_type, recursive, contains ) )
+            elif not contains or ( contains and (contains in f["file"] ) ):
+                fileList.append( f["file"] )
+                xbmc.log( "[folder.py] - File Path: %s" % f["file"], level=xbmc.LOGDEBUG ) 
+            else:
+                continue
     return fileList
 
 def getFolders( dir_name, recursive="FALSE" ):
@@ -44,21 +39,16 @@ def getFolders( dir_name, recursive="FALSE" ):
     xbmc.log( "[folder.py] - getFolders Activated", level=xbmc.LOGDEBUG )
     folderList = []
     json_query = '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % ( escapeDirJSON( dir_name ) )
-    json_folder_detail = xbmc.executeJSONRPC(json_query)
-    xbmc.log( "[folder.py] - json_folder_detail -\n%s" % json_folder_detail, level=xbmc.LOGDEBUG )
-    file_detail = re.compile( "{(.*?)}", re.DOTALL ).findall(json_folder_detail)
-    for f in file_detail:
-        match = re.search( '"file" : "(.*?)",', f )
-        if not match:
-            match = re.search( '"file":"(.*?)",', f )
-        if match:
-            if match.group(1).endswith( "/" ) or match.group(1).endswith( "\\" ):
+    json_folder_detail = retrieve_json_dict(json_query, items='files', force_log=True)
+    if json_folder_detail:
+        for f in json_folder_detail:
+            if f["filetype"] == "directory":
                 folderList.append( match.group(1) )
-                xbmc.log( "[folder.py] - Folder Path: %s" % match.group(1), level=xbmc.LOGDEBUG )
+                #xbmc.log( "[folder.py] - Folder Path: %s" % f["file"], level=xbmc.LOGDEBUG )
                 if recursive == "TRUE":
-                    fileList.extend( dirEntries( match.group(1), media_type, recursive, contains ) ) 
-        else:
-            continue
+                    fileList.extend( getFolders( f["file"], recursive ) ) 
+            else:
+                continue
     return folderList
 
 def escapeDirJSON ( dir_name ):

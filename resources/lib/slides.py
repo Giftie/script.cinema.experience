@@ -19,16 +19,18 @@ BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-from folder import dirEntries, getFolders
 
 try:
     from xbmcvfs import delete as delete_file
     from xbmcvfs import exists as exists
     from xbmcvfs import copy as file_copy
+    from folder import dirEntries, getFolders
+
 except:
     from os import remove as delete_file
     exists = os.path.exists
     from shutil import copy as file_copy
+    from dharma_code import dirEntries, getFolders
 
 def _fetch_slides( movie_mpaa ):
     # get watched list
@@ -71,8 +73,8 @@ def _get_slides( paths, movie_mpaa ):
     for path in paths:
         # get the directory listing
         entries = dirEntries( path, media_type="files", recursive="FALSE" )
-        if not entries:
-            entries = getFolders( path, recursive="FALSE" )
+        #if not entries:
+        #    entries = getFolders( path, recursive="TRUE" )
         # sort in case
         entries.sort()
         # get a slides.xml if it exists
