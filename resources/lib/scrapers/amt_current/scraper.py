@@ -15,7 +15,8 @@ import urllib
 from random import shuffle, random
 from xml.sax.saxutils import unescape
 
-__useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
+__useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
+#__useragent__ = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.6"
 _A_ = xbmcaddon.Addon('script.cinema.experience')
 _L_ = _A_.getLocalizedString
 

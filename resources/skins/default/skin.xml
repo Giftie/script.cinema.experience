@@ -1,6 +1,6 @@
 <skin>
-  <defaultresolution>pal</defaultresolution>
-  <defaultresolutionwide>pal</defaultresolutionwide>
+  <defaultresolution>720p</defaultresolution>
+  <defaultresolutionwide>720p</defaultresolutionwide>
   <version>2.1</version>
   
   <!-- amount to zoom skin to remove overscan compensation -->
@@ -8,8 +8,8 @@
   
   <credits>
     <skinname>default</skinname>
-    <default>PAL</default>
-    <defaultwide>PAL</defaultwide>
+    <default>720p</default>
+    <defaultwide>720pL</defaultwide>
     <name>nuka1195</name>
   </credits>
 </skin>

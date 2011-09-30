@@ -46,7 +46,7 @@ def _build_playlist( movie_titles ):
 def _store_playlist():
     p_list = []
     xbmc.log( "[script.cinema.experience] - Storing Playlist", level=xbmc.LOGNOTICE )
-    json_query = '{"jsonrpc": "2.0", "method": "VideoPlaylist.GetItems", "params": {"fields": ["title", "file", "thumbnail", "streamDetails", "mpaa", "genre"] }, "id": 1}'
+    json_query = '{"jsonrpc": "2.0", "method": "VideoPlaylist.GetItems", "params": {"fields": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"] }, "id": 1}'
     p_list = retrieve_json_dict( json_query, items="items", force_log=False )
     return p_list
 
@@ -79,7 +79,7 @@ def _get_queued_video_info( feature = 0 ):
         mpaa = plist[feature]['mpaa']
         genre = plist[feature]['genre']
         try:
-            audio = plist[feature]['streamDetails']['audio'][0]['codec']
+            audio = plist[feature]['streamdetails']['audio'][0]['codec']
         except:
             audio = "other"
         if mpaa == "":

@@ -20,6 +20,7 @@ _S_ = _A_.getSetting
 BASE_RESOURCE_PATH = os.path.join( xbmc.translatePath( _A_.getAddonInfo('path') ), 'resources' )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
+from folder import dirEntries
 from ce_playlist import build_music_playlist
 
 try:
@@ -28,12 +29,13 @@ try:
     from xbmcvfs import exists as exists
     from xbmcvfs import copy as file_copy
     from folder import dirEntries
+    volume_query = '{"jsonrpc": "2.0", "method": "Application.GetProperties", "params": { "properties": [ "volume" ] }, "id": 1}'
 except:
     from dharma_code import _rebuild_playlist, dirEntries
-
     from os import remove as delete_file
     exists = os.path.exists
     from shutil import copy as file_copy
+    volume_query = '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}'
 
 class Trivia( xbmcgui.WindowXML ):
     # base paths
@@ -41,7 +43,7 @@ class Trivia( xbmcgui.WindowXML ):
     # special action codes
     ACTION_NEXT_SLIDE = ( 2, 3, 7, )
     ACTION_PREV_SLIDE = ( 1, 4, )
-    ACTION_EXIT_SCRIPT = ( 9, 10, )
+    ACTION_EXIT_SCRIPT = ( 9, 10, 92)
 
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXML.__init__( self, *args, **kwargs )
@@ -81,12 +83,19 @@ class Trivia( xbmcgui.WindowXML ):
 
     def _get_current_volume( self ):
         # get the current volume
-        result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}')
-        match = re.search( '"result" : ([0-9]{1,3})', result )
-        if not match:
-            match = re.search( '"result":([0-9]{1,3})', result )
+        result = xbmc.executeJSONRPC( volume_query )
+        if volume_query == '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}':
+            match = re.search( '"result" : ([0-9]{1,3})', result )
             if not match:
-                match = re.search( '"result": ([0-9]{1,3})', result )
+                match = re.search( '"result":([0-9]{1,3})', result )
+                if not match:
+                    match = re.search( '"result": ([0-9]{1,3})', result )
+        else:
+            match = re.search( '"volume" : ([0-9]{1,3})', result )
+            if not match:
+                match = re.search( '"volume":([0-9]{1,3})', result )
+                if not match:
+                    match = re.search( '"volume": ([0-9]{1,3})', result )
         volume = int(match.group(1))
         xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume
@@ -263,8 +272,10 @@ class Trivia( xbmcgui.WindowXML ):
 
     def onAction( self, action ):
         if action in self.ACTION_EXIT_SCRIPT and self.exiting is False:
+            print action
             self._exit_trivia()
         elif action in self.ACTION_EXIT_SCRIPT and self.exiting is True:
+            print action
             self._play_video_playlist()
         elif action in self.ACTION_NEXT_SLIDE and not self.exiting:
             self._next_slide()

@@ -107,6 +107,7 @@ class Main:
                 # if we have enough exit
                 if count == self.settings[ "trailer_count" ]:
                    break
+            self._save_watched()
             return self.trailers
         except:
             xbmc.log( "%s - Error searching database", level=xbmc.LOGDEBUG )
@@ -148,5 +149,6 @@ class Main:
             # close file object
             file_object.close()
         except:
+            traceback.print_exc()
             pass
 

@@ -17,14 +17,8 @@ _A_ = xbmcaddon.Addon( __scriptID__ )
 _L_ = _A_.getLocalizedString
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-
+from folder import dirEntries
 from ce_playlist import _set_trailer_info
-
-try:
-    from xbmcvfs import exists as exists
-    from folder import dirEntries
-except:
-    from dharma_code import dirEntries
 
 class Main:
     xbmc.log("%s - Local Folder Trailer Scraper Started" % logmessage, level=xbmc.LOGNOTICE )
