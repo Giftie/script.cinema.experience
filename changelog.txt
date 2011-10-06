@@ -1,3 +1,6 @@
+1.0.48 - 1.0.50
+- Many updates for use with Eden
+
 1.0.47
 - more Ede-pre upgrades
 - separated Dharma code and Eden code
