@@ -228,7 +228,11 @@ class Trivia( xbmcgui.WindowXML ):
         # turn screensaver back on
         xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % self.screensaver )
         # we play the video playlist here so the screen does not flash
-        xbmc.Player().play( self.playlist )
+        xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
+        #xbmc.Player().play( self.playlist )
+        #xbmc.Player().pause()
+        #xbmc.sleep(2000) # wait 2 seconds
+        #xbmc.Player().play()
         # close trivia slide show
         self.close()
 
@@ -272,10 +276,8 @@ class Trivia( xbmcgui.WindowXML ):
 
     def onAction( self, action ):
         if action in self.ACTION_EXIT_SCRIPT and self.exiting is False:
-            print action
             self._exit_trivia()
         elif action in self.ACTION_EXIT_SCRIPT and self.exiting is True:
-            print action
             self._play_video_playlist()
         elif action in self.ACTION_NEXT_SLIDE and not self.exiting:
             self._next_slide()

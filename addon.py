@@ -4,7 +4,7 @@
 __script__ = "Cinema Experience"
 __author__ = "nuka1195-giftie-ackbarr"
 __url__ = "http://code.google.com/p/xbmc-addons/"
-__version__ = "1.0.48"
+__version__ = "1.0.50"
 __scriptID__ = "script.cinema.experience"
 
 import xbmcgui, xbmc, xbmcaddon, os, re, sys
@@ -250,6 +250,7 @@ def activate_ha( trigger = None, prev_trigger = None, mode="thread" ):
     
 def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
     activate_ha( _L_( 32613 ) ) # Script Start - Or where it seems to be
+    xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "True" )
     # if trivia path and time to play the trivia slides
     pDialog = xbmcgui.DialogProgress()
     pDialog.create( __script__, _L_( 32520 )  )
@@ -283,6 +284,7 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         
             if playlist.size() > 0:
                 _wait_until_end()
+            xbmc.sleep(1500) # wait 1.5 seconds
             path = _MA_.getAddonInfo('path')
             question_type = question.TYPE_MOVIE
             mode = ( True, False )[int( _S_( "trivia_moviequiz_mode" ) ) ]
@@ -334,6 +336,7 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         if playlist.size() > 0:
             activate_ha( _L_( 32609 ) ) # Trivia Intro
             _wait_until_end()
+        xbmc.sleep(1500) # wait 1.5 seconds 
         from xbmcscript_trivia import Trivia
         xbmc.log( "[ script.cinema.experience ] - Starting Trivia script", level=xbmc.LOGNOTICE )
         activate_ha( _L_( 32615 ) ) # Trivia Start
@@ -342,6 +345,7 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         del ui
         # we need to activate the video window
         xbmc.executebuiltin( "XBMC.ActivateWindow(2005)" )
+        xbmc.Player().play( playlist )
     elif int( _S_( "trivia_mode" ) ) == 0: # No Trivia
         # no trivia slide show so play the video
         pDialog.close()
@@ -565,6 +569,7 @@ if __name__ == "__main__" :
             prev_trigger = activate_ha( _L_( 32614 ), None, "normal" ) # Script End
             _A_.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
             xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
+            xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
     except:
         traceback.print_exc()
         # if script fails, changes settings back
@@ -573,4 +578,5 @@ if __name__ == "__main__" :
         _A_.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
         xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
         prev_trigger = activate_ha( _L_( 32614 ), None, "normal" ) # Script End
+        xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
     #sys.modules.clear()

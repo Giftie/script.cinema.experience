@@ -21,7 +21,7 @@ def _build_playlist( movie_titles ):
         xbmc.executehttpapi( "SetResponseFormat()" )
         xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
         # select Movie path from movieview Limit 1
-        sql = "SELECT movieview.idMovie, movieview.c16, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
+        sql = "SELECT movieview.idMovie, movieview.c00, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
         xbmc.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), level=xbmc.LOGDEBUG )
         # query database for info dummy is needed as there are two </field> formatters
         try:
@@ -38,7 +38,7 @@ def _build_playlist( movie_titles ):
         xbmc.log( "[script.cinema.experience] - Movie Filename: %s" % movie_filename, level=xbmc.LOGNOTICE )
         xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie_full_path, level=xbmc.LOGNOTICE )
         if not movie_id == 0:
-            json_command = '{"jsonrpc": "2.0", "method": "VideoPlaylist.Add", "params": {"item": {"movieid": %d} }, "id": 1}' % movie_id
+            json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % movie_id
             json_response = xbmc.executeJSONRPC(json_command)
             xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % movie_title, level=xbmc.LOGDEBUG )
             xbmc.sleep( 50 )
@@ -46,7 +46,7 @@ def _build_playlist( movie_titles ):
 def _store_playlist():
     p_list = []
     xbmc.log( "[script.cinema.experience] - Storing Playlist", level=xbmc.LOGNOTICE )
-    json_query = '{"jsonrpc": "2.0", "method": "VideoPlaylist.GetItems", "params": {"fields": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"] }, "id": 1}'
+    json_query = '{"jsonrpc": "2.0", "method": "Playlist.GetItems", "params": {"playlistid": 1, "properties": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"] }, "id": 1}'
     p_list = retrieve_json_dict( json_query, items="items", force_log=False )
     return p_list
 
@@ -60,7 +60,7 @@ def _rebuild_playlist( plist ): # rebuild movie playlist
             xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie["title"], level=xbmc.LOGDEBUG )
             xbmc.log( "[script.cinema.experience] - Movie Thumbnail: %s" % movie["thumbnail"], level=xbmc.LOGDEBUG )
             xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie["file"], level=xbmc.LOGDEBUG )
-            json_command = '{"jsonrpc": "2.0", "method": "VideoPlaylist.Add", "params": {"item": {"movieid": %d} }, "id": 1}' % movie["id"]
+            json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % movie["id"]
             json_response = xbmc.executeJSONRPC(json_command)
             xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % movie["title"], level=xbmc.LOGDEBUG )
         except:

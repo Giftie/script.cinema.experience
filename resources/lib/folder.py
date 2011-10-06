@@ -23,7 +23,7 @@ def dirEntries( dir_name, media_type="files", recursive="FALSE", contains="" ):
                 fileList.extend( dirEntries( f["file"], media_type, recursive, contains ) )
             elif not contains or ( contains and (contains in f["file"] ) ):
                 fileList.append( f["file"] )
-                xbmc.log( "[folder.py] - File Path: %s" % f["file"], level=xbmc.LOGDEBUG ) 
+                #xbmc.log( "[folder.py] - File Path: %s" % f["file"], level=xbmc.LOGDEBUG ) 
             else:
                 continue
     return fileList

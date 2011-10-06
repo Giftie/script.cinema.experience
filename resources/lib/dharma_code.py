@@ -21,7 +21,7 @@ def _build_playlist( movie_titles ):
         xbmc.executehttpapi( "SetResponseFormat()" )
         xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
         # select Movie path from movieview Limit 1
-        sql = "SELECT movieview.c16, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
+        sql = "SELECT movieview.c00, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
         xbmc.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), level=xbmc.LOGDEBUG )
         # query database for info dummy is needed as there are two </field> formatters
         try:
@@ -96,7 +96,10 @@ def _get_movie_details( movie_title="", thumbnail="", movie_full_path="" ):
     # retrive plot(c01), plotoutline(c02), runtime(c11), mpaa(c12), year(c07), studio(c18), genre(c14), writer(c06), director(c15), tagline(c03), votes(c04), imdbcode(c09), rating(c05), top250(c13) from database
     sql_query = "SELECT c01, c02, c11, c12, c07, c18, c14, c06, c15, c03, c04, c09, c05, c13 FROM movieview WHERE c00='%s' LIMIT 1" % ( movie_title.replace( "'", "''", ), )
     # the dummy string is to catch the extra </field>
-    plot, plotoutline, runtime, mpaa, year, studio, genre, writer, director, tagline, votes, imdbcode, rating, top250, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql_query ), ).split( "</field>" )
+    try:
+        plot, plotoutline, runtime, mpaa, year, studio, genre, writer, director, tagline, votes, imdbcode, rating, top250, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql_query ), ).split( "</field>" )
+    except:
+        plot = plotoutline = runtime = mpaa = year = studio = genre = writer = director = tagline = votes = imdbcode = rating = top250 = ""
     return plot, plotoutline, runtime, mpaa, year, studio, genre, writer, director, tagline, votes, imdbcode, rating, votes, top250
     
 def _get_queued_video_info( feature = 0 ):
