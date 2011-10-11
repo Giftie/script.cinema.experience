@@ -4,7 +4,7 @@
 __script__ = "Cinema Experience"
 __author__ = "nuka1195-giftie-ackbarr"
 __url__ = "http://code.google.com/p/xbmc-addons/"
-__version__ = "1.0.50"
+__version__ = "1.0.51"
 __scriptID__ = "script.cinema.experience"
 
 import xbmcgui, xbmc, xbmcaddon, os, re, sys
@@ -250,7 +250,6 @@ def activate_ha( trigger = None, prev_trigger = None, mode="thread" ):
     
 def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
     activate_ha( _L_( 32613 ) ) # Script Start - Or where it seems to be
-    xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "True" )
     # if trivia path and time to play the trivia slides
     pDialog = xbmcgui.DialogProgress()
     pDialog.create( __script__, _L_( 32520 )  )
@@ -482,6 +481,7 @@ if __name__ == "__main__" :
     xbmc.log( "[ script.cinema.experience ] - Log Level: %s" % loglevel, level=xbmc.LOGNOTICE )
     settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
     # check to see if an argv has been passed to script
+    xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "True" )
     try:
         try:
             if sys.argv[ 1 ]:
