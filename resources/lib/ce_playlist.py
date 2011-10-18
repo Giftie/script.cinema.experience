@@ -113,7 +113,13 @@ def _getnfo( path ):
         mpaa = "".join(re.compile("<mpaa>(.*?)</mpaa>", re.DOTALL).findall(xmlSource)) or ""
         release_date = "".join(re.compile("<premiered>(.*?)</premiered>", re.DOTALL).findall(xmlSource)) or ""
         studio = "".join(re.compile("<studio>(.*?)</studio>", re.DOTALL).findall(xmlSource)) or ""
-        genre = "".join(re.compile("<genre>(.*?)</genre>", re.DOTALL).findall(xmlSource)) or ""
+        genres = re.compile("<genre>(.*?)</genre>", re.DOTALL).findall(xmlSource) or ""
+        if genres = "":
+            genre = ""
+        else:
+            genre = genres[0]   # get the first genre
+            for g in genres[1:]: # now loop from the second genre and add it with a " / " in between
+                genre = genre + " / " + g
         director = "".join(re.compile("<director>(.*?)</director>", re.DOTALL).findall(xmlSource)) or ""
         return title, plot, runtime, mpaa, release_date, studio, genre, director
     

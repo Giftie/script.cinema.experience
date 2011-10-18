@@ -85,17 +85,9 @@ class Trivia( xbmcgui.WindowXML ):
         # get the current volume
         result = xbmc.executeJSONRPC( volume_query )
         if volume_query == '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}':
-            match = re.search( '"result" : ([0-9]{1,3})', result )
-            if not match:
-                match = re.search( '"result":([0-9]{1,3})', result )
-                if not match:
-                    match = re.search( '"result": ([0-9]{1,3})', result )
+            match = re.search( '"result": ?([0-9]{1,3})', result )
         else:
-            match = re.search( '"volume" : ([0-9]{1,3})', result )
-            if not match:
-                match = re.search( '"volume":([0-9]{1,3})', result )
-                if not match:
-                    match = re.search( '"volume": ([0-9]{1,3})', result )
+            match = re.search( '"volume": ?([0-9]{1,3})', result )
         volume = int(match.group(1))
         xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume

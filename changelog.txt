@@ -1,3 +1,7 @@
+1.0.52
+- cleaned up volume checks
+- fix local folder scraper for trailers.  Corrected multiple genre tags
+
 1.0.51
 - Moved Property "CinemaExperienceRunning" to the start of the script.  This allows skin developers to use as a conditional for starting TV Tunes
 
