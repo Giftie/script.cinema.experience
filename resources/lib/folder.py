@@ -19,12 +19,15 @@ def dirEntries( dir_name, media_type="files", recursive="FALSE", contains="" ):
     json_folder_detail = retrieve_json_dict(json_query, items='files', force_log=True)
     if json_folder_detail:
         for f in json_folder_detail:
-            if recursive == "TRUE" and f["filetype"] == "directory":
-                fileList.extend( dirEntries( f["file"], media_type, recursive, contains ) )
-            elif not contains or ( contains and (contains in f["file"] ) ):
-                fileList.append( f["file"] )
-                #xbmc.log( "[folder.py] - File Path: %s" % f["file"], level=xbmc.LOGDEBUG ) 
-            else:
+            try:
+                if recursive == "TRUE" and f["filetype"] == "directory":
+                    fileList.extend( dirEntries( f["file"], media_type, recursive, contains ) )
+                elif not contains or ( contains and (contains in f["file"] ) ):
+                    fileList.append( f["file"] )
+                    #xbmc.log( "[folder.py] - File Path: %s" % f["file"], level=xbmc.LOGDEBUG ) 
+                else:
+                    continue
+            except:
                 continue
     return fileList
 

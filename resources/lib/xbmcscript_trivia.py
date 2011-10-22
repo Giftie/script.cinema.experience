@@ -20,7 +20,6 @@ _S_ = _A_.getSetting
 BASE_RESOURCE_PATH = os.path.join( xbmc.translatePath( _A_.getAddonInfo('path') ), 'resources' )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
-from folder import dirEntries
 from ce_playlist import build_music_playlist
 
 try:
@@ -85,9 +84,9 @@ class Trivia( xbmcgui.WindowXML ):
         # get the current volume
         result = xbmc.executeJSONRPC( volume_query )
         if volume_query == '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}':
-            match = re.search( '"result": ?([0-9]{1,3})', result )
+            match = re.search( '"result" ?: ?([0-9]{1,3})', result )
         else:
-            match = re.search( '"volume": ?([0-9]{1,3})', result )
+            match = re.search( '"volume" ?: ?([0-9]{1,3})', result )
         volume = int(match.group(1))
         xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume
