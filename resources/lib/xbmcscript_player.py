@@ -40,11 +40,8 @@ BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info
-try:
-    import xbmcvfs
-    from pre_eden_code import _get_queued_video_info
-except:
-    from dharma_code import _get_queued_video_info
+
+from dharma_code import _get_queued_video_info
 
 class Main:
     def __init__( self ):

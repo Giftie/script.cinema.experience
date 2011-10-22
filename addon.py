@@ -4,7 +4,7 @@
 __script__ = "Cinema Experience"
 __author__ = "nuka1195-giftie-ackbarr"
 __url__ = "http://code.google.com/p/xbmc-addons/"
-__version__ = "1.0.52"
+__version__ = "1.0.53"
 __scriptID__ = "script.cinema.experience"
 
 import xbmcgui, xbmc, xbmcaddon, os, re, sys
@@ -41,16 +41,10 @@ from slides import _fetch_slides
 from trailer_downloader import downloader
 from utils import settings_to_log
 
-try:
-    from pre_eden_code import _store_playlist, _get_queued_video_info, _build_playlist
-    from xbmcvfs import delete as delete_file
-    from xbmcvfs import exists as exists
-    from xbmcvfs import copy as file_copy
-except:
-    from dharma_code import _store_playlist, _get_queued_video_info, _build_playlist
-    from os import remove as delete_file
-    exists = os.path.exists
-    from shutil import copy as file_copy
+from dharma_code import _store_playlist, _get_queued_video_info, _build_playlist
+from os import remove as delete_file
+exists = os.path.exists
+from shutil import copy as file_copy
 
 #TODO: Check to see if module is moved to /userdata/addon_data/script.cinema.experience
 try:

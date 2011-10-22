@@ -22,19 +22,11 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from ce_playlist import build_music_playlist
 
-try:
-    from pre_eden_code import _rebuild_playlist
-    from xbmcvfs import delete as delete_file
-    from xbmcvfs import exists as exists
-    from xbmcvfs import copy as file_copy
-    from folder import dirEntries
-    volume_query = '{"jsonrpc": "2.0", "method": "Application.GetProperties", "params": { "properties": [ "volume" ] }, "id": 1}'
-except:
-    from dharma_code import _rebuild_playlist, dirEntries
-    from os import remove as delete_file
-    exists = os.path.exists
-    from shutil import copy as file_copy
-    volume_query = '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}'
+from dharma_code import _rebuild_playlist, dirEntries
+from os import remove as delete_file
+exists = os.path.exists
+from shutil import copy as file_copy
+volume_query = '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}'
 
 class Trivia( xbmcgui.WindowXML ):
     # base paths
@@ -83,10 +75,7 @@ class Trivia( xbmcgui.WindowXML ):
     def _get_current_volume( self ):
         # get the current volume
         result = xbmc.executeJSONRPC( volume_query )
-        if volume_query == '{"jsonrpc": "2.0", "method": "XBMC.GetVolume", "id": 1}':
-            match = re.search( '"result" ?: ?([0-9]{1,3})', result )
-        else:
-            match = re.search( '"volume" ?: ?([0-9]{1,3})', result )
+        match = re.search( '"result" ?: ?([0-9]{1,3})', result )
         volume = int(match.group(1))
         xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume

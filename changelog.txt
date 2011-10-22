@@ -1,3 +1,7 @@
+1.0.53
+- fixed dharma function
+- split dharma and eden versions
+
 1.0.52
 - cleaned up volume checks
 - fix local folder scraper for trailers.  Corrected multiple genre tags
