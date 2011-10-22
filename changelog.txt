@@ -1,3 +1,6 @@
+2.0.53
+- remove dharma code
+
 1.0.52
 - cleaned up volume checks
 - fix local folder scraper for trailers.  Corrected multiple genre tags

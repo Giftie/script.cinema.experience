@@ -18,20 +18,10 @@ _S_ = _A_.getSetting
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-eden = True
 
-
-try:
-    from xbmcvfs import delete as delete_file
-    from xbmcvfs import exists as exists
-    from xbmcvfs import copy as file_copy
-    from folder import dirEntries, getFolders
-except:
-    from os import remove as delete_file
-    exists = os.path.exists
-    from shutil import copy as file_copy
-    from dharma_code import dirEntries
-    eden = False
+from xbmcvfs import delete as delete_file
+from xbmcvfs import exists as exists
+from folder import dirEntries, getFolders
     
 def _fetch_slides( movie_mpaa ):
     # get watched list
@@ -74,10 +64,6 @@ def _get_slides( paths, movie_mpaa ):
     for path in paths:
         # get the directory listing
         entries = dirEntries( path, media_type="files", recursive="FALSE" )
-        if not eden:
-            entries = xbmc.executehttpapi( "GetDirectory(%s)" % ( path, ) ).split( "\n" )
-        else:
-            entries = dirEntries( path, media_type="files", recursive="FALSE" )
         # sort in case
         entries.sort()
         # get a slides.xml if it exists
@@ -93,8 +79,6 @@ def _get_slides( paths, movie_mpaa ):
         # enumerate through our entries list and combine question, clue, answer
         for entry in entries:
             # if folder add to our folder list to recursively fetch slides
-            if not eden:
-                entry = entry.replace( "<li>", "" )
             if ( entry.endswith( "/" ) or entry.endswith( "\\" ) ):
                 folders += [ entry ]
             # sliders.xml was included, so check it
