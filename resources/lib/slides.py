@@ -79,8 +79,10 @@ def _get_slides( paths, movie_mpaa ):
         question = clue = answer = True
         # enumerate through our entries list and combine question, clue, answer
         for entry in entries:
-            # if folder add to our folder list to recursively fetch slides
             entry = entry.replace( "<li>", "" )
+            # if folder add to our folder list to recursively fetch slides
+            if ( entry.endswith( "/" ) or entry.endswith( "\\" ) ):
+                 folders += [ entry ]
             # sliders.xml was included, so check it
             elif ( slidesxml_exists ):
                 # question
