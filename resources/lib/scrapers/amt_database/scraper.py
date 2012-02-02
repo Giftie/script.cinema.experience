@@ -22,8 +22,8 @@ _L_ = _A_.getLocalizedString
 
 sys.path.append( os.path.join( _A_.getAddonInfo('path'), "resources" ) )
 
-
-__useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
+__useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
+#__useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
 
 class Main:

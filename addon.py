@@ -11,7 +11,8 @@ import xbmcgui, xbmc, xbmcaddon, os, re, sys
 import traceback
 import time
 from urllib import quote_plus
-from threading import Thread
+#from threading import Thread
+from multiprocessing import Process as Thread
 from shutil import copy2
 
 _A_ = xbmcaddon.Addon( __scriptID__ )
@@ -38,7 +39,7 @@ script_header = "[ %s ]" % __scriptID__
 
 from ce_playlist import _get_special_items, _wait_until_end, build_music_playlist,  _rebuild_playlist
 from slides import _fetch_slides
-from trailer_downloader import downloader
+from new_trailer_downloader import downloader
 from utils import settings_to_log
 
 from pre_eden_code import _store_playlist, _get_queued_video_info, _build_playlist
@@ -61,6 +62,9 @@ try:
 except ImportError:
     # or ha_imported to False if unsuccessful
     ha_imported = False
+
+#ce_pause_time = float( int( _S_("pause_time") ) )
+ce_pause_time = float( 2.5 )
    
 def footprints():
     xbmc.log( "[ script.cinema.experience ] - Script Name: %s" % __script__, level=xbmc.LOGNOTICE )
@@ -81,7 +85,7 @@ def _load_trigger_list():
         # close socket
         usock.close()
     except:
-        xbmc.log( "[script.cinema.experience] - Loading Trigger List", level=xbmc.LOGNOTICE)
+        xbmc.log( "[script.cinema.experience] - Error Loading Trigger List", level=xbmc.LOGNOTICE)
         traceback.print_exc()
         trigger_list = []
     return trigger_list
@@ -164,19 +168,21 @@ def voxcommando():
             movie_titles = movie_titles + movie_title + "<li>"
         movie_titles = movie_titles.rstrip("<li>")
         if _S_( "voxcommando" ) == "true":
-            xbmc.executehttpapi( "Broadcast(<b>CElaunch." + str(playlistsize ) + "<li>" + movie_titles + "</b>;33000)" )
+            pass
+            #xbmc.executehttpapi( "Broadcast(<b>CElaunch." + str(playlistsize ) + "<li>" + movie_titles + "</b>;33000)" )
     else:
         # get the queued video info
         movie_title = playlist[ 0 ].getdescription()
         xbmc.log( "[ script.cinema.experience ] - Feature - %s" % movie_title, level=xbmc.LOGNOTICE )
         if _S_( "voxcommando" ) == "true":
-            xbmc.executehttpapi( "Broadcast(<b>CElaunch<li>" + movie_title + "</b>;33000)" )
+            pass
+            #xbmc.executehttpapi( "Broadcast(<b>CElaunch<li>" + movie_title + "</b>;33000)" )
 
 def _sqlquery( sqlquery ):
     movie_list = []
     movies = []
-    xbmc.executehttpapi( "SetResponseFormat()" )
-    xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
+    #xbmc.executehttpapi( "SetResponseFormat()" )
+    #xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
     #sqlquery = "SELECT movieview.c00 FROM movieview JOIN genrelinkmovie ON genrelinkmovie.idMovie=movieview.idMovie JOIN genre ON genrelinkmovie.idGenre=genre.idGenre WHERE strGenre='Action' ORDER BY RANDOM() LIMIT 4"
     xbmc.log( "[ script.cinema.experience ]  - SQL: %s" % ( sqlquery, ), level=xbmc.LOGDEBUG )
     try:
@@ -192,11 +198,14 @@ def auto_refresh( before, mode ):
     xbmc.log( "[ script.cinema.experience ] - auto_refresh( %s, %s )" % ( before, mode ), level=xbmc.LOGNOTICE )
     # turn off autorefresh
     if _S_( "autorefresh" ) == "true" and before == "True" and mode=="disable":
-        xbmc.executehttpapi( "SetGUISetting(1; videoplayer.adjustrefreshrate; False)" )
+        pass
+        #xbmc.executehttpapi( "SetGUISetting(1; videoplayer.adjustrefreshrate; False)" )
     # turn on autorefresh
     elif _S_( "autorefresh" ) == "true" and before == "True" and mode=="enable":
-        xbmc.executehttpapi( "SetGUISetting(1; videoplayer.adjustrefreshrate; True)" )
-    status = xbmc.executehttpapi( "GetGuiSetting(1; videoplayer.adjustrefreshrate)" ).strip("<li>")
+        pass
+        #xbmc.executehttpapi( "SetGUISetting(1; videoplayer.adjustrefreshrate; True)" )
+    status = True
+    #status = xbmc.executehttpapi( "GetGuiSetting(1; videoplayer.adjustrefreshrate)" ).strip("<li>")
     xbmc.log( "[ script.cinema.experience ] - Autorefresh Status: %s" % status, level=xbmc.LOGNOTICE )
 
 def trivia_intro():
@@ -220,12 +229,12 @@ def start_downloader( mpaa, genre, equivalent_mpaa ):
     # start the downloader if Play Mode is set to stream and if scraper is not Local or XBMC_library
     if ( int( _S_( "trailer_play_mode" ) ) == 1 ) and ( not ( int( _S_( "trailer_scraper" ) ) in (2, 3) ) ):
         xbmc.log( "[ script.cinema.experience ] - Starting Downloader Thread", level=xbmc.LOGNOTICE )
-        #thread = Thread( target=downloader, args=( mpaa, genre ) )
-        #thread.start()
-        _genre = genre.replace( " / ", "_" )
-        downloader_path = os.path.join( BASE_RESOURCE_PATH, "lib", "new_trailer_downloader.py,mpaa=%s;genre=%s" % ( equivalent_mpaa, genre ) )
+        thread = Thread( target=downloader, args=( mpaa, equivalent_mpaa ) )
+        thread.start()
+        #_genre = genre.replace( " / ", "_" )
+        #downloader_path = os.path.join( BASE_RESOURCE_PATH, "lib", "new_trailer_downloader.py,mpaa=%s;genre=%s" % ( equivalent_mpaa, genre ) )
         #xbmc.executescript( downloader_path )
-        xbmc.executebuiltin( "XBMC.RunScript(%s)" % downloader_path )
+        #xbmc.executebuiltin( "XBMC.RunScript(%s)" % downloader_path )
     else:
         pass
         
@@ -236,7 +245,7 @@ def activate_ha( trigger = None, prev_trigger = None, mode="thread" ):
         elif mode != "thread":
             activate_on( trigger )
         else:
-            thread = Thread( target=activate_on, args=( trigger, ) )
+            thread = Thread( name='ha_trigger', target=activate_on, args=( trigger, ) )
             thread.start()
         if not trigger in ( _L_( 32618 ), _L_( 32619 ) ):
             prev_trigger = trigger
@@ -324,7 +333,11 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         # import trivia module and execute the gui
         pDialog.update( 50 )
         slide_playlist = _fetch_slides( equivalent_mpaa )
+        print "Pausing for 1 second"
+        time.sleep(1)
         pDialog.close()
+        print "Pausing for 1 second"
+        time.sleep(1)
         trivia_intro()
         if playlist.size() > 0:
             activate_ha( _L_( 32609 ) ) # Trivia Intro
@@ -407,7 +420,7 @@ def start_script( library_view = "oldway" ):
         while not playlist.getposition() == ( playlist.size() - 1 ):
             try:
                 pauseCheck = xbmc.Player().getTime()
-                time.sleep( 1 )
+                xbmc.sleep( int( ce_pause_time * 1000 ) )
                 if xbmc.Player().isPlayingVideo():
                     stop_check = 0
                     if (xbmc.Player().getTime() == pauseCheck) and not paused:
@@ -421,11 +434,13 @@ def start_script( library_view = "oldway" ):
                 elif not xbmc.Player().isPlayingVideo():
                     xbmc.log( "[ script.cinema.experience ] - Video may have stopped", level=xbmc.LOGNOTICE )
             except:
-                if stop_check == 50000:
+                traceback.print_exc()
+                if stop_check == 60:
                 	xbmc.log( "[ script.cinema.experience ] - Video Definitely Stopped", level=xbmc.LOGNOTICE )
                 	messy_exit = True
                 	break
                 else:
+                     xbmc.sleep( 1000 )
                      stop_check += 1 
             if playlist.getposition() > count:
                 try:
@@ -471,7 +486,8 @@ def start_script( library_view = "oldway" ):
 if __name__ == "__main__" :
     footprints()
     prev_trigger = ""
-    loglevel = int(xbmc.executehttpapi( "GetLogLevel" ).replace( "<li>", "" ) )
+    #loglevel = int(xbmc.executehttpapi( "GetLogLevel" ).replace( "<li>", "" ) )
+    loglevel = 1
     xbmc.log( "[ script.cinema.experience ] - Log Level: %s" % loglevel, level=xbmc.LOGNOTICE )
     settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
     # check to see if an argv has been passed to script
@@ -562,7 +578,7 @@ if __name__ == "__main__" :
                 auto_refresh( autorefresh, "enable" )
             prev_trigger = activate_ha( _L_( 32614 ), None, "normal" ) # Script End
             _A_.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-            xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
+            #xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
             xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
     except:
         traceback.print_exc()
@@ -570,7 +586,7 @@ if __name__ == "__main__" :
         if _S_( "autorefresh" ) == "true":
             auto_refresh( autorefresh, "enable" )
         _A_.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-        xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
+        #xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
         prev_trigger = activate_ha( _L_( 32614 ), None, "normal" ) # Script End
         xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
     #sys.modules.clear()

@@ -43,6 +43,7 @@ def _get_trailers( items, mpaa, genre, movie, mode = "download" ):
                    "trailer_play_mode": int( _S_( "trailer_play_mode" ) ),
                      "trailer_hd_only": _S_( "trailer_hd_only" ) == "true",
                      "trailer_quality": int( _S_( "trailer_quality" ) ),
+        "trailer_unwatched_movie_only": _S_( "trailer_unwatched_movie_only" ) == "true",
               "trailer_unwatched_only": _S_( "trailer_unwatched_only" ) == "true",
                  "trailer_newest_only": _S_( "trailer_newest_only" ) == "true",
                        "trailer_count": ( 0, 1, 2, 3, 4, 5, 10, )[ int( _S_( "trailer_count" ) ) ],

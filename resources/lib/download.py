@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 import urllib, urllib2, os, traceback, sys, socket
+__useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
 try:
     import xbmcgui
 except:
     pass
     
+
 socket.setdefaulttimeout(30)
 
 class _urlopener( urllib.URLopener ):
-    version =  "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
+    version =  __useragent__
 
 urllib._urlopener = _urlopener()
 
