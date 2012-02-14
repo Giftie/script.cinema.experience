@@ -4,7 +4,7 @@
 __script__ = "Cinema Experience"
 __author__ = "nuka1195-giftie-ackbarr"
 __url__ = "http://code.google.com/p/xbmc-addons/"
-__version__ = "2.0.53"
+__version__ = "2.0.54"
 __scriptID__ = "script.cinema.experience"
 
 import xbmcgui, xbmc, xbmcaddon, os, re, sys
