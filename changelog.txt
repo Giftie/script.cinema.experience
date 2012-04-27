@@ -1,5 +1,5 @@
 2.0.54
-- fix slides being stored on network drives
+- fixed testing for stopping of video
 
 2.0.53
 - remove dharma code

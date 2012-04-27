@@ -10,6 +10,7 @@ import xbmcgui
 import xbmc
 import xbmcaddon
 import traceback, threading
+import xbmcvfs
 
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 _A_ = xbmcaddon.Addon( __scriptID__ )
@@ -33,6 +34,7 @@ def downloader( mpaa, genre ):
     movie = ""
     trailer_list = []
     xbmc.log( "%s - Starting Trailer Downloader" % logmessage, level=xbmc.LOGNOTICE )
+    genre = genre.replace( "_", " / " )
     trailer_list = _download_trailers( mpaa, genre, movie )
     save_download_list( trailer_list )
 
@@ -72,6 +74,9 @@ def save_download_list( download_trailers ):
 def _download_trailers( mpaa, genre, movie ):
     updated_trailers = []
     xbmc.log( "%s - Downloading Trailers: %s Trailers" % ( logmessage, ( 0, 1, 2, 3, 4, 5, 10, )[ int( _S_( "trailer_count" ) ) ] ), level=xbmc.LOGNOTICE )
+    temp_destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "temp_trailers" ).replace( "\\\\", "\\" )
+    if not xbmcvfs.exists( temp_destination ):
+        xbmcvfs.mkdir( temp_destination )
     trailers = _get_trailers(  items=( 0, 1, 2, 3, 4, 5, 10, )[ int( _S_( "trailer_count" ) ) ],
                                 mpaa=mpaa,
                                genre=genre,
@@ -79,7 +84,7 @@ def _download_trailers( mpaa, genre, movie ):
                                 mode="download"
                             )
     for trailer in trailers:
-        updated_trailer= {}
+        updated_trailer = {}
         success = False
         destination = ""   
         thumb = ""
@@ -93,8 +98,8 @@ def _download_trailers( mpaa, genre, movie ):
             destination = file_path
             thumb = os.path.splitext( file_path )[0] + ".tbn"
         else:
-            success, destination = download( trailer[ 2 ], _S_( "trailer_download_folder" ), file_tag="-trailer" )
-            tsuccess, thumb = download( trailer[ 3 ], _S_( "trailer_download_folder" ), file_tag="-trailer", new_name=filename, extension=".tbn" )
+            success, destination = download( trailer[ 2 ], temp_destination, file_tag="-trailer" )
+            tsuccess, thumb = download( trailer[ 3 ], temp_destination, file_tag="-trailer", new_name=filename, extension=".tbn" )
         if success:
             xbmc.log( "%s - Successfully Download Trailer: %s" % ( logmessage, trailer[ 1 ] ), level=xbmc.LOGNOTICE )
             updated_trailer[ 0 ] = trailer[ 0 ]
@@ -109,10 +114,16 @@ def _download_trailers( mpaa, genre, movie ):
             updated_trailer[ 9 ] = trailer[ 9 ]
             updated_trailer[ 10 ] = trailer[ 10 ]
             updated_trailer[ 11 ] = trailer[ 11 ]
-            _create_nfo_file( updated_trailer, destination )
+            _create_nfo_file( updated_trailer, os.path.join( temp_destination, filename).replace( "\\\\", "\\" ) )
         else:
             xbmc.log( "%s - Failed to Download Trailer: %s" % ( logmessage, trailer[ 1 ] ), level=xbmc.LOGNOTICE )
             updated_trailer=[]
+        xbmcvfs.copy( os.path.join( temp_destination, filename ).replace( "\\\\", "\\"), os.path.join( _S_( "trailer_download_folder" ), filename ).replace( "\\\\", "\\" ) )
+        xbmcvfs.copy( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".tbn" ).replace( "\\\\", "\\"), os.path.join( _S_( "trailer_download_folder" ), os.path.splitext( filename )[0] + ".tbn"  ).replace( "\\\\", "\\" ) )
+        xbmcvfs.copy( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\"), os.path.join( _S_( "trailer_download_folder" ), os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\" ) )
+        xbmcvfs.delete( os.path.join( temp_destination, filename ).replace( "\\\\", "\\") )
+        xbmcvfs.delete( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".tbn" ).replace( "\\\\", "\\") )
+        xbmcvfs.delete( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\") )
         updated_trailers += [ updated_trailer ]
     return updated_trailers
 

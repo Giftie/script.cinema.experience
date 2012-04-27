@@ -52,7 +52,7 @@ class Trivia( xbmcgui.WindowXML ):
         xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,None)" )
         self._get_global_timer( (self.settings[ "trivia_total_time" ] * 60 ) , self._exit_trivia )
         #display slideshow
-        self.doModal()
+        #self.doModal()
 
     def onInit( self ):
         self._load_watched_trivia_file()

@@ -178,7 +178,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail=None, 
         xbmc.log( "%s - No Items" % log_message, level=xbmc.LOGDEBUG)
         return
     # if path is a file check if file exists
-    if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not ( xbmc.executehttpapi( "FileExists(%s)" % ( path, ) ) == "<li>True" ):
+    if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not exists( path ):
         xbmc.log( "%s - _get_special_items() - File Does not Exist" % log_message, level=xbmc.LOGDEBUG)
         return
     # set default paths list
