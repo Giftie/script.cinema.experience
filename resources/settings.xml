@@ -77,7 +77,7 @@
         <setting id="trailer_limit_mpaa" type="bool" visible="!eq(-16,0)" label="32140" default="true" />
         <setting id="trailer_limit_genre" type="bool" visible="!eq(-17,0)" label="32141" default="true" />
         <setting id="trailer_rating" type="labelenum"  visible="!eq(-18,0) + !eq(-7,2)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
-        <setting id="trailer_unwatched_movie_only" type="bool" visible=eq(-12,3) label="Only use trailers from unwatched movies" default="true" />
+        <setting id="trailer_unwatched_movie_only" type="bool" visible="eq(-12,3)" label="Only use trailers from unwatched movies" default="true" />
         <setting id="trailer_unwatched_only" type="bool" visible="!eq(-20,0)" label="32190" default="false" />
         <setting type="action" label="32191" visible="!eq(-21,0)" enable="eq(-1,true)" action="RunScript($CWD/addon.py,ClearWatchedTrailers)" />
     </category>
@@ -130,7 +130,6 @@
         <setting id="autorefresh" type="bool" label="32401" default="false" />
         <setting id="autorefresh_movie" type="bool" visible="eq(-1,true)" enable="eq(-1,true)" label="32402" default="false" />
         <setting id="voxcommando" type="bool" label="32403" default="false" />
-        <setting id="pre_eden" type="bool" label="32404" default="false" />
     </category>
 
 </settings>
