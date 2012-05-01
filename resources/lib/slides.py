@@ -15,12 +15,13 @@ _L_ = _A_.getLocalizedString
 # settings method
 _S_ = _A_.getSetting
 
-BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) ).replace("\\\\","\\")
+BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) ).replace("\\\\","\\")
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 from xbmcvfs import delete as delete_file
 from xbmcvfs import exists as exists
+from xbmcvfs import copy as file_copy
 from folder import dirEntries, getFolders
     
 def _fetch_slides( movie_mpaa ):
@@ -36,7 +37,7 @@ def _load_watched_trivia_file():
     xbmc.log( "[script.cinema.experience] - Loading Watch Slide List", level=xbmc.LOGDEBUG)
     try:
         # set base watched file path
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
         # open path
         usock = open( base_path, "r" )
         # read source
@@ -48,7 +49,7 @@ def _load_watched_trivia_file():
     return watched
 
 def _reset_watched():
-    base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
+    base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
     if exists( base_path ):
         delete_file( base_path )
         watched = []
@@ -110,13 +111,17 @@ def _get_slides( paths, movie_mpaa ):
     return tmp_slides
 
 def _get_slides_xml( path ):
+    source = os.path.join( path, "slides.xml" ).replace("\\\\","\\")
+    destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "slides.xml" ).replace("\\\\","\\")
     # if no slides.xml exists return false
-    if not exists( os.path.join( path, "slides.xml" ) ):
+    if not exists( source ):
         return False, "", "", "", ""
     # fetch data
-    xml = open( os.path.join( path, "slides.xml" ) ).read()
+    file_copy( source, destination )
+    xml = open( destination ).read()
     # parse info
     mpaa, theme, question_format, clue_format, answer_format = re.search( "<slides?(?:.+?rating=\"([^\"]*)\")?(?:.+?theme=\"([^\"]*)\")?.*?>.+?<question.+?format=\"([^\"]*)\".*?/>.+?<clue.+?format=\"([^\"]*)\".*?/>.+?<answer.+?format=\"([^\"]*)\".*?/>", xml, re.DOTALL ).groups()
+    delete_file ( destination )
     return True, mpaa, question_format, clue_format, answer_format
 
 def _shuffle_slides( tmp_slides, watched ):

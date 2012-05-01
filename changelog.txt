@@ -1,3 +1,7 @@
+2.0.55 
+- add handling of slides being on VFS drive
+- modify testing for stopping of Video
+
 2.0.54
 - fixed testing for stopping of video
 

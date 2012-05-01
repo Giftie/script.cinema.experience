@@ -3,8 +3,8 @@
 # constants
 __script__ = "Cinema Experience"
 __author__ = "nuka1195-giftie-ackbarr"
-__url__ = "http://code.google.com/p/xbmc-addons/"
-__version__ = "2.0.54"
+__url__ = "https://github.com/Giftie/script.cinema.experience"
+__version__ = "2.0.55"
 __scriptID__ = "script.cinema.experience"
 
 import xbmcgui, xbmc, xbmcaddon, os, re, sys
