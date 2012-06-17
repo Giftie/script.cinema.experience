@@ -248,9 +248,9 @@ class Main:
                                      writer=_L_( 32603 ),
                                       index=0
                               )
-        for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
-            # Insert Rating Label into Trigger List
-            self.trigger_list.insert( 0, _L_( 32603 ) )
+            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+                # Insert Rating Label into Trigger List
+                self.trigger_list.insert( 0, _L_( 32603 ) )
         # get feature presentation intro videos
         xbmc.log( "[script.cinema.experience] - Adding Feature Presentation Intro Videos: %s Videos" % (0, 1, 1, 2, 3, 4, 5,)[ int( _S_( "fpv_intro" ) ) ], level=xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()

@@ -1,3 +1,9 @@
+2.0.57
+- fix - trigger is 'Movie' not 'Movies' - fixes turning autorefresh back on for movie if it is the last video in playlist
+
+2.0.56
+- fix trigger for MPAA rating video if enable_ratings is false
+
 2.0.55 
 - add handling of slides being on VFS drive
 - modify testing for stopping of Video

@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 
 # constants
 __script__ = "Cinema Experience"
 __author__ = "nuka1195-giftie-ackbarr"
 __url__ = "https://github.com/Giftie/script.cinema.experience"
-__version__ = "2.0.55"
+__version__ = "2.0.57"
 __scriptID__ = "script.cinema.experience"
 
 import xbmcgui, xbmc, xbmcaddon, os, re, sys
@@ -14,6 +14,7 @@ from urllib import quote_plus
 from threading import Thread
 #from multiprocessing import Process as Thread
 from shutil import copy2
+import __builtin__
 
 _A_ = xbmcaddon.Addon( __scriptID__ )
 # language method
@@ -65,6 +66,19 @@ except ImportError:
 
 #ce_pause_time = float( int( _S_("pause_time") ) )
 ce_pause_time = float( 2.5 )
+__builtin__.slide_settings = {  "trivia_total_time": int( float( _S_( "trivia_total_time" ) ) ),
+                                    "trivia_folder": xbmc.translatePath( _S_( "trivia_folder" ) ),
+                                "trivia_slide_time": int( float( _S_( "trivia_slide_time" ) ) ),
+                                     "trivia_intro": _S_( "trivia_intro" ),
+                                     "trivia_music": _S_( "trivia_music" ),
+                             "trivia_adjust_volume": _S_( "trivia_adjust_volume" ),
+                               "trivia_fade_volume": _S_( "trivia_fade_volume" ),
+                                 "trivia_fade_time": int( float( _S_( "trivia_fade_time" ) ) ),
+                                "trivia_music_file": xbmc.translatePath( _S_( "trivia_music_file" ) ),
+                              "trivia_music_folder": xbmc.translatePath( _S_( "trivia_music_folder" ) ),
+                              "trivia_music_volume": int( float( _S_( "trivia_music_volume" ) ) ),
+                            "trivia_unwatched_only": _S_( "trivia_unwatched_only" ) == "true"
+                             }
    
 def footprints():
     xbmc.log( "[ script.cinema.experience ] - Script Name: %s" % __script__, level=xbmc.LOGNOTICE )
@@ -278,8 +292,7 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
                 traceback.print_exc()
             pDialog.close()
             activate_ha( _L_( 32613 ) ) # Script Start - Or where it seems to be
-            trivia_intro()
-        
+            trivia_intro()        
             if playlist.size() > 0:
                 _wait_until_end()
             xbmc.sleep(500) # wait .5 seconds
@@ -306,20 +319,6 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         ## update dialog with new message
         pDialog.update( -1, _L_( 32510 ) )        
         # trivia settings, grab them here so we don't need another _S_() object
-        settings = {  "trivia_total_time": int( float( _S_( "trivia_total_time" ) ) ),
-                          "trivia_folder": xbmc.translatePath( _S_( "trivia_folder" ) ),
-                      "trivia_slide_time": int( float( _S_( "trivia_slide_time" ) ) ),
-                           "trivia_intro": _S_( "trivia_intro" ),
-                           "trivia_music": _S_( "trivia_music" ),
-                   "trivia_adjust_volume": _S_( "trivia_adjust_volume" ),
-                     "trivia_fade_volume": _S_( "trivia_fade_volume" ),
-                       "trivia_fade_time": int( float( _S_( "trivia_fade_time" ) ) ),
-                      "trivia_music_file": xbmc.translatePath( _S_( "trivia_music_file" ) ),
-                    "trivia_music_folder": xbmc.translatePath( _S_( "trivia_music_folder" ) ),
-                    "trivia_music_volume": int( float( _S_( "trivia_music_volume" ) ) ),
-                  "trivia_unwatched_only": _S_( "trivia_unwatched_only" ) == "true"
-                            }
-
         if not int( _S_( "trivia_music" ) )== 0:
             pDialog.update( -1, _L_( 32511 )  )
             build_music_playlist()
@@ -328,9 +327,7 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         xbmc.log( "[ script.cinema.experience ] - Slide MPAA Rating: %s" % equivalent_mpaa, level=xbmc.LOGNOTICE )
         # import trivia module and execute the gui
         pDialog.update( 50 )
-        #xbmc.sleep(1000)
         slide_playlist = _fetch_slides( equivalent_mpaa )
-        xbmc.sleep(1000)
         pDialog.close()
         trivia_intro()
         if playlist.size() > 0:
@@ -340,7 +337,11 @@ def _play_trivia( mpaa, genre, plist, equivalent_mpaa ):
         from xbmcscript_trivia import Trivia
         xbmc.log( "[ script.cinema.experience ] - Starting Trivia script", level=xbmc.LOGNOTICE )
         activate_ha( _L_( 32615 ) ) # Trivia Start
-        ui = Trivia( "script-CExperience-trivia.xml", _A_.getAddonInfo('path'), "default", "720p", settings=settings, mpaa=mpaa, genre=genre, plist=plist, slide_playlist=slide_playlist )
+        __builtin__.plist = plist
+        __builtin__.slide_playlist = slide_playlist
+        __builtin__.movie_mpaa = mpaa
+        __builtin__.movie_genre = genre
+        ui = Trivia( "script-CExperience-trivia.xml", _A_.getAddonInfo('path'), "default", "720p" )
         ui.doModal()
         del ui
         # we need to activate the video window
@@ -464,7 +465,7 @@ def start_script( library_view = "oldway" ):
         if not playlist.size() < 1 and not messy_exit: # To catch an already running script when a new instance started
             xbmc.log( "[ script.cinema.experience ] - Playlist Position: %s  Playlist Size: %s " % ( playlist.getposition() + 1, ( playlist.size() ) ), level=xbmc.LOGNOTICE )
             prev_trigger = activate_ha( trigger_list[ playlist.getposition() ], prev_trigger, "normal" )
-            if trigger_list[ playlist.getposition() ] == "Movies":
+            if trigger_list[ playlist.getposition() ] == "Movie":
                 xbmc.log( "[ script.cinema.experience ] - Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], level=xbmc.LOGNOTICE )
                 if _S_( "autorefresh" ) == "true" and _S_( "autorefresh_movie" ) == "true":
                     auto_refresh( autorefresh, "enable" )
@@ -483,7 +484,7 @@ def start_script( library_view = "oldway" ):
     return messy_exit
 
 if __name__ == "__main__" :
-    xbmc.sleep( 500 )
+    xbmc.sleep( 2000 )
     footprints()
     prev_trigger = ""
     loglevel = int(xbmc.executehttpapi( "GetLogLevel" ).replace( "<li>", "" ) )
@@ -577,7 +578,7 @@ if __name__ == "__main__" :
                 auto_refresh( autorefresh, "enable" )
             prev_trigger = activate_ha( _L_( 32614 ), None, "normal" ) # Script End
             _A_.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-            #xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
+            xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
             xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
     except:
         traceback.print_exc()
@@ -585,7 +586,7 @@ if __name__ == "__main__" :
         if _S_( "autorefresh" ) == "true":
             auto_refresh( autorefresh, "enable" )
         _A_.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-        #xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
+        xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % screensaver )
         prev_trigger = activate_ha( _L_( 32614 ), None, "normal" ) # Script End
         xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
     #sys.modules.clear()

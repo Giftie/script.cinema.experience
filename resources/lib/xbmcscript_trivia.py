@@ -2,6 +2,7 @@
 
 __script__ = "Cinema Experience"
 __scriptID__ = "script.cinema.experience"
+
 # main imports
 import os, sys, traceback
 import xbmcgui
@@ -12,6 +13,7 @@ import binascii
 from random import shuffle, random
 import re
 import time
+
 
 _A_ = xbmcaddon.Addon(__scriptID__)
 _L_ = _A_.getLocalizedString
@@ -39,13 +41,13 @@ class Trivia( xbmcgui.WindowXML ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXML.__init__( self, *args, **kwargs )
         # update dialog
-        self.settings = kwargs[ "settings" ]
+        self.settings = slide_settings
         self.playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
-        self.mpaa = kwargs[ "mpaa" ]
-        self.genre = kwargs[ "genre" ]
+        self.mpaa = movie_mpaa
+        self.genre = movie_genre
         # initialize our class variable
-        self.plist = kwargs[ "plist" ]
-        self.slide_playlist = kwargs[ "slide_playlist" ]
+        self.plist = plist
+        self.slide_playlist = slide_playlist
         self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
         self._init_variables()
         # turn screensaver off
@@ -97,7 +99,6 @@ class Trivia( xbmcgui.WindowXML ):
             #    xbmc.Player().play( self.music_playlist )
             xbmc.sleep( 200 )
             xbmc.Player().play( self.music_playlist )
-
 
     def _next_slide( self, slide=1, final_slide=False ):
         # cancel timer if it's running
@@ -200,7 +201,7 @@ class Trivia( xbmcgui.WindowXML ):
         # cancel timers
         self._cancel_timers()
         xbmc.Player().stop()
-        time.sleep( 1 )
+        xbmc.sleep( 1000 )
         if (self.settings[ "trivia_fade_volume" ] == "true" and self.settings[ "trivia_adjust_volume"] == "true" ):
             self._fade_volume( False )
         elif (self.settings[ "trivia_fade_volume" ] == "false" and self.settings[ "trivia_adjust_volume"] == "true" ):
