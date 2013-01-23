@@ -22,13 +22,8 @@ _L_ = _A_.getLocalizedString
 # settings method
 _S_ = _A_.getSetting
 
-
 # set proper message
 message = 32520
-
-#pDialog = xbmcgui.DialogProgress()
-#pDialog.create( __script__, _L_( message )  )
-#pDialog.update( 0 )
 
 from urllib import quote_plus
 from random import shuffle, random
@@ -210,8 +205,6 @@ class Main:
     def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa ):
         # TODO: try to get a local thumb for special videos?
         xbmc.log( "[script.cinema.experience] - Building Cinema Experience Playlist",level=xbmc.LOGNOTICE )
-        # get Dolby/DTS videos
-        xbmc.log( "[script.cinema.experience] - Adding Audio Format Video",level=xbmc.LOGNOTICE )
         # Add Countdown video
         xbmc.log( "[script.cinema.experience] - Adding Countdown Videos: %s Video(s)" % (0, 1, 1, 2, 3, 4, 5,)[ int( _S_( "countdown_video" ) ) ], level=xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -225,7 +218,9 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Countdown Label into Trigger List
             self.trigger_list.insert( 0, _L_( 32611 ) )
+        # get Dolby/DTS videos
         if ( _S_( "enable_audio" ) ) == "true" and ( _S_( "audio_videos_folder" ) ):
+            xbmc.log( "[script.cinema.experience] - Adding Audio Format Video",level=xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( _S_( "audio_videos_folder" ) != "" ),
@@ -238,8 +233,8 @@ class Main:
                 # Insert Audio Format Label into Trigger List
                 self.trigger_list.insert( 0, _L_( 32606 ) )
         # get rating video
-        xbmc.log( "[script.cinema.experience] - Adding Ratings Video",level=xbmc.LOGNOTICE )
         if ( _S_( "enable_ratings" ) ) == "true" :
+            xbmc.log( "[script.cinema.experience] - Adding Ratings Video",level=xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( _S_( "rating_videos_folder" ) != "" ),

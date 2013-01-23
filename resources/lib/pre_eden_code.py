@@ -8,6 +8,7 @@ import xbmc, xbmcgui, xbmcaddon
 import traceback, os
 from urllib import quote_plus
 from json_utils import find_movie_details, retrieve_json_dict
+from utils import list_to_string
 
 _A_ = xbmcaddon.Addon( __scriptID__ )
 # language method
@@ -45,16 +46,22 @@ def _build_playlist( movie_titles ):
 
 def _store_playlist():
     p_list = []
-    xbmc.log( "[script.cinema.experience] - Storing Playlist", level=xbmc.LOGNOTICE )
+    xbmc.log( "[script.cinema.experience] - Storing Playlist in memory", level=xbmc.LOGNOTICE )
     json_query = '{"jsonrpc": "2.0", "method": "Playlist.GetItems", "params": {"playlistid": 1, "properties": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"] }, "id": 1}'
     p_list = retrieve_json_dict( json_query, items="items", force_log=False )
     return p_list
-
+    
+def _movie_details( movie_id ):
+    movie_details = []
+    xbmc.log( "[script.cinema.experience] - Retrieving Movie Details", level=xbmc.LOGNOTICE )
+    json_query = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"movieid": %d, "properties": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"]}, "id": 1}' % movie_id
+    movie_details = retrieve_json_dict( json_query, items="moviedetails", force_log=False )
+    return movie_details
+    
 def _rebuild_playlist( plist ): # rebuild movie playlist
     xbmc.log( "[script.cinema.experience] - [ce_playlist.py] - Rebuilding Playlist", level=xbmc.LOGNOTICE )
     playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
     playlist.clear()
-    print plist
     for movie in plist:
         try:
             xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie["title"], level=xbmc.LOGDEBUG )
@@ -74,12 +81,13 @@ def _get_queued_video_info( feature = 0 ):
     try:
         # get movie name
         plist = _store_playlist()
-        movie_title = plist[feature]['title']
-        path = plist[feature]['file']
-        mpaa = plist[feature]['mpaa']
-        genre = plist[feature]['genre']
+        movie_detail = _movie_details( plist[feature]['id'] )
+        movie_title = movie_detail['title']
+        path = movie_detail['file']
+        mpaa = movie_detail['mpaa']
+        genre = list_to_string( movie_detail['genre'] )
         try:
-            audio = plist[feature]['streamdetails']['audio'][0]['codec']
+            audio = movie_detail['streamdetails']['audio'][0]['codec']
         except:
             audio = "other"
         if mpaa == "":

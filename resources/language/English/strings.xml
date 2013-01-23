@@ -41,7 +41,6 @@
     <string id="32196">   - File</string>
     <string id="32197">   - Folder</string>
     <string id="32198">- Coming Attractions Outro</string>
-
     <!-- Trivia quiz settings -->
     <string id="32200">Duration(in Minutes)</string>
     <string id="32201">None</string>
@@ -90,7 +89,6 @@
     <string id="32289">   - Video Folder</string>
     <string id="32290">- Limit Trivia by Rating of Movie [I](requires slides.xml) [/I]</string>
     <string id="32291">- Rating Limit for Trivia [I](requires slides.xml) [/I]</string>
-
     <!-- Special videos settings -->
     <string id="32300">Movie Ratings Folder</string>
     <string id="32301">Enable Rating Video</string>
@@ -112,14 +110,12 @@
     <string id="32390">Movie Coundown Video File</string>
     <string id="32391">Movie Coundown Video Folder</string>
     <string id="32392">Movie Coundown Video</string>
-
     <!-- Misc settings -->
     <string id="32400">Run script before videos start</string>
     <string id="32401">Disable Auto Refresh Setting</string>
     <string id="32402">  - Re-Enable Auto Refresh For Movie</string>
     <string id="32403">Enable Output to VoxCommando</string>
-    <string id="32404">Enable Pre-Eden</string>
-    
+    <string id="32404">Enable Pre-Eden</string>    
     <!-- Feature Options -->
     <string id="32410">Number Of Features</string>
     <string id="32411">1 Feature</string>
@@ -133,7 +129,6 @@
     <string id="32430">Insert Audio Format Video</string>
     <string id="32440">Insert Rating Video</string>
     <string id="32445">Enable Queue Instructions</string>
-
     <!-- Messages -->
     <string id="32500">Choosing random trailers...</string>
     <string id="32510">Randomizing trivia slideshow...</string>
@@ -149,7 +144,6 @@
     <string id="32544">Script Canceled</string>
     <string id="32545">Script Exiting</string>
     <string id="32546">Press 'Q' or '0'(ZERO) to Queue Movie(s)</string>
-
     <!-- Genre/Studio labels -->
     <!-- Do not Translate -->
     <string id="32600">Coming Attractions Intro</string>
@@ -172,22 +166,19 @@
     <string id="32617">Movie Theatre Outro</string>
     <string id="32618">Pause</string>
     <string id="32619">Resume</string>
-    <!-- Start Translating Again -->
-    
+    <!-- Start Translating Again -->    
     <!-- compatible messages -->
     <string id="32700">Version</string>
     <string id="32701">This version of %s requires an</string>
     <string id="32702">XBMC revision of %s or greater to run.</string>
     <string id="32703">Please update your XBMC.</string>
-
     <!-- Label separators -->
     <string id="32800">Movie Trailers</string>
     <string id="32801">Trivia Slideshow</string>
     <string id="32802">Special Videos</string>
     <string id="32803">Feature Presentation</string>
     <string id="32804">Miscellaneous</string>
-    <string id="32805">Home Automation</string>
-    
+    <string id="32805">Home Automation</string>    
     <!-- Home Automation -->
     <string id="32900">[B]When Multiple Videos are Involved[/B] - Trigger only once</string>
     <string id="32901">Trigger at start of the Script</string>

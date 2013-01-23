@@ -50,8 +50,6 @@ class Trivia( xbmcgui.WindowXML ):
         self.slide_playlist = slide_playlist
         self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
         self._init_variables()
-        # turn screensaver off
-        xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,None)" )
         self._get_global_timer( (self.settings[ "trivia_total_time" ] * 60 ) , self._exit_trivia )
         #display slideshow
         #self.doModal()
@@ -69,10 +67,9 @@ class Trivia( xbmcgui.WindowXML ):
         self.global_timer = None
         self.slide_timer = None
         self.exiting = False
-        # get current screensaver
-        self.screensaver = xbmc.executehttpapi( "GetGUISetting(3;screensaver.mode)" ).replace( "<li>", "" )
         self.xbmc_volume = self._get_current_volume()
         self.image_count = 0
+        self.watched = []
 
     def _get_current_volume( self ):
         # get the current volume
@@ -85,7 +82,6 @@ class Trivia( xbmcgui.WindowXML ):
     def _start_slideshow_music( self ):
         xbmc.log( "[script.cinema.experience] - Starting Tivia Music", level=xbmc.LOGNOTICE)
         # did user set this preference
-        #xbmc.log( "[script.cinema.experience] - Setting - trivia_music: %s"  % self.settings[ "trivia_music" ], level=xbmc.LOGNOTICE)
         if int(self.settings[ "trivia_music" ]) > 0:
             # check to see if script is to adjust the volume
             if self.settings[ "trivia_adjust_volume" ] == "true":
@@ -206,9 +202,6 @@ class Trivia( xbmcgui.WindowXML ):
             self._fade_volume( False )
         elif (self.settings[ "trivia_fade_volume" ] == "false" and self.settings[ "trivia_adjust_volume"] == "true" ):
             xbmc.executebuiltin( "XBMC.SetVolume(%d)" % ( self.xbmc_volume ) )
-        # turn screensaver back on
-        xbmc.executehttpapi( "SetGUISetting(3,screensaver.mode,%s)" % self.screensaver )
-        # we play the video playlist here so the screen does not flash
         xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
         #xbmc.Player().play( self.playlist )
         #xbmc.Player().pause()
@@ -245,7 +238,6 @@ class Trivia( xbmcgui.WindowXML ):
         for volume in volumes:
             xbmc.executebuiltin( "XBMC.SetVolume(%d)" % volume  )
             # sleep
-            #time.sleep( sleep_time )
             xbmc.sleep( int( sleep_time * 1000 ) )
         xbmc.log( "[script.cinema.experience] - Finish Volume: %d " % ( self._get_current_volume() ), level=xbmc.LOGNOTICE)
 

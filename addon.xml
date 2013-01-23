@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.cinema.experience" name="Cinema Experience" version="2.0.57" provider-name="nuka1195-giftie-ackbarr">
+<addon id="script.cinema.experience" name="Cinema Experience" version="3.0.0" provider-name="nuka1195-giftie-ackbarr">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1"/>
     </requires>
     <extension point="xbmc.python.script" library="addon.py"/>
     <extension point="xbmc.addon.metadata">

@@ -5,6 +5,17 @@
 import re, os, sys, traceback
 import xbmc
 
+def list_to_string( item ):
+    list_to_string = ""
+    if not ( type( item ) is list ):
+        list_to_string = item
+    else:
+        if len( item ) > 1:
+            list_to_string = " / ".join( item )
+        else:
+            list_to_string = "".join( item )
+    return list_to_string
+
 def settings_to_log( settings_path, script_heading="[utils.py]" ):
     try:
         xbmc.log( "%s - Settings\n" % script_heading, level=xbmc.LOGDEBUG)

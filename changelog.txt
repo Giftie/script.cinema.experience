@@ -1,3 +1,6 @@
+3.0.0 
+- first Frodo Version.
+
 2.0.57
 - fix - trigger is 'Movie' not 'Movies' - fixes turning autorefresh back on for movie if it is the last video in playlist
 
