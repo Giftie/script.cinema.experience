@@ -8,7 +8,6 @@ def parse_playlist( playlist, supported ):
         finds all Artist - Title and File path information from a m3u playlist
         Returns a list for Artist - Title and one for File path
     """
-    print "parsing m3u file"
     track_info = []
     track_location = []
     for line in playlist:

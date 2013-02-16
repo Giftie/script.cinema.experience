@@ -19,6 +19,12 @@ _A_ = xbmcaddon.Addon(__scriptID__)
 _L_ = _A_.getLocalizedString
 _S_ = _A_.getSetting
 
+trivia_settings    = sys.modules["__main__"].trivia_settings
+trailer_settings   = sys.modules["__main__"].trailer_settings
+feature_settings   = sys.modules["__main__"].feature_settings
+video_settings     = sys.modules["__main__"].video_settings
+CEPlayer           = xbmc.Player
+
 BASE_RESOURCE_PATH = os.path.join( xbmc.translatePath( _A_.getAddonInfo('path') ), 'resources' )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
@@ -41,7 +47,7 @@ class Trivia( xbmcgui.WindowXML ):
     def __init__( self, *args, **kwargs ):
         xbmcgui.WindowXML.__init__( self, *args, **kwargs )
         # update dialog
-        self.settings = slide_settings
+        self.settings = trivia_settings
         self.playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
         self.mpaa = movie_mpaa
         self.genre = movie_genre
@@ -75,16 +81,16 @@ class Trivia( xbmcgui.WindowXML ):
         # get the current volume
         result = xbmc.executeJSONRPC( volume_query )
         match = re.search( '"volume" ?: ?([0-9]{1,3})', result )
-        volume = int(match.group(1))
+        volume = int( match.group(1) )
         xbmc.log( "[script.cinema.experience] - Current Volume: %d" % volume, level=xbmc.LOGDEBUG)
         return volume
 
     def _start_slideshow_music( self ):
         xbmc.log( "[script.cinema.experience] - Starting Tivia Music", level=xbmc.LOGNOTICE)
         # did user set this preference
-        if int(self.settings[ "trivia_music" ]) > 0:
+        if self.settings[ "trivia_music" ] > 0:
             # check to see if script is to adjust the volume
-            if self.settings[ "trivia_adjust_volume" ] == "true":
+            if self.settings[ "trivia_adjust_volume" ]:
                 xbmc.log( "[script.cinema.experience] - Adjusting Volume to %s" % self.settings[ "trivia_music_volume" ], level=xbmc.LOGNOTICE)
                 # calculate the new volume
                 volume = self.settings[ "trivia_music_volume" ]
@@ -94,7 +100,7 @@ class Trivia( xbmcgui.WindowXML ):
             #if self.settings[ "trivia_music_file" ].endswith(".m3u"):
             #    xbmc.Player().play( self.music_playlist )
             xbmc.sleep( 200 )
-            xbmc.Player().play( self.music_playlist )
+            CEPlayer().play( self.music_playlist )
 
     def _next_slide( self, slide=1, final_slide=False ):
         # cancel timer if it's running
@@ -104,9 +110,9 @@ class Trivia( xbmcgui.WindowXML ):
         self.image_count += slide
         # check for invalid count, TODO: make sure you don't want to reset timer
         # check to see if playlist has come to an end
-        if not xbmc.Player().isPlayingAudio() and int(self.settings[ "trivia_music" ]) > 0:
+        if not CEPlayer().isPlayingAudio() and int(self.settings[ "trivia_music" ]) > 0:
                 #build_music_playlist()
-                xbmc.Player().play( self.music_playlist )
+                CEPlayer().play( self.music_playlist )
         else:
             pass
         if self.image_count < 0:
@@ -182,10 +188,10 @@ class Trivia( xbmcgui.WindowXML ):
         self._show_intro_outro( "outro" )
 
     def _show_intro_outro( self, type="intro" ):
-        is_playing = "True"
+        is_playing = True
         if type == "outro":
             xbmc.log( "[script.cinema.experience] - ## Outro ##", level=xbmc.LOGNOTICE)
-            if self.settings[ "trivia_fade_volume" ] == "true" and self.settings[ "trivia_adjust_volume"] == "true":
+            if self.settings[ "trivia_fade_volume" ] and self.settings[ "trivia_adjust_volume"]:
                 self._fade_volume()
             self._play_video_playlist()
         else:
@@ -196,13 +202,13 @@ class Trivia( xbmcgui.WindowXML ):
         self.exiting = -1
         # cancel timers
         self._cancel_timers()
-        xbmc.Player().stop()
-        xbmc.sleep( 1000 )
-        if (self.settings[ "trivia_fade_volume" ] == "true" and self.settings[ "trivia_adjust_volume"] == "true" ):
+        CEPlayer().stop()
+        xbmc.sleep( 500 )
+        if ( self.settings[ "trivia_fade_volume" ] and self.settings[ "trivia_adjust_volume"] ):
             self._fade_volume( False )
-        elif (self.settings[ "trivia_fade_volume" ] == "false" and self.settings[ "trivia_adjust_volume"] == "true" ):
+        elif ( not self.settings[ "trivia_fade_volume" ] and self.settings[ "trivia_adjust_volume"] ):
             xbmc.executebuiltin( "XBMC.SetVolume(%d)" % ( self.xbmc_volume ) )
-        xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
+        #xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
         #xbmc.Player().play( self.playlist )
         #xbmc.Player().pause()
         #xbmc.sleep(2000) # wait 2 seconds

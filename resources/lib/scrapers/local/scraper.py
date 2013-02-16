@@ -15,7 +15,9 @@ import xbmcaddon
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 _A_ = xbmcaddon.Addon( __scriptID__ )
 _L_ = _A_.getLocalizedString
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+trailer_settings   = sys.modules[ "__main__" ].trailer_settings
+BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from folder import dirEntries
 from ce_playlist import _set_trailer_info
@@ -23,10 +25,10 @@ from ce_playlist import _set_trailer_info
 class Main:
     xbmc.log("%s - Local Folder Trailer Scraper Started" % logmessage, level=xbmc.LOGNOTICE )
     # base paths
-    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
+    BASE_CURRENT_SOURCE_PATH = BASE_RESOURCE_PATH
 
-    def __init__( self, mpaa=None, genre=None, settings=None, movie=None ):
-        self.mpaa = mpaa
+    def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
+        self.mpaa = equivalent_mpaa
         self.genre = genre.replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and ADV" ).replace( "Adventure", "ACT and Adventure" ).replace( "ACT",  "Action" ).replace( "ADV",  "Adventure" ).split( " / " )
         self.settings = settings
         self.movie = movie

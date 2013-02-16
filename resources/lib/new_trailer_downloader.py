@@ -16,8 +16,7 @@ logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 _A_ = xbmcaddon.Addon( __scriptID__ )
 # language method
 _L_ = _A_.getLocalizedString
-# settings method
-_S_ = _A_.getSetting
+trailer_settings   = sys.modules["__main__"].trailer_settings
 
 from urllib import quote_plus
 from random import shuffle, random
@@ -30,12 +29,12 @@ from ce_playlist import _get_trailers
 
 downloaded_trailers = []
 
-def downloader( mpaa, genre ):
+def downloader( mpaa, genre, equivalent_mpaa ):
     movie = ""
     trailer_list = []
     xbmc.log( "%s - Starting Trailer Downloader" % logmessage, level=xbmc.LOGNOTICE )
     genre = genre.replace( "_", " / " )
-    trailer_list = _download_trailers( mpaa, genre, movie )
+    trailer_list = _download_trailers( equivalent_mpaa, mpaa, genre, movie )
     save_download_list( trailer_list )
 
 def save_download_list( download_trailers ):
@@ -71,13 +70,14 @@ def save_download_list( download_trailers ):
         except:
             xbmc.log( "%s - Error Trying to Remove List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
     
-def _download_trailers( mpaa, genre, movie ):
+def _download_trailers( equivalent_mpaa, mpaa, genre, movie ):
     updated_trailers = []
-    xbmc.log( "%s - Downloading Trailers: %s Trailers" % ( logmessage, ( 0, 1, 2, 3, 4, 5, 10, )[ int( _S_( "trailer_count" ) ) ] ), level=xbmc.LOGNOTICE )
+    xbmc.log( "%s - Downloading Trailers: %s Trailers" % ( logmessage, trailer_settings[ "trailer_count" ] ), level=xbmc.LOGNOTICE )
     temp_destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "temp_trailers" ).replace( "\\\\", "\\" )
     if not xbmcvfs.exists( temp_destination ):
         xbmcvfs.mkdir( temp_destination )
-    trailers = _get_trailers(  items=( 0, 1, 2, 3, 4, 5, 10, )[ int( _S_( "trailer_count" ) ) ],
+    trailers = _get_trailers(  items=trailer_settings[ "trailer_count" ],
+                     equivalent_mpaa=equivalent_mpaa,
                                 mpaa=mpaa,
                                genre=genre,
                                movie=movie,
@@ -91,7 +91,7 @@ def _download_trailers( mpaa, genre, movie ):
         xbmc.log( "%s - Attempting To Download Trailer: %s" % ( logmessage, trailer[ 1 ] ), level=xbmc.LOGNOTICE )
         filename, ext = os.path.splitext( os.path.basename( (trailer[ 2 ].split("|")[0] ).replace( "?","" ) ) )
         filename = filename + "-trailer" + ext
-        file_path = os.path.join( _S_( "trailer_download_folder" ), filename ).replace( "\\\\", "\\" )
+        file_path = os.path.join( trailer_settings[ "trailer_download_folder" ], filename ).replace( "\\\\", "\\" )
         # check to see if trailer is already downloaded
         if os.path.isfile( file_path ):
             success = True
@@ -118,9 +118,9 @@ def _download_trailers( mpaa, genre, movie ):
         else:
             xbmc.log( "%s - Failed to Download Trailer: %s" % ( logmessage, trailer[ 1 ] ), level=xbmc.LOGNOTICE )
             updated_trailer=[]
-        xbmcvfs.copy( os.path.join( temp_destination, filename ).replace( "\\\\", "\\"), os.path.join( _S_( "trailer_download_folder" ), filename ).replace( "\\\\", "\\" ) )
-        xbmcvfs.copy( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".tbn" ).replace( "\\\\", "\\"), os.path.join( _S_( "trailer_download_folder" ), os.path.splitext( filename )[0] + ".tbn"  ).replace( "\\\\", "\\" ) )
-        xbmcvfs.copy( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\"), os.path.join( _S_( "trailer_download_folder" ), os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\" ) )
+        xbmcvfs.copy( os.path.join( temp_destination, filename ).replace( "\\\\", "\\"), os.path.join( trailer_settings[ "trailer_download_folder" ], filename ).replace( "\\\\", "\\" ) )
+        xbmcvfs.copy( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".tbn" ).replace( "\\\\", "\\"), os.path.join( trailer_settings[ "trailer_download_folder" ], os.path.splitext( filename )[0] + ".tbn"  ).replace( "\\\\", "\\" ) )
+        xbmcvfs.copy( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\"), os.path.join( trailer_settings[ "trailer_download_folder" ], os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\" ) )
         xbmcvfs.delete( os.path.join( temp_destination, filename ).replace( "\\\\", "\\") )
         xbmcvfs.delete( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".tbn" ).replace( "\\\\", "\\") )
         xbmcvfs.delete( os.path.join( temp_destination, os.path.splitext( filename )[0] + ".nfo" ).replace( "\\\\", "\\") )
@@ -142,7 +142,7 @@ def _create_nfo_file( trailer, trailer_nfopath ):
     '''
     xbmc.log( "%s - Creating Trailer NFO file" % logmessage, level=xbmc.LOGNOTICE )
     # set quality, we do this since not all resolutions have trailers
-    quality = ( "Standard", "480p", "720p", "1080p" )[ int( _S_( "trailer_quality" ) ) ]
+    quality = trailer_settings[ "trailer_quality" ]
     # set movie info
     nfoSource = """<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <movieinfo id="%s">
@@ -183,9 +183,9 @@ def _save_nfo_file( nfoSource, trailer_nfopath ):
 if __name__ == "__main__":
     try:
         if sys.argv[1]:
-            mpaa, genre = sys.argv[1].replace( "mpaa=", "" ).replace( "genre=", "").split(";")
+            mpaa, genre = sys.argv[1].replace( "mpaa=", "" ).replace( "genre=", "").replace( "equivalent_mpaa=", "" ).split(";")
             _genre = genre.replace( "_", " / " )
-            downloader( mpaa, _genre )
+            downloader( mpaa, _genre, equivalent_mpaa )
         else:
             xbmc.log( "%s - No Arguments sent " % logmessage, level=xbmc.LOGNOTICE )
     except:

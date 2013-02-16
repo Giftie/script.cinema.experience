@@ -26,6 +26,7 @@ class _urlopener( urllib.FancyURLopener ):
 # set for user agent
 urllib._urlopener = _urlopener()
 
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 
 class _Parser:
     """
@@ -56,10 +57,7 @@ class _Parser:
             # gather all video records <movieinfo>
             movies = re.findall( "<movieinfo id=\"(.+?)\">(.*?)</movieinfo>", xmlSource )
             # randomize the trailers and create our play list
-            while count <6:
-                shuffle( movies, random )
-                count += 1
-            count = 0
+            shuffle( movies )
             # enumerate thru the movies list and gather info
             for id, movie in movies:
                 # user preference to skip watch trailers
@@ -135,11 +133,9 @@ class Main:
     print "Apple Movie Trailers Newest trailers scraper"
     # base url
     BASE_CURRENT_URL = "http://www.apple.com/trailers/home/xml/newest%s.xml"
-    # base paths
-    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data" ), os.path.basename( _A_.getAddonInfo('path') ) )
-
-    def __init__( self, mpaa=None, genre=None, settings=None, movie=None ):
-        self.mpaa = mpaa
+    
+    def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
+        self.mpaa = equivalent_mpaa
         self.genre = genre
         self.settings = settings
 
@@ -147,8 +143,8 @@ class Main:
         # initialize trailers list
         trailers = []
         # fetch source
-        path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, ( "newest.xml", "newest_480p.xml", "newest_720p.xml", "newest_720p.xml", )[ self.settings[ "trailer_quality" ] ] )
-        url = self.BASE_CURRENT_URL % ( ( "", "_480p", "_720p", "_720p", )[ self.settings[ "trailer_quality" ] ], )
+        path = os.path.join( BASE_CURRENT_SOURCE_PATH, "newest%s.xml" % self.settings[ "trailer_quality_url" ] )
+        url = self.BASE_CURRENT_URL % ( self.settings[ "trailer_quality_url" ], )
         xmlSource = self._get_xml_source( path, url )
         # parse source and add our items
         if ( xmlSource ):
@@ -207,7 +203,7 @@ class Main:
 
     def _parse_xml_source( self, xmlSource ):
         # base path to watched file
-        base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         # get watched file
         try:
             watched = eval( self._get_xml_source( base_path ) )

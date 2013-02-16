@@ -201,4 +201,6 @@
     <string id="32918">Trigger when paused</string>
     <string id="32919">Trigger when resumed</string>
     <string id="32920">Enable the Home Automation Script</string>
+    <string id="32921">Must use Trivia Slide Show as well to provide time for script to download trailer(s)</string>
+    <string id="32922">    Delay to determine if movie is paused(in 100ms steps, ie 20 = 2000 ms = 2 secs</string>
 </strings>

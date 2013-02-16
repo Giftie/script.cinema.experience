@@ -4,14 +4,12 @@
 Apple Movie Trailers script database scraper
 """
 
-import sys
-import os
-import xbmcaddon
-import xbmc
+import sys, os, datetime, traceback
+import xbmcaddon, xbmc
 
 from random import shuffle
 from urllib import quote_plus
-import datetime
+
 try:
   from sqlite3 import dbapi2 as sqlite
 except:
@@ -24,26 +22,30 @@ sys.path.append( os.path.join( _A_.getAddonInfo('path'), "resources" ) )
 
 __useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
 #__useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
-
+trailer_settings   = sys.modules[ "__main__" ].trailer_settings
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 
 class Main:
     print "Apple Movie Trailers script database scraper"
-    BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://masterprofile/addon_data" ), "script.apple.movie.trailers" )
+    BASE_DATA_PATH = os.path.join( BASE_CURRENT_SOURCE_PATH, "script.apple.movie.trailers" )
 
-    def __init__( self, mpaa=None, genre=None, settings=None, movie=None ):
-        self.mpaa = mpaa
+    def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
+        self.mpaa = equivalent_mpaa
         self.genre = genre
         self.settings = settings
 
     def clear_watched( self ):
-        # make db connection
-        records = Records( amt_db_path=self.settings[ "trailer_amt_db_file" ] )
-        # clear watched sql
-        sql ="UPDATE movies SET times_watched=0, last_watched=''"
-        # update the record with our new values
-        ok = records.update( sql )
-        # close the database
-        records.close()
+        try:
+            # make db connection
+            records = Records( amt_db_path=self.settings[ "trailer_amt_db_file" ] )
+            # clear watched sql
+            sql ="UPDATE movies SET times_watched=0, last_watched=''"
+            # update the record with our new values
+            ok = records.update( sql )
+            # close the database
+            records.close()
+        except:
+            traceback.print_exc()
 
     def fetch_trailers( self ):
         try:

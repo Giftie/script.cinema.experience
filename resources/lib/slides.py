@@ -12,8 +12,6 @@ __scriptID__ = "script.cinema.experience"
 _A_ = xbmcaddon.Addon( __scriptID__ )
 # language method
 _L_ = _A_.getLocalizedString
-# settings method
-_S_ = _A_.getSetting
 
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) ).replace("\\\\","\\")
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) ).replace("\\\\","\\")
@@ -23,12 +21,14 @@ from xbmcvfs import delete as delete_file
 from xbmcvfs import exists as exists
 from xbmcvfs import copy as file_copy
 from folder import dirEntries, getFolders
+
+slide_settings = sys.modules["__main__"].trivia_settings
     
 def _fetch_slides( movie_mpaa ):
     # get watched list
     watched = _load_watched_trivia_file()
     # get the slides
-    tmp_slides = _get_slides( [_S_( "trivia_folder" )], movie_mpaa )
+    tmp_slides = _get_slides( [ slide_settings[ "trivia_folder" ] ], movie_mpaa )
     # shuffle and format playlist
     slide_playlist = _shuffle_slides( tmp_slides, watched )
     return slide_playlist
@@ -136,7 +136,7 @@ def _shuffle_slides( tmp_slides, watched ):
     # loop thru slide groups and skip already watched groups
     for slides in tmp_slides:
         # has this group been watched
-        if ( not _S_( "trivia_unwatched_only" ) or ( slides[ 0 ] and xbmc.getCacheThumbName( slides[ 0 ] ) not in watched ) or
+        if ( not slide_settings[ "trivia_unwatched_only" ] or ( slides[ 0 ] and xbmc.getCacheThumbName( slides[ 0 ] ) not in watched ) or
               ( slides[ 1 ] and xbmc.getCacheThumbName( slides[ 1 ] ) not in watched ) or
               ( slides[ 2 ] and xbmc.getCacheThumbName( slides[ 2 ] ) not in watched ) ):
             # loop thru slide group only include non blank slides
@@ -146,7 +146,7 @@ def _shuffle_slides( tmp_slides, watched ):
                     # add slide
                     slide_playlist += [ slide ]
             xbmc.log( "[script.cinema.experience] ------------------Unwatched-------------------------     included - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ), level=xbmc.LOGDEBUG)
-
+            
         else:
             xbmc.log( "[script.cinema.experience] -------------------Watched--------------------------     skipped - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ), level=xbmc.LOGDEBUG)
 
@@ -154,7 +154,7 @@ def _shuffle_slides( tmp_slides, watched ):
     xbmc.log( "[script.cinema.experience] - total slides selected: %d" % len( slide_playlist ), level=xbmc.LOGNOTICE)
 
     # reset watched automatically if no slides are left
-    if ( len( slide_playlist ) == 0 and _S_( "trivia_unwatched_only" ) and len( watched ) > 0 ):
+    if ( len( slide_playlist ) == 0 and slide_settings[ "trivia_unwatched_only" ] and len( watched ) > 0 ):
         watched = _reset_watched()
         #attempt to load our playlist again
         _shuffle_slides( tmp_slides, watched )

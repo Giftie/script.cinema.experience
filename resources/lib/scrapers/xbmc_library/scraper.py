@@ -14,12 +14,16 @@ import xbmc
 from random import shuffle
 from urllib import quote_plus
 import datetime, traceback
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
 
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 _A_ = xbmcaddon.Addon('script.cinema.experience')
 _L_ = _A_.getLocalizedString
-
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+trailer_settings   = sys.modules[ "__main__" ].trailer_settings
+BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_thumbnail, _get_trailer_thumbnail
 unwatched_movie_only = True
@@ -28,14 +32,19 @@ __useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
 class Main:
     xbmc.log( "%s - XBMC Movie Library Trailer Scraper" % logmessage, level=xbmc.LOGNOTICE )
-    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data" ), os.path.basename( _A_.getAddonInfo('path') ) )
+    BASE_CURRENT_SOURCE_PATH = BASE_RESOURCE_PATH
 
-
-    def __init__( self, mpaa=None, genre=None, settings=None, movie=None ):
-        self.mpaa = mpaa
-        self.genre = genre.split( " / " )
-        self.movie = movie
+    def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.settings = settings
+        if settings['trailer_limit_mpaa']:
+            self.mpaa = "Rated %s" % mpaa
+        else:
+            self.mpaa = ""
+        if settings['trailer_limit_genre'] and settings['trailer_rating'] == '--':
+            self.genre = ""
+        else:
+            self.genre = genre.split( " / " )[ 0 ]
+        self.movie = movie
         #  initialize our trailer list
         self.trailers = []
 
@@ -43,79 +52,54 @@ class Main:
         # get watched list
         self._get_watched()
         count = 0
-        sqlquery = """SELECT movieview.c00, movieview.c19, movieview.c12, movieview.c14, playCount from movieview WHERE NOT c19="" ORDER BY RANDOM()"""
-        xbmc.executehttpapi( "SetResponseFormat()" )
-        xbmc.executehttpapi( "SetResponseFormat(CloseRecord;</record>;OpenField,)" )
-        xbmc.log( "%s  - SQL: %s" % ( logmessage, sqlquery, ), level=xbmc.LOGDEBUG )
-        try:
-            sqlresult = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sqlquery ), )
-            #xbmc.log( "%s - sqlresult: %s" % sqlresult, level=xbmc.LOGDEBUG )
-            sqlrecords = sqlresult.split("</record>")
-            trailer_list = sqlrecords[ 0:len( sqlrecords ) -1 ]
-            for trailer in trailer_list:
-                title, trailer_path, trailer_ratingsql, trailer_genresql, movie_playcount, dummy = trailer.split("</field>")
-                # shorten MPAA/BBFC ratings
-                if trailer_ratingsql == "":
-                    trailer_ratingsql = "NR"
-                elif trailer_ratingsql.startswith("Rated"):
-                    trailer_ratingsql = trailer_ratingsql.split( " " )[ 1 - ( len( trailer_ratingsql.split( " " ) ) == 1 ) ]
-                    trailer_ratingsql = ( trailer_ratingsql, "NR", )[ trailer_ratingsql not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", ) ]
-                elif trailer_ratingsql.startswith("UK"):
-                    trailer_ratingsql = trailer_ratingsql.split( ":" )[ 1 - ( len( trailer_ratingsql.split( ":" ) ) == 1 ) ]
-                    trailer_ratingsql = ( trailer_ratingsql, "NR", )[ trailer_ratingsql not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
-                else:
-                    trailer_ratingsql = ( trailer_ratingsql, "NR", )[ trailer_ratingsql not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
-                if trailer_ratingsql not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", "NR" ):
-                    if trailer_ratingsql in ("12", "12A",):
-                        trailer_ratingsql = "PG-13"
-                    elif trailer_ratingsql == "15":
-                        trailer_ratingsql = "R"
-                    elif trailer_ratingsql == "U":
-                        trailer_ratingsql = "G"
-                    elif trailer_ratingsql in ("18", "R18", "MA",):
-                        trailer_ratingsql = "NC-17"
+        if self.settings[ "trailer_unwatched_movie_only" ]:
+            jsonquery = '''{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "sort": { "order": "ascending", "method": "title", "ignorearticle": true }, "properties" : ["trailer", "mpaa", "genre", "thumbnail", "plot"], "filter": { "and": [  { "field": "playcount", "operator": "is", "value": "0" }, { "field": "mpaarating", "operator": "contains", "value": "%s" }, { "field": "genre", "operator": "contains", "value": "%s" }, { "field": "hastrailer", "operator": "true", "value": "true" } ] }  }, "id": 1}''' % ( self.mpaa, self.genre )
+        else:
+            jsonquery = '''{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "sort": { "order": "ascending", "method": "title", "ignorearticle": true }, "properties" : ["trailer", "mpaa", "genre", "thumbnail", "plot"], "filter": { "and": [  { "field": "mpaarating", "operator": "contains", "value": "%s" }, { "field": "genre", "operator": "contains", "value": "%s" }, { "field": "hastrailer", "operator": "true", "value": "true" } ] }  }, "id": 1}''' % ( self.mpaa, self.genre )
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        data = simplejson.loads( jsonresponse )
+        if data.has_key('result'):
+            if data['result'].has_key('movies'):
+                trailers = data['result']['movies']
+                shuffle( trailers )
+                for trailer in trailers:
+                    trailer_rating = trailer['mpaa']
+                    # shorten MPAA/BBFC ratings
+                    if trailer_rating == "":
+                        trailer_rating = "NR"
+                    elif trailer_rating.startswith("Rated"):
+                        trailer_rating = trailer_rating.split( " " )[ 1 - ( len( trailer_rating.split( " " ) ) == 1 ) ]
+                        trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", ) ]
+                    elif trailer_rating.startswith("UK"):
+                        trailer_rating = trailer_rating.split( ":" )[ 1 - ( len( trailer_rating.split( ":" ) ) == 1 ) ]
+                        trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
                     else:
-                        trailer_ratingsql = trailer_ratingsql
-                # add trailer to our final list
-                if self.settings[ "trailer_unwatched_movie_only" ] == "true" and not movie_playcount:
-                #if unwatched_movie_only and not movie_playcount:
-                    xbmc.log("%s - Movie watched - Skipping Trailer" % logmessage, level=xbmc.LOGDEBUG )
-                    continue
-                if self.settings[ "trailer_unwatched_only" ] and xbmc.getCacheThumbName( trailer_path ) in self.watched:
-                    continue
-                trailer_genre = trailer_genresql.split(" / ")
-                if self.settings[ "trailer_limit_genre" ] and ( not list(set(trailer_genre) & set(self.genre) ) ):
-                    xbmc.log("%s - Genre Not Matched - Skipping Trailer" % logmessage, level=xbmc.LOGDEBUG )
-                    continue
-                if self.settings[ "trailer_limit_mpaa" ] and ( not trailer_ratingsql or not trailer_ratingsql == self.mpaa ):
-                    xbmc.log("%s - MPAA Not Matched - Skipping Trailer" % logmessage, level=xbmc.LOGDEBUG )
-                    continue
-                trailer_info = ( xbmc.getCacheThumbName( trailer_path ), # id
-                                 title, # title
-                                 trailer_path, # trailer
-                                 _get_trailer_thumbnail( trailer_path ), # thumb
-                                 '', # plot
-                                 '', # runtime
-                                 trailer_ratingsql, # mpaa
-                                 '', # release date
-                                 '', # studio
-                                 trailer_genresql, # genre
-                                 _L_( 32605 ), # writer
-                                 '', # director 32613
-                                )
-                self.trailers += [ trailer_info ]
-                # add id to watched file TODO: maybe don't add if not user preference
-                self.watched += [ xbmc.getCacheThumbName( trailer_path ) ]
-                # increment counter
-                count += 1
-                # if we have enough exit
-                if count == self.settings[ "trailer_count" ]:
-                   break
+                        trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+                    # add trailer to our final list
+                    if not trailer['trailer'].startswith( 'plugin://' ):
+                        trailer_info = ( xbmc.getCacheThumbName( trailer['trailer'] ), # id
+                                         trailer['label'], # title
+                                         trailer['trailer'], # trailer
+                                         trailer['thumbnail'], # thumb
+                                         trailer['plot'], # plot
+                                         '', # runtime
+                                         trailer_rating, # mpaa
+                                         '', # release date
+                                         '', # studio
+                                         trailer['genre'], # genre
+                                         'Trailer', # writer
+                                         '', # director 32613
+                                        )
+                        self.trailers += [ trailer_info ]
+                        # add id to watched file TODO: maybe don't add if not user preference
+                        self.watched += [ xbmc.getCacheThumbName( trailer['trailer'] ) ]
+                        # increment counter
+                        count += 1
+                        # if we have enough exit
+                        if count == self.settings[ "trailer_count" ]:
+                           break
             self._save_watched()
             return self.trailers
-        except:
-            xbmc.log( "%s - Error searching database", level=xbmc.LOGDEBUG )
-            traceback.print_exc()
 
     def _get_watched( self ):
         xbmc.log("%s - Getting Watched List" % logmessage, level=xbmc.LOGNOTICE )

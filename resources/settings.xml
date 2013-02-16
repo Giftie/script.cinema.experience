@@ -67,7 +67,7 @@
         <setting id="cav_outro_folder" type="folder" visible="!eq(-6,0) + gt(-2,1)" source="video" label="32197" default="" />
         <setting id="trailer_scraper" type="enum" visible="!eq(-7,0)" lvalues="32111|32112|32113|32114" label="32110" default="1" />  <!-- Stream -->
         <setting id="trailer_play_mode" type="enum" visible="eq(-1,0) | eq(-1,1)" enable="!eq(-1,2) | !eq(-1,3)" lvalues="32186|32187" label="32185" default="0" />
-        <setting type="lsep" label="Must use Trivia Slide Show as well to provide time for script to download trailer(s)" visible="eq(-1,1)" /> 
+        <setting type="lsep" label="32921" visible="eq(-1,1)" /> 
         <setting id="trailer_download_folder" type="folder" visible="!eq(-10,0) + eq(-2,1) + !eq(-3,2) + !eq(-3,3)" source="video" label="32188" default="" />
         <setting id="trailer_folder" type="folder" visible="!eq(-11,0) + eq(-4,2)" source="video" label="32113" default="" />
         <setting id="trailer_amt_db_file" type="file" visible="!eq(-12,0) + eq(-5,0)" source="local" mask="AMT.db" label="32120" default="special://profile/addon_data/script.apple.movie.trailers/AMT.db" />
@@ -121,9 +121,10 @@
         <setting type="sep" />
         <setting id="ha_paused" type="bool" label="32918" visible="eq(-20,true)" default="false" />
         <setting id="ha_resumed" type="bool" label="32919" visible="eq(-21,true)" default="false" />
+        <setting id="ha_pause_time" type="slider" label="32922" visible="eq(-22,true)" enable="eq(-2,true)" option="int" range="0,30" default="20"/>
     </category>
     
-<!-- Misc. Settings-->
+<!-- Misc. Settings _-->
 <!--    
     <category label="32804">    
         <setting type="lsep" label="32804" />

@@ -5,7 +5,7 @@ log_message = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 log_sep = "-"*70
 
 import xbmc, xbmcgui, xbmcaddon
-import traceback, os
+import traceback, os, sys
 from urllib import quote_plus
 from json_utils import find_movie_details, retrieve_json_dict
 from utils import list_to_string
@@ -13,36 +13,11 @@ from utils import list_to_string
 _A_ = xbmcaddon.Addon( __scriptID__ )
 # language method
 _L_ = _A_.getLocalizedString
-# settings method
-_S_ = _A_.getSetting
 
-def _build_playlist( movie_titles ):
-    for movie in movie_titles:
-        xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie, level=xbmc.LOGNOTICE )
-        xbmc.executehttpapi( "SetResponseFormat()" )
-        xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
-        # select Movie path from movieview Limit 1
-        sql = "SELECT movieview.idMovie, movieview.c00, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
-        xbmc.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), level=xbmc.LOGDEBUG )
-        # query database for info dummy is needed as there are two </field> formatters
-        try:
-            movie_id, movie_title, movie_path, movie_filename, thumb, genre, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql ), ).split( "</field>" )
-            movie_id = int( movie_id )
-        except:
-            traceback.print_exc()
-            xbmc.log( "[script.cinema.experience] - Unable to match movie", level=xbmc.LOGERROR )
-            movie_id = 0
-            movie_title = movie_path = movie_filename = thumb = genre = dummy = ""
-        movie_full_path = os.path.join(movie_path, movie_filename).replace("\\\\" , "\\")
-        xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie_title, level=xbmc.LOGNOTICE )
-        xbmc.log( "[script.cinema.experience] - Movie Path: %s" % movie_path, level=xbmc.LOGNOTICE )
-        xbmc.log( "[script.cinema.experience] - Movie Filename: %s" % movie_filename, level=xbmc.LOGNOTICE )
-        xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie_full_path, level=xbmc.LOGNOTICE )
-        if not movie_id == 0:
-            json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % movie_id
-            json_response = xbmc.executeJSONRPC(json_command)
-            xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % movie_title, level=xbmc.LOGDEBUG )
-            xbmc.sleep( 50 )
+trivia_settings    = sys.modules["__main__"].trivia_settings
+trailer_settings   = sys.modules["__main__"].trailer_settings
+feature_settings   = sys.modules["__main__"].feature_settings
+video_settings     = sys.modules["__main__"].video_settings
 
 def _store_playlist():
     p_list = []
@@ -122,8 +97,8 @@ def _get_queued_video_info( feature = 0 ):
     xbmc.log( "%s - Genre: %s" % ( log_message, genre, ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s - MPAA: %s" % ( log_message, mpaa, ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s - Audio: %s" % ( log_message, audio, ), level=xbmc.LOGDEBUG )
-    if _S_( "audio_videos_folder" ):
-        xbmc.log( "%s - Folder: %s" % ( log_message, ( xbmc.translatePath( _S_( "audio_videos_folder" ) ) + { "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + xbmc.translatePath( _S_( "audio_videos_folder" ) )[ -1 ], ) ), level=xbmc.LOGDEBUG )
+    if video_settings[ "audio_videos_folder" ]:
+        xbmc.log( "%s - Folder: %s" % ( log_message, ( video_settings[ "audio_videos_folder" ] + { "dts": "DTS", "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s  %s" % ( log_message, log_sep ), level=xbmc.LOGDEBUG )
     # return results
     return mpaa, audio, genre, path, equivalent_mpaa
