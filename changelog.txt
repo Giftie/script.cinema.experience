@@ -1,3 +1,44 @@
+3.0.1
+- fix       - more HTTP-API calls removed(none should be left in functioning code)
+- fix       - Local Folder trailer scraper
+- fix       - XBMC Library trailer scraper
+                - Matches Genre to the first genre type in movie(if enabled)
+                - accurately matches Rating(MPAA and BBFC only)(if enabled)
+                - accurately matches unwatched Movies(if enabled)
+- fix       - trailer downloader
+- improved  - reduce the chance of seeing the Movie Library listing(still flashes but much better)
+- change    - code re-arrange and partial re-write(improvements in speed and function)
+- add       - New starting method available - RunScript(script.cinema.experience,movieid=xxxx) xxxx = database Movie ID($INFO[ListItem.DBID])
+            - this allows the script to be started inside of a skin as such:(taken from Transperency!)
+                <control type="button" id="1112">
+                    <posx>1195</posx>
+                    <posy>471</posy>
+                    <width>48</width>
+                    <height>48</height>
+                    <label>-</label>
+                    <font>-</font>
+                    <texturefocus>cinema-focus.png</texturefocus>
+                    <texturenofocus>cinema-nofocus.png</texturenofocus>
+                    <onleft>11</onleft>
+                    <onright>11</onright>
+                    <onup>1113</onup>
+                    <ondown>50</ondown>
+                    <onclick>Dialog.Close(MovieInformation)</onclick>
+                    <onclick>RunScript(script.cinema.experience,movieid=$INFO[ListItem.DBID])</onclick>
+                    <visible>Container.Content(Movies) + Skin.HasSetting(CinemaScript_MovieInfo)</visible>
+                </control>
+            - starting in this method stops the movie library from jumping to the next item(making a better flow)
+- add       - new service script
+            - allows for pause and resume to function off of xbmc.Player instance(keeps Home Automation scripting fast) - there are still times pause and resume fail to trigger though
+            - allows the script to 'override' the default play action when selecting a video in the Movie Library.
+                - What happens is the the script will see that XBMC has added something to the video playlist then stops the player(about 250ms delay)
+                  You may see the Full Screen video show up for a split second(or longer) but the video should not play, then the script will take over.
+                - Need to adjust the new setting in Miscellaneous( 'Override Play button' )
+                - May not work for every one
+                - also requires a restart of XBMC
+- change    - the home_automation.py scripting has changed(sorry folks, it was needed.)  Will post link to new Event Ghost version
+- change    - reduced the amount of shuffling videos(used to shuffle 5 times, now only once) - should help randomizing the videos when only a few are available
+
 3.0.0 
 - first Frodo Version.
 

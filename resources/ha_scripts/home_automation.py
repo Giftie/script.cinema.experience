@@ -31,8 +31,6 @@ class Automate:
             else:
                 thread = Thread( name='ha_trigger', target=self.activate_on, args=( trigger, ) )
                 thread.start()
-            if not trigger in ( "Pause", "Resumed" ):
-                prev_trigger = trigger
         return prev_trigger
 
     def activate_on( self, trigger = None ):
@@ -126,3 +124,5 @@ class Automate:
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
             pass
             # place code below this line
+        else:
+            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Opps. Something happened", level=xbmc.LOGNOTICE )

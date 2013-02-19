@@ -23,12 +23,12 @@ trivia_settings    = sys.modules["__main__"].trivia_settings
 trailer_settings   = sys.modules["__main__"].trailer_settings
 feature_settings   = sys.modules["__main__"].feature_settings
 video_settings     = sys.modules["__main__"].video_settings
-CEPlayer           = xbmc.Player
 
 BASE_RESOURCE_PATH = os.path.join( xbmc.translatePath( _A_.getAddonInfo('path') ), 'resources' )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from ce_playlist import build_music_playlist
+CEPlayer           = xbmc.Player
 
 from pre_eden_code import _rebuild_playlist
 from xbmcvfs import delete as delete_file

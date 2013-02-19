@@ -43,8 +43,6 @@ def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download"
         settings[ "trailer_scraper" ] = "local"
         settings[ "trailer_folder" ] = settings[ "trailer_download_folder" ]
     # get the correct scraper
-    print settings[ "trailer_scraper" ]
-    print settings[ "trailer_play_mode" ]
     sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib", "scrapers" ) )
     exec "from %s import scraper as scraper" % ( settings[ "trailer_scraper" ], )
     Scraper = scraper.Main( equivalent_mpaa, mpaa, genre, settings, movie )
