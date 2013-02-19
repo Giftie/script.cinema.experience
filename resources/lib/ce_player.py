@@ -97,12 +97,13 @@ class Script():
             mplaylist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
             mplaylist.clear()
             trigger_list = self.load_trigger_list()
-            #xbmc.Player().play( playlist )
             self.player.play( playlist )
             count = -1
             stop_check = 0
             paused = False
-            # prelim programming for adding - Activate script and other additions
+            # wait until fullscreen video is shown
+            while not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ):
+                pass
             while not playlist.getposition() == ( playlist.size() - 1 ):
                 if playlist.getposition() > count:
                     try:
@@ -119,8 +120,10 @@ class Script():
                     #if not self.player.isPlayingVideo() and not is_paused:
                     if not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ):
                         xbmc.log( "[ script.cinema.experience ] - Video may have stopped", level=xbmc.LOGNOTICE )
-                        messy_exit = True
-                        break
+                        xbmc.sleep( 5000 )  # wait 5 seconds for fullscreen video to show up(during playback)
+                        if not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ): # if fullscreen video does not show up, break and exit script
+                            messy_exit = True
+                            break
                 except:
                     if xbmc.getCondVisibility( "Container.Content(movies)" ):
                         xbmc.log( "[ script.cinema.experience ] - Video Definitely Stopped", level=xbmc.LOGNOTICE )
@@ -293,6 +296,7 @@ class Script():
             _rebuild_playlist( plist )
             import xbmcscript_player as script
             script.Main()
+            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             #xbmc.sleep(500) # wait .5 seconds
             #xbmc.Player().play( playlist )
         elif trivia_settings[ "trivia_folder" ] and trivia_settings[ "trivia_mode" ] == 1:  # Start Slide Show
@@ -322,7 +326,7 @@ class Script():
             del ui
             # we need to activate the video window
             #xbmc.sleep(5) # wait .005 seconds
-            xbmc.executebuiltin( "XBMC.ActivateWindow(2005)" )
+            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             #xbmc.Player().play( playlist )
         elif trivia_settings[ "trivia_mode" ] == 0: # No Trivia
             # no trivia slide show so play the video
@@ -331,5 +335,6 @@ class Script():
             # play the video playlist
             import xbmcscript_player as script
             script.Main()
+            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             xbmc.sleep(500) # wait .5 seconds
             #xbmc.Player().play( playlist )

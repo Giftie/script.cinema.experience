@@ -208,6 +208,7 @@ class Trivia( xbmcgui.WindowXML ):
             self._fade_volume( False )
         elif ( not self.settings[ "trivia_fade_volume" ] and self.settings[ "trivia_adjust_volume"] ):
             xbmc.executebuiltin( "XBMC.SetVolume(%d)" % ( self.xbmc_volume ) )
+        xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
         #xbmc.PlayList(xbmc.PLAYLIST_MUSIC).clear()
         #xbmc.Player().play( self.playlist )
         #xbmc.Player().pause()

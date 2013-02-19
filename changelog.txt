@@ -1,3 +1,7 @@
+3.0.2
+- fix - make sure home_automation.py is moved in service.py if it does not exist
+- fix - have script wait until full screen video is playing before detecting a stop, should fix when XBMC is slow to start
+
 3.0.1
 - fix       - more HTTP-API calls removed(none should be left in functioning code)
 - fix       - Local Folder trailer scraper
