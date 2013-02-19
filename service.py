@@ -1,4 +1,4 @@
-import xbmc, xbmcaddon, xbmcgui
+import xbmc, xbmcaddon, xbmcgui, xbmcvfs
 import os, sys
 
 __addon__        = xbmcaddon.Addon()
@@ -9,6 +9,7 @@ __setting__      = __addon__.getSetting
 __scriptID__     = __addonid__
 
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
+BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( __addon__.getAddonInfo('path') ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 true = True
 false = False
@@ -42,6 +43,15 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
                                   "ha_paused": eval( __setting__( "ha_paused" ) ),
                                  "ha_resumed": eval( __setting__( "ha_resumed" ) )
                           }
+
+                          `
+#Check to see if module is moved to /userdata/addon_data/script.cinema.experience
+if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ) and ha_settings[ "ha_enable" ]:
+    source = os.path.join( BASE_RESOURCE_PATH, "ha_scripts", "home_automation.py" )
+    destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" )
+    xbmcvfs.mkdir( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" ) )        
+    xbmcvfs.copy( source, destination )
+    log( "[ script.cinema.experience ] - home_automation.py copied", level=xbmc.LOGNOTICE )
 
 from launch_automation import Launch_automation
 from utils import log
