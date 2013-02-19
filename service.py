@@ -44,7 +44,6 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
                                  "ha_resumed": eval( __setting__( "ha_resumed" ) )
                           }
 
-                          `
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
 if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ) and ha_settings[ "ha_enable" ]:
     source = os.path.join( BASE_RESOURCE_PATH, "ha_scripts", "home_automation.py" )
