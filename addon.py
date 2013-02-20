@@ -83,7 +83,7 @@ video_settings             = { "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float
                     "countdown_video_type": ( "file", "folder" )[ int( float( __setting__( "countdown_video" ) ) ) > 1 ],
                     "countdown_video_file": xbmc.translatePath( __setting__( "countdown_video_file" ) ).decode('utf-8'),
                   "countdown_video_folder": xbmc.translatePath( __setting__( "countdown_video_folder" ) ).decode('utf-8'),
-                               "cav_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "cav_outro" ) ) ) ],
+                               "cav_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "cav_intro" ) ) ) ],
                           "cav_intro_type": ( "file", "folder" )[ int( float( __setting__( "cav_intro" ) ) ) > 1 ],
                           "cav_intro_file": xbmc.translatePath( __setting__( "cav_intro_file" ) ).decode('utf-8'),
                         "cav_intro_folder": xbmc.translatePath( __setting__( "cav_intro_folder" ) ).decode('utf-8'),
