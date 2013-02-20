@@ -73,13 +73,14 @@
         <setting id="trailer_amt_db_file" type="file" visible="!eq(-12,0) + eq(-5,0)" source="local" mask="AMT.db" label="32120" default="special://profile/addon_data/script.apple.movie.trailers/AMT.db" />
         <setting id="trailer_newest_only" type="bool" visible="!eq(-13,0) + eq(-6,0)" label="32160" default="false" />
         <setting id="trailer_quality" type="enum" visible="!eq(-14,0) + !eq(-7,2) + !eq(-7,3)" enable="!eq(-7,2) + !eq(-7,3)" lvalues="32171|32172|32173|32174" label="32170" default="0" />
-        <setting id="trailer_hd_only" type="bool" visible="!eq(-15,0) + eq(-8,0)" enable="gt(-1,1)" label="32180" default="false" />
-        <setting id="trailer_limit_mpaa" type="bool" visible="!eq(-16,0)" label="32140" default="true" />
-        <setting id="trailer_limit_genre" type="bool" visible="!eq(-17,0)" label="32141" default="true" />
-        <setting id="trailer_rating" type="labelenum"  visible="!eq(-18,0) + !eq(-7,2)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
-        <setting id="trailer_unwatched_movie_only" type="bool" visible="eq(-12,3)" label="Only use trailers from unwatched movies" default="true" />
-        <setting id="trailer_unwatched_only" type="bool" visible="!eq(-20,0)" label="32190" default="false" />
-        <setting type="action" label="32191" visible="!eq(-21,0)" enable="eq(-1,true)" action="RunScript($CWD/addon.py,ClearWatchedTrailers)" />
+        <setting id="trailer_skip_youtube" type="bool" visible="!eq(-15,0) + eq(-8,3)" enable="eq(-8,3)" label="32923" default="true" />
+        <setting id="trailer_hd_only" type="bool" visible="!eq(-16,0) + eq(-9,0)" enable="gt(-2,1)" label="32180" default="false" />
+        <setting id="trailer_limit_mpaa" type="bool" visible="!eq(-17,0)" label="32140" default="true" />
+        <setting id="trailer_limit_genre" type="bool" visible="!eq(-18,0)" label="32141" default="true" />
+        <setting id="trailer_rating" type="labelenum"  visible="!eq(-19,0) + !eq(-8,2)" enable="eq(-3,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
+        <setting id="trailer_unwatched_movie_only" type="bool" visible="eq(-13,3)" label="Only use trailers from unwatched movies" default="true" />
+        <setting id="trailer_unwatched_only" type="bool" visible="!eq(-21,0)" label="32190" default="false" />
+        <setting type="action" label="32191" visible="!eq(-22,0)" enable="eq(-1,true)" action="RunScript($CWD/addon.py,ClearWatchedTrailers)" />
     </category>
     
 <!-- Feature Presentations -->

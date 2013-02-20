@@ -76,7 +76,7 @@ class Main:
                     else:
                         trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
                     # add trailer to our final list
-                    if not trailer['trailer'].startswith( 'plugin://' ):
+                    if not trailer['trailer'].startswith( 'plugin://' ) and self.settings['trailer_skip_youtube'] :
                         trailer_info = ( xbmc.getCacheThumbName( trailer['trailer'] ), # id
                                          trailer['label'], # title
                                          trailer['trailer'], # trailer

@@ -56,7 +56,8 @@ trailer_settings             = { "trailer_count": ( 0, 1, 2, 3, 4, 5, 10, )[int(
                            "trailer_limit_genre": eval( __setting__( "trailer_limit_genre" ) ),
                                 "trailer_rating": __setting__( "trailer_rating" ),
                   "trailer_unwatched_movie_only": eval( __setting__( "trailer_unwatched_movie_only" ) ),
-                        "trailer_unwatched_only": eval( __setting__( "trailer_unwatched_only" ) )
+                        "trailer_unwatched_only": eval( __setting__( "trailer_unwatched_only" ) ),
+                          "trailer_skip_youtube": eval( __setting__( "trailer_skip_youtube" ) )
                                }
 
 video_settings             = { "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "mte_intro" ) ) ) ],
