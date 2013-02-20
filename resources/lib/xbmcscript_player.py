@@ -219,7 +219,7 @@ class Main:
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
-                                       path=video_settings[ "audio_videos_folder" ] + { "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
+                                       path=video_settings[ "audio_videos_folder" ] + { "dca": "DTS", "dts": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
                                       genre="Audio Format",
                                      writer="Audio Format",
                                       index=0
