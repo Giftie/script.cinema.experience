@@ -227,7 +227,7 @@ class Script():
             
     def start_downloader( self, mpaa, genre, equivalent_mpaa ):
         # start the downloader if Play Mode is set to stream and if scraper is not Local or XBMC_library
-        if ( trailer_settings[ "trailer_play_mode" ] ) == 1 and not ( trailer_settings[ "trailer_scraper" ] in (2, 3) ):
+        if trailer_settings[ "trailer_play_mode" ] == 1 and  ( trailer_settings[ "trailer_scraper" ] in ( "amt_database", "amt_current" ) ):
             xbmc.log( "[ script.cinema.experience ] - Starting Downloader Thread", level=xbmc.LOGNOTICE )
             thread = Thread( target=downloader, args=( mpaa, genre, equivalent_mpaa ) )
             thread.start()
