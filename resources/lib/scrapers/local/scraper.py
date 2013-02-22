@@ -7,26 +7,24 @@ Local trailer scraper
 """
 # TODO: add watched.xml to skip watched trailers
 
-import os, sys, re
+import os, sys, time, re, urllib
+from random import shuffle, random
+from xml.sax.saxutils import unescape
+
 import xbmc
-from random import shuffle
-import xbmcaddon
 
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
-_A_ = xbmcaddon.Addon( __scriptID__ )
-_L_ = _A_.getLocalizedString
-trailer_settings   = sys.modules[ "__main__" ].trailer_settings
-BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
-
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from folder import dirEntries
 from ce_playlist import _set_trailer_info
 
 class Main:
     xbmc.log("%s - Local Folder Trailer Scraper Started" % logmessage, level=xbmc.LOGNOTICE )
-    # base paths
-    BASE_CURRENT_SOURCE_PATH = BASE_RESOURCE_PATH
-
+    
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.mpaa = equivalent_mpaa
         self.genre = genre.replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and ADV" ).replace( "Adventure", "ACT and Adventure" ).replace( "ACT",  "Action" ).replace( "ADV",  "Adventure" ).split( " / " )
@@ -87,9 +85,9 @@ class Main:
         try:
             # base path to watched file
             if int( self.settings[ "trailer_play_mode" ] )== 1:
-                base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
+                base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
             else:
-                base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+                base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
             # open path
             usock = open( base_path, "r" )
             # read source
@@ -102,9 +100,9 @@ class Main:
     def _reset_watched( self ):
         xbmc.log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
         if int( self.settings[ "trailer_play_mode" ] )== 1:
-            base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
+            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
         else:
-            base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         if ( os.path.isfile( base_path ) ):
             os.remove( base_path )
             self.watched = []
@@ -114,9 +112,9 @@ class Main:
         try:
             # base path to watched file
             if int( self.settings[ "trailer_play_mode" ] )== 1:
-                base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
+                base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
             else:
-                base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+                base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
             # if the path to the source file does not exist create it
             if ( not os.path.isdir( os.path.dirname( base_path ) ) ):
                 os.makedirs( os.path.dirname( base_path ) )

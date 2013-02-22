@@ -1,29 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import os, sys
-import xbmcgui,xbmc, xbmcaddon
-
+import os, sys, re
 from random import shuffle, random
-import re
 
 __script__ = "Cinema Experience"
 __scriptID__ = "script.cinema.experience"
 
-_A_ = xbmcaddon.Addon( __scriptID__ )
-# language method
-_L_ = _A_.getLocalizedString
-
-BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) ).replace("\\\\","\\")
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) ).replace("\\\\","\\")
+slide_settings           = sys.modules["__main__"].trivia_settings
+BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
+import xbmcgui,xbmc, xbmcaddon
 from xbmcvfs import delete as delete_file
 from xbmcvfs import exists as exists
 from xbmcvfs import copy as file_copy
 from folder import dirEntries, getFolders
 
-slide_settings = sys.modules["__main__"].trivia_settings
-    
 def _fetch_slides( movie_mpaa ):
     # get watched list
     watched = _load_watched_trivia_file()

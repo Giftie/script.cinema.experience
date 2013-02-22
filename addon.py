@@ -152,12 +152,11 @@ is_paused = False
 prev_trigger = ""
 script_header = "[ %s ]" % __scriptID__
 
-from ce_playlist import _get_special_items, build_music_playlist,  _rebuild_playlist
+from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info
 from slides import _fetch_slides
 from new_trailer_downloader import downloader
 from utils import settings_to_log
 from launch_automation import Launch_automation
-from pre_eden_code import _store_playlist, _get_queued_video_info
 
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
 if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ) and ha_settings[ "ha_enable" ]:

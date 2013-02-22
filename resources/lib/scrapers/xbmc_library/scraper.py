@@ -6,34 +6,30 @@ __modname__ = "XBMC Library scraper"
 XBMC Movie Library Trailer Scraper
 """
 
-import sys
-import os
-import xbmcaddon
-import xbmc
-
-from random import shuffle
-from urllib import quote_plus
-import datetime, traceback
+import os, sys, time, re, urllib, traceback, datetime
+from random import shuffle, random
+from xml.sax.saxutils import unescape
 if sys.version_info < (2, 7):
     import simplejson
 else:
     import json as simplejson
 
+import xbmc
+
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
-_A_ = xbmcaddon.Addon('script.cinema.experience')
-_L_ = _A_.getLocalizedString
-trailer_settings   = sys.modules[ "__main__" ].trailer_settings
-BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_thumbnail, _get_trailer_thumbnail
-unwatched_movie_only = True
-__useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
+__useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
 class Main:
     xbmc.log( "%s - XBMC Movie Library Trailer Scraper" % logmessage, level=xbmc.LOGNOTICE )
-    BASE_CURRENT_SOURCE_PATH = BASE_RESOURCE_PATH
-
+    
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.settings = settings
         if settings['trailer_limit_mpaa']:
@@ -105,7 +101,7 @@ class Main:
         xbmc.log("%s - Getting Watched List" % logmessage, level=xbmc.LOGNOTICE )
         try:
             # base path to watched file
-            base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
             # open path
             usock = open( base_path, "r" )
             # read source
@@ -117,7 +113,7 @@ class Main:
 
     def _reset_watched( self ):
         xbmc.log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
-        base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         if os.path.isfile( base_path ):
             os.remove( base_path )
             self.watched = []
@@ -126,7 +122,7 @@ class Main:
         xbmc.log("%s - Saving Watched List" % logmessage, level=xbmc.LOGNOTICE )
         try:
             # base path to watched file
-            base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] +"_watched.txt" )
+            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] +"_watched.txt" )
             # if the path to the source file does not exist create it
             if not os.path.isdir( os.path.dirname( base_path ) ):
                 os.makedirs( os.path.dirname( base_path ) )

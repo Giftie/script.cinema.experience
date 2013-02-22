@@ -7,41 +7,39 @@ true = True
 false = False
 null = None
 
-__script__          = sys.modules[ "__main__" ].__script__
-__scriptID__        = sys.modules[ "__main__" ].__scriptID__
-triggers            = sys.modules[ "__main__" ].triggers
-trivia_settings     = sys.modules[ "__main__" ].trivia_settings
-trailer_settings    = sys.modules[ "__main__" ].trailer_settings
-video_settings      = sys.modules[ "__main__" ].video_settings
-feature_settings    = sys.modules[ "__main__" ].feature_settings
-ha_settings         = sys.modules[ "__main__" ].ha_settings
-extra_settings      = sys.modules[ "__main__" ].extra_settings
-
-_A_ = xbmcaddon.Addon( __scriptID__ )
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
+triggers                 = sys.modules[ "__main__" ].triggers
+trivia_settings          = sys.modules[ "__main__" ].trivia_settings
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+video_settings           = sys.modules[ "__main__" ].video_settings
+feature_settings         = sys.modules[ "__main__" ].feature_settings
+ha_settings              = sys.modules[ "__main__" ].ha_settings
+extra_settings           = sys.modules[ "__main__" ].extra_settings
+BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+__addon__ = xbmcaddon.Addon( __scriptID__ )
 # language method
-_L_ = _A_.getLocalizedString
+__language__ = __addon__.getLocalizedString
 
 number_of_features = feature_settings[ "number_of_features" ] + 1
 playback = ""
-BASE_CACHE_PATH = os.path.join( xbmc.translatePath( "special://profile" ).decode('utf-8'), "Thumbnails", "Video" )
-BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( _A_.getAddonInfo('path') ) )
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path').decode('utf-8'), 'resources' ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-headings = ( _L_(32600), _L_(32601), _L_(32602), _L_(32603), _L_(32604), _L_(32605), _L_(32606), _L_(32607), _L_(32608), _L_(32609), _L_(32610), _L_(32611), _L_(32612) )
+headings = ( __language__(32600), __language__(32601), __language__(32602), __language__(32603), __language__(32604), __language__(32605), __language__(32606), __language__(32607), __language__(32608), __language__(32609), __language__(32610), __language__(32611), __language__(32612) )
 header = "Cinema Experience"
 time_delay = 200
-image = xbmc.translatePath( os.path.join( _A_.getAddonInfo("path"), "icon.png") ).decode('utf-8')
+image = xbmc.translatePath( os.path.join( __addon__.getAddonInfo("path"), "icon.png") ).decode('utf-8')
 playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
 is_paused = False
 prev_trigger = ""
 script_header = "[ %s ]" % __scriptID__
 
-from ce_playlist import _get_special_items, build_music_playlist,  _rebuild_playlist
+from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info
 from slides import _fetch_slides
 from new_trailer_downloader import downloader
 from utils import settings_to_log
 from launch_automation import Launch_automation
-from pre_eden_code import _store_playlist, _get_queued_video_info
 
 class Script():
     def __init__(self, *args, **kwargs):
@@ -62,7 +60,7 @@ class Script():
             while not xbmc.getCondVisibility( "Container.Content(movies)" ):
                 pass
             if feature_settings[ "enable_notification" ]:
-                xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, _L_( 32546 ), 300000, image) )
+                xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32546 ), 300000, image) )
             # wait until playlist is full to the required number of features
             xbmc.log( "[ script.cinema.experience ] - Waiting for queue to be filled with %s Feature films" % number_of_features, level=xbmc.LOGNOTICE )
             count = 0
@@ -70,7 +68,7 @@ class Script():
                 if playlist.size() > count:
                     xbmc.log( "[ script.cinema.experience ] - User queued %s of %s Feature films" % (playlist.size(), number_of_features), level=xbmc.LOGNOTICE )
                     header1 = header + " - Feature " + "%d" % playlist.size()
-                    message = _L_( 32543 ) + playlist[playlist.size() -1].getdescription()
+                    message = __language__( 32543 ) + playlist[playlist.size() -1].getdescription()
                     if feature_settings[ "enable_notification" ]:
                         xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header1, message, time_delay, image) )
                     count = playlist.size()
@@ -81,14 +79,14 @@ class Script():
             xbmc.log( "[ script.cinema.experience ] - User queued %s Feature films" % playlist.size(), level=xbmc.LOGNOTICE )
             if not early_exit:
                 header1 = header + " - Feature " + "%d" % playlist.size()
-                message = _L_( 32543 ) + playlist[playlist.size() -1].getdescription()
+                message = __language__( 32543 ) + playlist[playlist.size() -1].getdescription()
                 if feature_settings[ "enable_notification" ]:
                     xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header1, message, time_delay, image) )
                 early_exit = False
             # If for some reason the limit does not get reached and the window changed, cancel script
         if playlist.size() < number_of_features and library_view != "oldway":
             if feature_settings[ "enable_notification" ]:
-                xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, _L_( 32544 ), time_delay, image) )
+                xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32544 ), time_delay, image) )
             _clear_playlists()
         else:
             mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = 0 )
@@ -321,7 +319,7 @@ class Script():
             from xbmcscript_trivia import Trivia
             xbmc.log( "[ script.cinema.experience ] - Starting Trivia script", level=xbmc.LOGNOTICE )
             Launch_automation().launch_automation( triggers[2] ) # Trivia Start
-            ui = Trivia( "script-CExperience-trivia.xml", _A_.getAddonInfo('path'), "default", "720p" )
+            ui = Trivia( "script-CExperience-trivia.xml", __addon__.getAddonInfo('path'), "default", "720p" )
             ui.doModal()
             del ui
             # we need to activate the video window

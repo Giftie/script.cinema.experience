@@ -16,22 +16,19 @@ import traceback, threading, re
 from urllib import quote_plus
 from random import shuffle, random
 
-_A_ = xbmcaddon.Addon( __scriptID__ )
-trivia_settings    = sys.modules["__main__"].trivia_settings
-trailer_settings   = sys.modules["__main__"].trailer_settings
-feature_settings   = sys.modules["__main__"].feature_settings
-video_settings     = sys.modules["__main__"].video_settings
-triggers           = sys.modules["__main__"].triggers
-
-log_sep = "-"*70
-
-BASE_CACHE_PATH = os.path.join( xbmc.translatePath( "special://profile" ), "Thumbnails", "Video" )
-BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+trivia_settings          = sys.modules["__main__"].trivia_settings
+trailer_settings         = sys.modules["__main__"].trailer_settings
+feature_settings         = sys.modules["__main__"].feature_settings
+video_settings           = sys.modules["__main__"].video_settings
+triggers                 = sys.modules["__main__"].triggers
+BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info
 
-from pre_eden_code import _get_queued_video_info
+_A_ = xbmcaddon.Addon( __scriptID__ )
+
+from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info, _get_queued_video_info
 
 class Main:
     def __init__( self ):

@@ -4,41 +4,29 @@ __script__ = "Cinema Experience"
 __scriptID__ = "script.cinema.experience"
 
 # main imports
-import os, sys, traceback
-import xbmcgui
-import xbmc
-import xbmcaddon
-import threading
-import binascii
+import os, sys, traceback, threading, binascii, re, time
 from random import shuffle, random
-import re
-import time
-
-
-_A_ = xbmcaddon.Addon(__scriptID__)
-_L_ = _A_.getLocalizedString
-_S_ = _A_.getSetting
-
-trivia_settings    = sys.modules["__main__"].trivia_settings
-trailer_settings   = sys.modules["__main__"].trailer_settings
-feature_settings   = sys.modules["__main__"].feature_settings
-video_settings     = sys.modules["__main__"].video_settings
-
-BASE_RESOURCE_PATH = os.path.join( xbmc.translatePath( _A_.getAddonInfo('path') ), 'resources' )
-sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-from music import parse_playlist
-from ce_playlist import build_music_playlist
-CEPlayer           = xbmc.Player
-
-from pre_eden_code import _rebuild_playlist
+import xbmc, xbmcgui, xbmcaddon
 from xbmcvfs import delete as delete_file
 from xbmcvfs import exists as exists
+
+trivia_settings          = sys.modules["__main__"].trivia_settings
+trailer_settings         = sys.modules["__main__"].trailer_settings
+feature_settings         = sys.modules["__main__"].feature_settings
+video_settings           = sys.modules["__main__"].video_settings
+BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+
+from music import parse_playlist
+from ce_playlist import build_music_playlist, _rebuild_playlist
 from folder import dirEntries
+
+CEPlayer           = xbmc.Player
 volume_query = '{"jsonrpc": "2.0", "method": "Application.GetProperties", "params": { "properties": [ "volume" ] }, "id": 1}'
 
 class Trivia( xbmcgui.WindowXML ):
-    # base paths
-    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
     # special action codes
     ACTION_NEXT_SLIDE = ( 2, 3, 7, )
     ACTION_PREV_SLIDE = ( 1, 4, )

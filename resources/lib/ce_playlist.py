@@ -1,37 +1,31 @@
 # -*- coding: utf-8 -*-
+import traceback, os, re, sys
+from urllib import quote_plus
+from random import shuffle, random
 
 __script__ = "Cinema Experience"
 __scriptID__ = "script.cinema.experience"
 __modname__ = "ce_playlist.py"
 
-import traceback, os, re, sys
 import xbmc, xbmcaddon, xbmcgui
-from urllib import quote_plus
-from random import shuffle, random
 
 log_message = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
-_A_ = xbmcaddon.Addon( __scriptID__ )
-# language method
-_L_ = _A_.getLocalizedString
+log_sep = "-"*70
 
-trivia_settings    = sys.modules["__main__"].trivia_settings
-trailer_settings   = sys.modules["__main__"].trailer_settings
-feature_settings   = sys.modules["__main__"].feature_settings
-video_settings     = sys.modules["__main__"].video_settings
-
-
-#tmp_paths = []
-BASE_CACHE_PATH = os.path.join( xbmc.translatePath( "special://profile" ), "Thumbnails", "Video" )
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+trivia_settings          = sys.modules[ "__main__" ].trivia_settings
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+feature_settings         = sys.modules[ "__main__" ].feature_settings
+video_settings           = sys.modules[ "__main__" ].video_settings
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 from music import parse_playlist
-
-from pre_eden_code import _rebuild_playlist
+from json_utils import find_movie_details, retrieve_json_dict
+from utils import list_to_string
 from xbmcvfs import exists as exists
 from folder import dirEntries
-
-log_sep = "-"*70
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
     xbmc.log( "[script.cinema.experience] - [ce_playlist.py] - _get_trailers started", level=xbmc.LOGDEBUG )
@@ -264,7 +258,7 @@ def build_music_playlist():
             track_info, track_location = parse_playlist( saved_playlist, xbmc.getSupportedMedia('music') )
         elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):
             for track in range(100):
-                track_location.append( trivia[ "trivia_music_file" ] )
+                track_location.append( trivia_settings[ "trivia_music_file" ] )
     # otherwise
     else:
         if trivia_settings[ "trivia_music_folder" ]:
@@ -274,3 +268,104 @@ def build_music_playlist():
     shuffle( track_location )
     for track in track_location:
         music_playlist.add( track,  )
+        
+def get_equivalent_rating( rating ):
+    if rating == "":
+        rating = "NR"
+    #MPAA    
+    elif rating.startswith("Rated"):
+        rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
+        rating = ( rating, "NR", )[ rating not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", ) ]
+    #BBFC
+    elif rating.startswith("UK"):
+        if rating.startswith( "UK:" ):
+            rating = rating.split( ":" )[ 1 - ( len( rating.split( ":" ) ) == 1 ) ]
+        else:
+            rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
+        rating = ( rating, "NR", )[ rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+    elif rating.startswith("FSK"):
+        if rating.startswith( "FSK:" ):
+            rating = rating.split( ":" )[ 1 - ( len( rating.split( ":" ) ) == 1 ) ]
+        else:
+            rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
+    else:
+        rating = ( rating, "NR", )[ rating not in ( "0", "6", "12", "12A", "PG", "15", "16", "18", "R18", "MA", "U", ) ]
+    if rating not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", "NR" ):
+        if rating in ("12", "12A",):
+            equivalent_mpaa = "PG-13"
+        elif rating in ( "15", "16" ):
+            equivalent_mpaa = "R"
+        elif rating in ( "0", "U" ):
+            equivalent_mpaa = "G"
+        elif rating in ( "6", ):
+            equivalent_mpaa = "PG"
+        elif rating in ("18", "R18", "MA",):
+            equivalent_mpaa = "NC-17"
+    else:
+        equivalent_mpaa = rating
+    return equivalent_mpaa, rating
+
+# moved from pre_eden_code
+def _store_playlist():
+    p_list = []
+    xbmc.log( "[script.cinema.experience] - Storing Playlist in memory", level=xbmc.LOGNOTICE )
+    json_query = '{"jsonrpc": "2.0", "method": "Playlist.GetItems", "params": {"playlistid": 1, "properties": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"] }, "id": 1}'
+    p_list = retrieve_json_dict( json_query, items="items", force_log=False )
+    return p_list
+    
+def _movie_details( movie_id ):
+    movie_details = []
+    xbmc.log( "[script.cinema.experience] - Retrieving Movie Details", level=xbmc.LOGNOTICE )
+    json_query = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"movieid": %d, "properties": ["title", "file", "thumbnail", "streamdetails", "mpaa", "genre"]}, "id": 1}' % movie_id
+    movie_details = retrieve_json_dict( json_query, items="moviedetails", force_log=False )
+    return movie_details
+    
+def _rebuild_playlist( plist ): # rebuild movie playlist
+    xbmc.log( "[script.cinema.experience] - [ce_playlist.py] - Rebuilding Playlist", level=xbmc.LOGNOTICE )
+    playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
+    playlist.clear()
+    for movie in plist:
+        try:
+            xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie["title"], level=xbmc.LOGDEBUG )
+            xbmc.log( "[script.cinema.experience] - Movie Thumbnail: %s" % movie["thumbnail"], level=xbmc.LOGDEBUG )
+            xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie["file"], level=xbmc.LOGDEBUG )
+            json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % movie["id"]
+            json_response = xbmc.executeJSONRPC(json_command)
+            xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % movie["title"], level=xbmc.LOGDEBUG )
+        except:
+            traceback.print_exc()
+        # give XBMC a chance to add to the playlist... May not be needed, but what's 50ms?
+        xbmc.sleep( 50 )
+
+def _get_queued_video_info( feature = 0 ):
+    xbmc.log( "%s - _get_queued_video_info() Started" % log_message, level=xbmc.LOGDEBUG )
+    equivalent_mpaa = "NR"
+    try:
+        # get movie name
+        plist = _store_playlist()
+        movie_detail = _movie_details( plist[feature]['id'] )
+        movie_title = movie_detail['title']
+        path = movie_detail['file']
+        mpaa = movie_detail['mpaa']
+        genre = list_to_string( movie_detail['genre'] )
+        try:
+            audio = movie_detail['streamdetails']['audio'][0]['codec']
+        except:
+            audio = "other"
+        equivalent_mpaa, short_mpaa = get_equivalent_rating( mpaa )
+    except:
+        traceback.print_exc()
+        movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa = ""
+    # spew queued video info to log
+    xbmc.log( "%s - Queued Movie Information" % log_message, level=xbmc.LOGDEBUG )
+    xbmc.log( "%s %s" % ( log_message,log_sep ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s - Title: %s" % ( log_message, movie_title, ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s - Path: %s" % ( log_message, path, ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s - Genre: %s" % ( log_message, genre, ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s - MPAA: %s" % ( log_message, short_mpaa, ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s - Audio: %s" % ( log_message, audio, ), level=xbmc.LOGDEBUG )
+    if video_settings[ "audio_videos_folder" ]:
+        xbmc.log( "%s - Folder: %s" % ( log_message, ( video_settings[ "audio_videos_folder" ] + { "dts": "DTS", "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s  %s" % ( log_message, log_sep ), level=xbmc.LOGDEBUG )
+    # return results
+    return short_mpaa, audio, genre, path, equivalent_mpaa

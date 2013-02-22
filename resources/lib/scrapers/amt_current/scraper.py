@@ -4,29 +4,24 @@
 Apple Movie Trailers current trailers scraper
 """
 
-import sys
-import os
-
-import xbmc
-import xbmcaddon
-import time
-import re
-import urllib
+import os, sys, time, re, urllib
 from random import shuffle, random
 from xml.sax.saxutils import unescape
+
+import xbmc
 
 #__useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
 #__useragent__ = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.6"
-_A_ = xbmcaddon.Addon('script.cinema.experience')
-_L_ = _A_.getLocalizedString
 
 class _urlopener( urllib.FancyURLopener ):
     version = __useragent__
 # set for user agent
 urllib._urlopener = _urlopener()
 
-BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
 
 class _Parser:
     """
@@ -118,7 +113,7 @@ class _Parser:
                 # size
                 #size = long( re.findall( "filesize=\"([0-9]*)", preview[ 0 ] )[ 0 ] )
                 # add the item to our media list
-                self.trailers += [ ( id, title, trailer, poster, plot, runtime, mpaa, releasedate, studio, genre, _L_( 32605 ), director, ) ]
+                self.trailers += [ ( id, title, trailer, poster, plot, runtime, mpaa, releasedate, studio, genre, "Movie Trailer", director, ) ]
                 # increment counter
                 count += 1
                 # if we have enough exit
