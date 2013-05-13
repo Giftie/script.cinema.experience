@@ -105,11 +105,19 @@ class Automate:
             pass
             # place code below this line
         # Movie Theatre Intro
-        elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]: 
+        elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]:
             pass
             # place code below this line
         # Intermission
-        elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]: 
+        elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]:
+            pass
+            # place code below this line
+        # 3D Movie Intro
+        elif trigger == "3D Movie Intro" and ha_setting[ "ha_3d_intro" ]:
+            pass
+            # place code below this line
+        #3D Trailers
+        elif trigger == "3D Trailer" and ha_setting [ "ha_3d_trailer" ]:
             pass
             # place code below this line
         # Script End

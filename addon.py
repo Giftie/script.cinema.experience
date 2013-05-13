@@ -22,7 +22,7 @@ null = None
 
 triggers                    = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
                                 "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "Feature Presentation Intro", "Audio Format", 
-                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume" )
+                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume", "3D Trailer", "3D Movie Intro" )
 
 trivia_settings             = {        "trivia_mode": int( __setting__( "trivia_mode" ) ),
                                  "trivia_total_time": int( float( __setting__( "trivia_total_time" ) ) ),
@@ -60,7 +60,9 @@ trailer_settings             = { "trailer_count": ( 0, 1, 2, 3, 4, 5, 10, )[int(
                                 "trailer_rating": __setting__( "trailer_rating" ),
                   "trailer_unwatched_movie_only": eval( __setting__( "trailer_unwatched_movie_only" ) ),
                         "trailer_unwatched_only": eval( __setting__( "trailer_unwatched_only" ) ),
-                          "trailer_skip_youtube": eval( __setting__( "trailer_skip_youtube" ) )
+                          "trailer_skip_youtube": eval( __setting__( "trailer_skip_youtube" ) ),
+                                   "3d_trailers": eval( __setting__( "3d_trailers" ) ),
+                            "3d_trailer_folder": xbmc.translatePath( __setting__( "3d_trailer_folder" ) ).decode('utf-8')
                                }
 
 video_settings             = { "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "mte_intro" ) ) ) ],
@@ -102,7 +104,11 @@ video_settings             = { "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float
                             "trivia_outro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "trivia_outro" ) ) ) ],
                        "trivia_outro_type": ( "file", "folder" )[ int( float( __setting__( "trivia_outro" ) ) ) > 1 ],
                        "trivia_outro_file": xbmc.translatePath( __setting__( "trivia_outro_file" ) ).decode('utf-8'),
-                     "trivia_outro_folder": xbmc.translatePath( __setting__( "trivia_outro_folder" ) ).decode('utf-8')
+                     "trivia_outro_folder": xbmc.translatePath( __setting__( "trivia_outro_folder" ) ).decode('utf-8'),
+                                "3d_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "3d_intro" ) ) ) ],
+                           "3d_intro_type": ( "file", "folder" )[ int( float( __setting__( "3d_intro" ) ) ) > 1 ],
+                           "3d_intro_file": xbmc.translatePath( __setting__( "3d_intro_file" ) ).decode('utf-8'),
+                         "3d_intro_folder": xbmc.translatePath( __setting__( "3d_intro_folder" ) ).decode('utf-8')
                                }
 
 feature_settings             = { "enable_notification": eval( __setting__( "enable_notification" ) ),
@@ -132,7 +138,9 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
                                    "ha_movie": eval( __setting__( "ha_movie" ) ),
                                "ha_fpv_outro": eval( __setting__( "ha_fpv_outro" ) ),
                                "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
-                            "ha_intermission": eval( __setting__( "ha_intermission" ) ),
+                            "ha_intermission": eval( __setting__( "ha_intermission" ) )
+                                "ha_3d_intro": eval( __setting__( "ha_3d_intro" ) ),
+                              "ha_3d_trailer": eval( __setting__( "ha_3d_trailer" ) ),
                               "ha_script_end": eval( __setting__( "ha_script_end" ) ),
                                   "ha_paused": eval( __setting__( "ha_paused" ) ),
                                  "ha_resumed": eval( __setting__( "ha_resumed" ) )

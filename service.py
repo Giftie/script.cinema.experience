@@ -19,7 +19,7 @@ null = None
 
 triggers                    = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
                                 "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "Feature Presentation Intro", "Audio Format", 
-                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume" )
+                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume", "3D Trailer", "3D Movie Intro" )
 
 override_play           = eval( __setting__( "override_play" ) )
 
@@ -41,6 +41,8 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
                                "ha_fpv_outro": eval( __setting__( "ha_fpv_outro" ) ),
                                "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
                             "ha_intermission": eval( __setting__( "ha_intermission" ) ),
+                                "ha_3d_intro": eval( __setting__( "ha_3d_intro" ) ),
+                              "ha_3d_trailer": eval( __setting__( "ha_3d_trailer" ) ),
                               "ha_script_end": eval( __setting__( "ha_script_end" ) ),
                                   "ha_paused": eval( __setting__( "ha_paused" ) ),
                                  "ha_resumed": eval( __setting__( "ha_resumed" ) )
@@ -129,6 +131,8 @@ class Main():
                                            "ha_fpv_outro": eval( __setting__( "ha_fpv_outro" ) ),
                                            "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
                                         "ha_intermission": eval( __setting__( "ha_intermission" ) ),
+                                            "ha_3d_intro": eval( __setting__( "ha_3d_intro" ) ),
+                                          "ha_3d_trailer": eval( __setting__( "ha_3d_trailer" ) ),
                                           "ha_script_end": eval( __setting__( "ha_script_end" ) ),
                                               "ha_paused": eval( __setting__( "ha_paused" ) ),
                                              "ha_resumed": eval( __setting__( "ha_resumed" ) )
