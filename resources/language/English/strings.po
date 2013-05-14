@@ -897,7 +897,7 @@ msgid "3D Movie Intro Video Folder"
 msgstr ""
 
 msgctxt "#32930"
-msgid "Enable 3D Movie Trailers if 3D Movie is played - Overrides normal trailers"
+msgid "Enable 3D Movie Trailers if 3D Movie is played"
 msgstr ""
 
 msgctxt "#32931"
