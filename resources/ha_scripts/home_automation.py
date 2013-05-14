@@ -12,8 +12,8 @@ class Automate:
     def __init__( self ):
         pass
     
-    def broadcastUDP( self, data, port = 8278 ): # XBMC's former HTTP API output port is 8278
-        IPADDR = '255.255.255.255'
+    def broadcastUDP( self, data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's former HTTP API output port is 8278
+        IPADDR = ipaddress
         PORTNUM = port
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
         if hasattr(socket,'SO_BROADCAST'):
