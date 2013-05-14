@@ -319,7 +319,7 @@ class Script():
             from xbmcscript_trivia import Trivia
             xbmc.log( "[ script.cinema.experience ] - Starting Trivia script", level=xbmc.LOGNOTICE )
             Launch_automation().launch_automation( triggers[2] ) # Trivia Start
-            ui = Trivia( "script-CExperience-trivia.xml", __addon__.getAddonInfo('path'), "default", "720p" )
+            ui = Trivia( "script-CExperience-trivia.xml", __addon__.getAddonInfo('path'), "Default", "720p" )
             ui.doModal()
             del ui
             # we need to activate the video window

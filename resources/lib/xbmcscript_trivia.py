@@ -110,11 +110,26 @@ class Trivia( xbmcgui.WindowXML ):
             self._exit_trivia()
         else:     
             # set the property the image control uses
-            xbmcgui.Window( xbmcgui.getCurrentWindowId() ).setProperty( "Slide", self.slide_playlist[ self.image_count ] )
+            myslide = self.slide_playlist[ self.image_count ]
+            slide_type = "still"
+            if (re.search("__question__", myslide)) :
+                slide_type = "question"
+                myslide = myslide.replace("__question__", "")
+            elif (re.search("__answer__", myslide)) :
+                slide_type = "answer"
+                myslide = myslide.replace("__answer__", "")
+            elif (re.search("__clue__", myslide)) :
+                slide_type = "clue"
+                myslide = myslide.replace("__clue__", "")
+            elif (re.search("__still__", myslide)) :
+                slide_type = "still"
+                myslide = myslide.replace("__still__", "")
+            xbmc.log("[script.cinema.experience] Slide #%s Type %s - %s" % (self.image_count, slide_type, myslide), level=xbmc.LOGNOTICE)
+            xbmcgui.Window( xbmcgui.getCurrentWindowId() ).setProperty( "Slide", myslide )
             # add id to watched file TODO: maybe don't add if not user preference
             self.watched += [ xbmc.getCacheThumbName( self.slide_playlist[ self.image_count ] ) ]
             # start slide timer
-            self._get_slide_timer()
+            self._get_slide_timer( slide_type )
         
 
     def _load_watched_trivia_file( self ):
@@ -154,9 +169,18 @@ class Trivia( xbmcgui.WindowXML ):
             delete_file( base_path )
             self.watched = []
 
-    def _get_slide_timer( self ):
-        self.slide_timer = threading.Timer( self.settings[ "trivia_slide_time" ], self._next_slide,() )
-        self.slide_timer.start()
+    def _get_slide_timer( self, slide_type="still" ):
+        if (slide_type and slide_type == "question"): 
+            timer = self.settings[ "trivia_slide_time_q" ]
+        elif (slide_type and slide_type == "answer"): 
+            timer = self.settings[ "trivia_slide_time_a" ]
+        elif (slide_type and slide_type == "clue"):
+            timer = self.settings[ "trivia_slide_time_c" ]
+        elif (slide_type and slide_type == "still"):
+            timer = self.settings[ "trivia_slide_time_s" ]
+        xbmc.log("[script.cinema.experience] Slide delay %s seconds type is %s" % (timer, slide_type), xbmc.LOGNOTICE)
+        self.slide_timer = threading.Timer( timer, self._next_slide,() )
+        self.slide_timer.start() 
 
     def _get_global_timer( self, time, function ):
         self.global_timer = threading.Timer( time, function,() )
@@ -200,6 +224,7 @@ class Trivia( xbmcgui.WindowXML ):
         self.close()
 
     def _cancel_timers( self ):
+        xbmc.log( "[script.cinema.experience] Canceling timers...", xbmc.LOGNOTICE )
         # cancel all timers
         if self.slide_timer is not None:
             self.slide_timer.cancel()
