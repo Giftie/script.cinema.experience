@@ -112,15 +112,25 @@ def _get_slides( paths, movie_mpaa ):
 
 def _get_slides_xml( path ):
     source = os.path.join( path, "slides.xml" ).replace("\\\\","\\")
-    destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "slides.xml" ).replace("\\\\","\\")
+    slidesxml_copied = False
     # if no slides.xml exists return false
     if not exists( source ):
-        return False, "", "", "", "", ""
-    # fetch data
-    file_copy( source, destination )
-    xml = open( destination ).read()
+        # if not found try file in Title casesource = os.path.join( path, "Slides.xml" ).replace( "\\\\", "\\" )
+        if not exists( source ):
+            return False, "", "", "", "", ""
+    try:
+        xml = xbmcvfs.File( source ).read()
+    except:
+        try:
+            destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "slides.xml" ).replace("\\\\","\\")
+            # Copy slide and read
+            file_copy( source, destination )
+            # fetch data
+            xml = open( destination ).read()
+            slidesxml_copied = True
+        except:
+            return False, "", "", "", "", ""
     # parse info
-    #mpaa, theme, question_format, clue_format, answer_format = re.search( "<slides?(?:.+?rating=\"([^\"]*)\")?(?:.+?theme=\"([^\"]*)\")?.*?>.+?<question.+?format=\"([^\"]*)\".*?/>.+?<clue.+?format=\"([^\"]*)\".*?/>.+?<answer.+?format=\"([^\"]*)\".*?/>", xml, re.DOTALL ).groups()
     mpaa = theme = question_format = clue_format = answer_format = still_format = ""
     mpaa_match = re.search( '''rating="([^\"]*)"''', xml, re.DOTALL )
     if mpaa_match:
@@ -140,8 +150,8 @@ def _get_slides_xml( path ):
     still_match = re.search( '''<still.+?format="([^\"]*)".*?/>''', xml, re.DOTALL )
     if still_match:
         still_format = still_match.group(1)
-    #xbmc.log("[script.cinema.experience] mpaa: %s QF: %s == AF: %s == CF: %s == SF: %s" % (mpaa, question_format, answer_format, clue_format, still_format), xbmc.LOGNOTICE) 
-    delete_file ( destination )
+    if slidesxml_copied:
+        delete_file ( destination )
     return True, mpaa, question_format, clue_format, answer_format, still_format
     
 def _shuffle_slides( tmp_slides, watched ):
