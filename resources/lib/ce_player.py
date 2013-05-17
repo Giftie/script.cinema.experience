@@ -35,7 +35,7 @@ is_paused = False
 prev_trigger = ""
 script_header = "[ %s ]" % __scriptID__
 
-from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info
+from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info, _clear_playlists
 from slides import _fetch_slides
 from new_trailer_downloader import downloader
 from utils import settings_to_log

@@ -21,6 +21,7 @@ trailer_settings         = sys.modules["__main__"].trailer_settings
 feature_settings         = sys.modules["__main__"].feature_settings
 video_settings           = sys.modules["__main__"].video_settings
 triggers                 = sys.modules["__main__"].triggers
+audio_formats            = sys.modules["__main__"].audio_formats
 BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
@@ -154,7 +155,7 @@ class Main:
                 elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and feature_settings[ "intermission_video" ] == 1:
                     index_count += feature_settings[ "intermission_video" ]
             # get rating video
-            if video_settings[ "enable_ratings" ] and video_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
+            if video_settings[ "enable_ratings" ] and feature_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
                 xbmc.log( "[script.cinema.experience] - Inserting Intermission Rating Video",level=xbmc.LOGNOTICE )
                 xbmc.log( "[script.cinema.experience] -     playlist Position: %d" % index_count, level=xbmc.LOGDEBUG )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -179,7 +180,7 @@ class Main:
                 xbmc.log( "[script.cinema.experience] -     p_size: %d" % p_size, level=xbmc.LOGDEBUG )
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
-                                          path = video_settings[ "audio_videos_folder" ] + { "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
+                                          path = video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
                                           genre="Audio Format",
                                          writer="Audio Format",
                                          index = index_count
@@ -216,7 +217,7 @@ class Main:
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
-                                       path=video_settings[ "audio_videos_folder" ] + { "dca": "DTS", "dts": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
+                                       path=video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
                                       genre="Audio Format",
                                      writer="Audio Format",
                                       index=0

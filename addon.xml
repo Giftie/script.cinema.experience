@@ -14,5 +14,9 @@
         <disclaimer>This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License *see license.txt</disclaimer>
         <description>Play trailers, slideshows, intro videos, outro videos: To re-create a movie theater experience in the comfort of your home.</description>
         <description lang="es">Reproduce Avances, presentaciones, videos de intro, videos de outro: Para recrear una experiencia como si estuvieses en una sala de Cine en la comodidad de tu casa.</description>
+        <website></website>
+        <source>https://github.com/Giftie/script.cinema.experience</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=87563</forum>
+        <email></email>
     </extension>
 </addon>

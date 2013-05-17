@@ -11,6 +11,8 @@ __scriptID__     = __addonid__
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( __addon__.getAddonInfo('path') ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+home_automation_folder   = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" )
+home_automation_module   = os.path.join( home_automation_folder, "home_automation.py" )
 true = True
 false = False
 null = None

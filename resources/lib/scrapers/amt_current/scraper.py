@@ -4,7 +4,7 @@
 Apple Movie Trailers current trailers scraper
 """
 
-import os, sys, time, re, urllib
+import os, sys, time, re, urllib, traceback
 from random import shuffle, random
 from xml.sax.saxutils import unescape
 
@@ -54,6 +54,7 @@ class _Parser:
             # randomize the trailers and create our play list
             shuffle( movies )
             # enumerate thru the movies list and gather info
+            print movies
             for id, movie in movies:
                 # user preference to skip watch trailers
                 if ( self.settings[ "trailer_unwatched_only" ] and id in self.watched ):
@@ -78,15 +79,35 @@ class _Parser:
                 poster = re.findall( "<poster>(.*?)</poster>", movie )
                 preview = re.findall( "<preview>(.*?)</preview>", movie )
                 # set our info
-                title = unicode( unescape( re.findall( "<title>(.*?)</title>", info[ 0 ] )[ 0 ] ), encoding, "replace" )
-                runtime = re.findall( "<runtime>(.*?)</runtime>", info[ 0 ] )[ 0 ]
-                studio = unicode( unescape( re.findall( "<studio>(.*?)</studio>", info[ 0 ] )[ 0 ] ), encoding, "replace" )
+                try:
+                    title = unicode( unescape( re.findall( "<title>(.*?)</title>", info[ 0 ] )[ 0 ] ), encoding, "replace" )
+                except:
+                    traceback.print_exc()
+                    title = ""
+                    print info[ 0 ]
+                try:
+                    runtime = re.findall( "<runtime>(.*?)</runtime>", info[ 0 ] )[ 0 ]
+                except:
+                    traceback.print_exc()
+                    runtime = ""
+                    print info[ 0 ]
+                try:
+                    studio = unicode( unescape( re.findall( "<studio>(.*?)</studio>", info[ 0 ] )[ 0 ] ), encoding, "replace" )
+                except:
+                    traceback.print_exc()
+                    studio = ""
+                    print info[ 0 ]
                 #postdate = ""
                 #tmp_postdate = re.findall( "<postdate>(.*?)</postdate>", info[ 0 ] )[ 0 ]
                 #if ( tmp_postdate ):
                 #    postdate = "%s-%s-%s" % ( tmp_postdate[ 8 : ], tmp_postdate[ 5 : 7 ], tmp_postdate[ : 4 ], )
-                releasedate = re.findall( "<releasedate>(.*?)</releasedate>", info[ 0 ] )[ 0 ]
-                if ( not releasedate ):
+                try:
+                    releasedate = re.findall( "<releasedate>(.*?)</releasedate>", info[ 0 ] )[ 0 ]
+                    if ( not releasedate ):
+                        releasedate = ""
+                except:
+                    traceback.print_exc()
+                    print info[ 0 ]
                     releasedate = ""
                 #copyright = unicode( unescape( re.findall( "<copyright>(.*?)</copyright>", info[ 0 ] )[ 0 ] ), encoding, "replace" )
                 director = unicode( unescape( re.findall( "<director>(.*?)</director>", info[ 0 ] )[ 0 ] ), encoding, "replace" )
@@ -106,7 +127,7 @@ class _Parser:
                 # trailer
                 trailer = re.findall( "<large[^>]*>(.*?)</large>", preview[ 0 ] )[ 0 ]
                 # replace with 1080p if quality == 1080p
-                if ( self.settings[ "trailer_quality" ] == 3 ):
+                if ( self.settings[ "trailer_quality" ] == "1080p" ):
                     trailer = trailer.replace( "a720p.m4v", "h1080p.mov" )
                 # add user agent to url
                 trailer += "|User-Agent=%s" % ( urllib.quote_plus( __useragent__ ), )
@@ -121,7 +142,7 @@ class _Parser:
                     break
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            traceback.print_exc()
 
 
 class Main:

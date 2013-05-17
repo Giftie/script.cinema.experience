@@ -24,6 +24,7 @@ BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_thumbnail, _get_trailer_thumbnail
+from utils import list_to_string
 
 __useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
@@ -33,7 +34,7 @@ class Main:
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.settings = settings
         if settings['trailer_limit_mpaa']:
-            self.mpaa = "Rated %s" % mpaa
+            self.mpaa = mpaa
         else:
             self.mpaa = ""
         if settings['trailer_limit_genre'] and settings['trailer_rating'] == '--':
@@ -63,16 +64,28 @@ class Main:
                     # shorten MPAA/BBFC ratings
                     if trailer_rating == "":
                         trailer_rating = "NR"
-                    elif trailer_rating.startswith("Rated"):
+                    #MPAA    
+                    if trailer_rating.startswith("Rated"):
                         trailer_rating = trailer_rating.split( " " )[ 1 - ( len( trailer_rating.split( " " ) ) == 1 ) ]
                         trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", ) ]
+                    #BBFC
                     elif trailer_rating.startswith("UK"):
-                        trailer_rating = trailer_rating.split( ":" )[ 1 - ( len( trailer_rating.split( ":" ) ) == 1 ) ]
+                        if trailer_rating.startswith( "UK:" ):
+                            trailer_rating = trailer_rating.split( ":" )[ 1 - ( len( trailer_rating.split( ":" ) ) == 1 ) ]
+                        else:
+                            trailer_rating = trailer_rating.split( " " )[ 1 - ( len( trailer_rating.split( " " ) ) == 1 ) ]
                         trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+                    elif trailer_rating.startswith("FSK"):
+                        if trailer_rating.startswith( "FSK:" ):
+                            trailer_rating = trailer_rating.split( ":" )[ 1 - ( len( trailer_rating.split( ":" ) ) == 1 ) ]
+                        else:
+                            trailer_rating = trailer_rating.split( " " )[ 1 - ( len( trailer_rating.split( " " ) ) == 1 ) ]
                     else:
-                        trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+                        trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "0", "6", "12", "12A", "PG", "15", "16", "18", "R18", "MA", "U", ) ]
                     # add trailer to our final list
-                    if not trailer['trailer'].startswith( 'plugin://' ) and self.settings['trailer_skip_youtube'] :
+                    if trailer['trailer'].startswith( 'plugin://' ) and not self.settings['trailer_skip_youtube']:
+                        continue
+                    else:
                         trailer_info = ( xbmc.getCacheThumbName( trailer['trailer'] ), # id
                                          trailer['label'], # title
                                          trailer['trailer'], # trailer
@@ -82,7 +95,7 @@ class Main:
                                          trailer_rating, # mpaa
                                          '', # release date
                                          '', # studio
-                                         trailer['genre'], # genre
+                                         list_to_string( trailer['genre'] ), # genre
                                          'Trailer', # writer
                                          '', # director 32613
                                         )
@@ -94,8 +107,13 @@ class Main:
                         # if we have enough exit
                         if count == self.settings[ "trailer_count" ]:
                            break
+            else:
+                xbmc.log( "No Movie Trailers found", level=xbmc.LOGNOTICE )
             self._save_watched()
             return self.trailers
+        else:
+            xbmc.log( "No results found", level=xbmc.LOGNOTICE )
+            return []
 
     def _get_watched( self ):
         xbmc.log("%s - Getting Watched List" % logmessage, level=xbmc.LOGNOTICE )

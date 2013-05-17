@@ -16,6 +16,7 @@ trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 feature_settings         = sys.modules[ "__main__" ].feature_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
+audio_formats            = sys.modules[ "__main__" ].audio_formats
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
@@ -365,7 +366,18 @@ def _get_queued_video_info( feature = 0 ):
     xbmc.log( "%s - MPAA: %s" % ( log_message, short_mpaa, ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s - Audio: %s" % ( log_message, audio, ), level=xbmc.LOGDEBUG )
     if video_settings[ "audio_videos_folder" ]:
-        xbmc.log( "%s - Folder: %s" % ( log_message, ( video_settings[ "audio_videos_folder" ] + { "dts": "DTS", "dca": "DTS", "ac3": "Dolby", "dtsma": "DTSHD-MA", "dtshd_ma": "DTSHD-MA", "a_truehd": "Dolby TrueHD", "truehd": "Dolby TrueHD" }.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) ), level=xbmc.LOGDEBUG )
+        xbmc.log( "%s - Folder: %s" % ( log_message, ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s  %s" % ( log_message, log_sep ), level=xbmc.LOGDEBUG )
     # return results
     return short_mpaa, audio, genre, path, equivalent_mpaa
+
+def _clear_playlists( mode="both" ):
+    # clear playlists
+    if mode=="video" or mode=="both":
+        vplaylist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
+        vplaylist.clear()
+        xbmc.log( "[ script.cinema.experience ] - Video Playlist Cleared", level=xbmc.LOGNOTICE )
+    if mode=="music" or mode=="both":
+        mplaylist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        mplaylist.clear()
+        xbmc.log( "[ script.cinema.experience ] - Music Playlist Cleared", level=xbmc.LOGNOTICE )

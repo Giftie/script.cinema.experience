@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import xbmcgui, xbmc, xbmcaddon, xbmcvfs
 import os, re, sys, socket, traceback, time, __builtin__
@@ -142,9 +142,11 @@ extra_settings          = {     "voxcommando": eval( __setting__( "voxcommando" 
 
 number_of_features = feature_settings[ "number_of_features" ] + 1
 playback = ""
-BASE_CACHE_PATH = os.path.join( xbmc.translatePath( "special://profile" ).decode('utf-8'), "Thumbnails", "Video" )
+BASE_CACHE_PATH          = os.path.join( xbmc.translatePath( "special://profile" ).decode('utf-8'), "Thumbnails", "Video" )
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( __addon__.getAddonInfo('path') ) )
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
+BASE_RESOURCE_PATH       = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
+home_automation_folder   = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" )
+home_automation_module   = os.path.join( home_automation_folder, "home_automation.py" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 headings = ( __language__(32600), __language__(32601), __language__(32602), __language__(32603), __language__(32604), __language__(32605), __language__(32606), __language__(32607), __language__(32608), __language__(32609), __language__(32610), __language__(32611), __language__(32612) )
 header = "Cinema Experience"
@@ -155,14 +157,14 @@ is_paused = False
 prev_trigger = ""
 script_header = "[ %s ]" % __scriptID__
 
-from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info
+from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info, _clear_playlists
 from slides import _fetch_slides
 from new_trailer_downloader import downloader
 from utils import settings_to_log
 from launch_automation import Launch_automation
 
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
-if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ) and ha_settings[ "ha_enable" ]:
+if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ):
     source = os.path.join( BASE_RESOURCE_PATH, "ha_scripts", "home_automation.py" )
     destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" )
     xbmcvfs.mkdir( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" ) )        
@@ -181,7 +183,6 @@ def _clear_watched_items( clear_type ):
     base_paths = []
     # clear trivia or trailers
     if ( clear_type == "ClearWatchedTrailers" ):
-        # trailer settings, grab them here so we don't need another __setting__() object
         # handle AMT db special
         sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib", "scrapers") )
         from amt_database import scraper as scraper
@@ -207,17 +208,6 @@ def _clear_watched_items( clear_type ):
         message = ( 32532, 32542, )[ sys.argv[ 1 ] == "ClearWatchedTrailers" ]
     # inform user of result
     ok = xbmcgui.Dialog().ok( __language__( 32000 ), __language__( message ) )
-
-def _clear_playlists( mode="both" ):
-    # clear playlists
-    if mode=="video" or mode=="both":
-        vplaylist = playlist
-        vplaylist.clear()
-        xbmc.log( "[ script.cinema.experience ] - Video Playlist Cleared", level=xbmc.LOGNOTICE )
-    if mode=="music" or mode=="both":
-        mplaylist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
-        mplaylist.clear()
-        xbmc.log( "[ script.cinema.experience ] - Music Playlist Cleared", level=xbmc.LOGNOTICE )
 
 def _build_playlist( movies, mode = "movie_titles" ):
     if mode == "movie_titles":
