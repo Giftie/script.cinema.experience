@@ -140,6 +140,17 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
 
 extra_settings          = {     "voxcommando": eval( __setting__( "voxcommando" ) ) }
 
+audio_formats           = {             "dts": "DTS",
+                                        "dca": "DTS",
+                                      "dtsma": "DTS-MA",
+                                   "dtshd_ma": "DTSHD-MA",
+                                  "dtshd_hra": "DTS-HR",
+                                      "dtshr": "DTS-HR",
+                                        "ac3": "Dolby",
+                                   "a_truehd": "Dolby TrueHD",
+                                     "truehd": "Dolby TrueHD"
+                          }
+
 number_of_features = feature_settings[ "number_of_features" ] + 1
 playback = ""
 BASE_CACHE_PATH          = os.path.join( xbmc.translatePath( "special://profile" ).decode('utf-8'), "Thumbnails", "Video" )
