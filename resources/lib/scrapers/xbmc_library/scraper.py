@@ -14,7 +14,7 @@ if sys.version_info < (2, 7):
 else:
     import json as simplejson
 
-import xbmc
+import xbmc, xbmcvfs
 
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 
@@ -44,6 +44,8 @@ class Main:
         self.movie = movie
         #  initialize our trailer list
         self.trailers = []
+		self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+        
 
     def fetch_trailers( self ):        
         # get watched list
@@ -116,17 +118,14 @@ class Main:
             return []
 
     def _get_watched( self ):
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-	    self.watched = utils.load_saved_list( base_path, "Trailer Watched List" )
+        self.watched = utils.load_saved_list( self.watched_path, "Trailer Watched List" )
 
     def _reset_watched( self ):
         xbmc.log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-        if os.path.isfile( base_path ):
-            os.remove( base_path )
+        if xbmcvfs.exists( self.watched_path ):
+            xbmcvfs.delete( self.watched_path )
             self.watched = []
 
     def _save_watched( self ):
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] +"_watched.txt" )
-        utils.save_list( base_path, self.watched, "Watched Trailers" )
+        utils.save_list( self.watched_path, self.watched, "Watched Trailers" )
 
