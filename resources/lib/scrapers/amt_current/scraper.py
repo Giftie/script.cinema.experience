@@ -19,9 +19,11 @@ class _urlopener( urllib.FancyURLopener ):
 # set for user agent
 urllib._urlopener = _urlopener()
 
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import utils
 
 class _Parser:
     """
@@ -218,13 +220,9 @@ class Main:
             return False
 
     def _parse_xml_source( self, xmlSource ):
-        # base path to watched file
+        def _get_watched( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-        # get watched file
-        try:
-            watched = eval( self._get_xml_source( base_path ) )
-        except:
-            watched = []
+	    watched = utils.load_saved_list( base_path, "Trailer Watched List" )
         # Parse xmlSource for videos
         parser = _Parser( xmlSource, self.mpaa, self.genre, self.settings, watched )
         # saved watched file

@@ -26,6 +26,7 @@ BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'),
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from download import download
 from ce_playlist import _get_trailers
+import utils
 
 downloaded_trailers = []
 
@@ -47,7 +48,7 @@ def save_download_list( download_trailers ):
         if ( not os.path.isdir( os.path.dirname( base_path ) ) ):
             os.makedirs( os.path.dirname( base_path ) )
         # open source path for writing
-        file_object = open( base_path, "w" )
+        file_object = xbmcvfs.File( base_path, "w" )
         if download_trailers:
             for trailer in download_trailers:
                 try:# write list
@@ -65,8 +66,8 @@ def save_download_list( download_trailers ):
     if not success:
         try:
             xbmc.log( "%s - Removing List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
-            if ( os.path.isfile( base_path ) ):
-                os.remove( base_path )
+            if xbmcvfs.exists( base_path ):
+                xbmcvfs.delete( base_path )
         except:
             xbmc.log( "%s - Error Trying to Remove List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
     
@@ -93,7 +94,7 @@ def _download_trailers( equivalent_mpaa, mpaa, genre, movie ):
         filename = filename + "-trailer" + ext
         file_path = os.path.join( trailer_settings[ "trailer_download_folder" ], filename ).replace( "\\\\", "\\" )
         # check to see if trailer is already downloaded
-        if os.path.isfile( file_path ):
+        if xbmcvfs.exists( file_path ):
             success = True
             destination = file_path
             thumb = os.path.splitext( file_path )[0] + ".tbn"
@@ -167,7 +168,7 @@ def _save_nfo_file( nfoSource, trailer_nfopath ):
     destination = os.path.splitext( trailer_nfopath )[0] + ".nfo"
     try:
         # open source path for writing
-        file_object = open( destination.encode( "utf-8" ), "w" )
+        file_object = xbmcvfs.File( destination.encode( "utf-8" ), "w" )
         # write xmlSource
         file_object.write( nfoSource.encode( "utf-8" ) )
         # close file object

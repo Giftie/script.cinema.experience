@@ -17,6 +17,7 @@ from xbmcvfs import delete as delete_file
 from xbmcvfs import exists as exists
 from xbmcvfs import copy as file_copy
 from folder import dirEntries, getFolders
+import utils
 
 def _fetch_slides( movie_mpaa ):
     # get watched list
@@ -28,19 +29,9 @@ def _fetch_slides( movie_mpaa ):
     return slide_playlist
 
 def _load_watched_trivia_file():
-    xbmc.log( "[script.cinema.experience] - Loading Watch Slide List", level=xbmc.LOGDEBUG)
-    try:
-        # set base watched file path
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
-        # open path
-        usock = open( base_path, "r" )
-        # read source
-        watched = eval( usock.read() )
-        # close socket
-        usock.close()
-    except:
-        watched = []
-    return watched
+    base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
+    watched = utils.load_saved_list( base_path, "Watched Trivia" )
+	return watched
 
 def _reset_watched():
     base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")

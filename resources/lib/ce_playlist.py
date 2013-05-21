@@ -25,7 +25,7 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from json_utils import find_movie_details, retrieve_json_dict
 from utils import list_to_string
-from xbmcvfs import exists as exists
+import xbmcvfs
 from folder import dirEntries
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
@@ -104,7 +104,7 @@ def _getnfo( path ):
 def _set_trailer_info( trailer ):
     xbmc.log("%s - Setting Trailer Info" % log_message, level=xbmc.LOGDEBUG )
     title = plot = runtime = mpaa = release_date = studio = genre = director = ""
-    if exists( os.path.splitext( trailer )[ 0 ] + ".nfo" ):
+    if xbmcvfs.exists( os.path.splitext( trailer )[ 0 ] + ".nfo" ):
         xbmc.log("%s - Trailer .nfo file FOUND" % log_message, level=xbmc.LOGDEBUG )
         title, plot, runtime, mpaa, release_date, studio, genre, director = _getnfo( trailer )
     else:
@@ -130,20 +130,20 @@ def _get_trailer_thumbnail( path ):
     thumbnail = os.path.splitext( path )[ 0 ] + ".tbn"
     xbmc.log("%s - Looking for thumbnail: %s" % ( log_message, thumbnail), level=xbmc.LOGDEBUG )
     # if thumb does not exist try stripping -trailer
-    if not exists( thumbnail ):
+    if not xbmcvfs.exists( thumbnail ):
         thumbnail = os.path.splitext( path )[ 0 ] + ".jpg"
         xbmc.log("%s - Looking for thumbnail: %s" % ( log_message, thumbnail), level=xbmc.LOGDEBUG )
-        if not exists( thumbnail ):
+        if not xbmcvfs.exists( thumbnail ):
             thumbnail = "%s.tbn" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
             xbmc.log("%s - Thumbnail not found, Trying: %s" % ( log_message, thumbnail), level=xbmc.LOGDEBUG )
-            if not exists( thumbnail ):
+            if not xbmcvfs.exists( thumbnail ):
                 thumbnail = "%s.jpg" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
                 xbmc.log("%s - Looking for thumbnail: %s" % ( log_message, thumbnail), level=xbmc.LOGDEBUG )
-                if not exists( thumbnail ):
+                if not xbmcvfs.exists( thumbnail ):
                     thumbnail = os.path.join( os.path.dirname( path ), "movie.tbn" )
                     xbmc.log("%s - Thumbnail not found, Trying: %s" % ( log_message, thumbnail), level=xbmc.LOGDEBUG )
                     # if thumb does not exist return empty
-                    if not exists( thumbnail ):
+                    if not xbmcvfs.exists( thumbnail ):
                         # set empty string
                         thumbnail = ""
                         xbmc.log("%s - Thumbnail not found" % log_message, level=xbmc.LOGDEBUG )
@@ -162,7 +162,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
         xbmc.log( "%s - No Items" % log_message, level=xbmc.LOGDEBUG)
         return
     # if path is a file check if file exists
-    if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not exists( path ):
+    if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not xbmcvfs.exists( path ):
         xbmc.log( "%s - _get_special_items() - File Does not Exist" % log_message, level=xbmc.LOGDEBUG)
         return
     # set default paths list
@@ -237,9 +237,9 @@ def _get_thumbnail( url ):
     thumbnail = os.path.join( BASE_CACHE_PATH, filename[ 0 ], filename )
     xbmc.log( "%s - Thumbnail Cached Filename: %s" % ( log_message, filename ), level=xbmc.LOGDEBUG )
     # if cached thumb does not exist try auto generated
-    if not exists( thumbnail ):
+    if not xbmcvfs.exists( thumbnail ):
         thumbnail = os.path.join( BASE_CACHE_PATH, filename[ 0 ], "auto-" + filename )
-    if not exists( thumbnail ):
+    if not xbmcvfs.exists( thumbnail ):
         thumbnail = "DefaultVideo.png"
     # return result
     return thumbnail
