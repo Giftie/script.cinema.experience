@@ -26,6 +26,7 @@ BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import utils
 
 _A_ = xbmcaddon.Addon( __scriptID__ )
 
@@ -45,25 +46,9 @@ class Main:
         _A_.setSetting( id='trailer_play_mode', value='%d' % int( self._play_mode ) )        
 
     def _save_trigger_list( self ):
-        xbmc.log( "[script.cinema.experience] - Saving trigger List", level=xbmc.LOGNOTICE)
-        try:
-            # base path to watched file
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
-            # if the path to the source file does not exist create it
-            if os.path.isfile( base_path ):
-                os.remove( base_path )
-            if not os.path.isdir( os.path.dirname( base_path ) ):
-                os.makedirs( os.path.dirname( base_path ) )
-            # open source path for writing
-            file_object = open( base_path, "w" )
-            # write xmlSource
-            file_object.write( repr( self.trigger_list ) )
-            # close file object
-            file_object.close()
-        except:
-            xbmc.log( "[script.cinema.experience] - Error saving trigger List", level=xbmc.LOGNOTICE)
-            traceback.print_exc()       
-    
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
+		utils.save_list( base_path, self.trigger_list, "Trigger List" )
+        
     def _build_trigger_list( self ):
         if self.playlistsize == 1:
             self.trigger_list.append( "Movie" )
@@ -94,19 +79,8 @@ class Main:
             pass
                     
     def _load_trailer_list( self ):
-        xbmc.log( "[script.cinema.experience] - Loading Downloaded Trailer List", level=xbmc.LOGNOTICE)
-        try:
-            # set base watched file path
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
-            # open path
-            usock = open( base_path, "r" )
-            # read source
-            trailer_list = eval( usock.read() )
-            # close socket
-            usock.close()
-        except:
-            trailer_list = []
-        return trailer_list
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
+        trailer_list = load_saved_list( base_path, "Downloaded Trailers" )
         
     def _start( self ):
         mpaa = audio = genre = movie = equivalent_mpaa = ""

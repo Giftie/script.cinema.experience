@@ -68,14 +68,9 @@ def unescape(text):
 def settings_to_log( settings_path, script_heading="[utils.py]" ):
     try:
         log( "Settings\n", xbmc.LOGDEBUG)
-        # set base watched file path
         base_path = os.path.join( settings_path, "settings.xml" )
-        # open path
-        settings_file = open( base_path, "r" )
-        settings_file_read = settings_file.read()
-        settings_list = settings_file_read.replace("<settings>\n","").replace("</settings>\n","").split("/>\n")
-        # close socket
-        settings_file.close()
+        settings_file = load_saved_list( base_path, "Settings" )
+        settings_list = settings_file.replace("<settings>\n","").replace("</settings>\n","").split("/>\n")
         for setting in settings_list:
             match = re.search('    <setting id="(.*?)" value="(.*?)"', setting)
             if not match:
@@ -90,3 +85,34 @@ def log( text, severity=xbmc.LOGDEBUG ):
         text = text.encode('utf-8')
     message = ('[%s] - %s' % ( __scriptname__ ,text.__str__() ) )
     xbmc.log( msg=message, level=severity)
+
+ def load_saved_list( f_name, type ):
+	saved_list = []
+	if xbmcvfs.exists( f_name ):
+		xbmc.log( "[script.cinema.experience] - Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+		try:
+			f_object = File( f_name )
+			saved_list = f_object.read()
+			f_object.close()
+		except:
+			xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+			traceback.print_exc()
+	else:
+		xbmc.log( "[script.cinema.experience] - List does not exist, %s" % type, level=xbmc.LOGNOTICE)
+	return saved_list
+
+def save_list( f_name, f_list, type ):
+	xbmc.log( "[script.cinema.experience] - Saving List, %s" % type, level=xbmc.LOGNOTICE)
+	try:
+		if not xbmcvfs.exists( os.path.dirname( f_name ) ):
+			xbmcvfs.mkdirs( os.path.dirname( f_name ) )
+		# open source path for writing
+		file_object = xbmcvfs.File( f_name, "w" )
+		# write xmlSource
+		file_object.write( repr( f_list ) )
+		# close file object
+		file_object.close()
+	except:
+		xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+		traceback.print_exc()
+	

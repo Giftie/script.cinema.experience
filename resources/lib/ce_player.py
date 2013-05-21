@@ -38,8 +38,8 @@ script_header = "[ %s ]" % __scriptID__
 from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info, _clear_playlists
 from slides import _fetch_slides
 from new_trailer_downloader import downloader
-from utils import settings_to_log
 from launch_automation import Launch_automation
+import utils
 
 class Script():
     def __init__(self, *args, **kwargs):
@@ -154,21 +154,9 @@ class Script():
         s.close()
     
     def load_trigger_list( self ):
-        xbmc.log( "[script.cinema.experience] - Loading Trigger List", level=xbmc.LOGNOTICE)
-        try:
-            # set base watched file path
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
-            # open path
-            usock = open( base_path, "r" )
-            # read source
-            trigger_list = eval( usock.read() )
-            # close socket
-            usock.close()
-        except:
-            xbmc.log( "[script.cinema.experience] - Error Loading Trigger List", level=xbmc.LOGNOTICE)
-            traceback.print_exc()
-            trigger_list = []
-        return trigger_list
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
+        trigger_list = utils.load_saved_list( base_path, "Trigger List" )
+		return trigger_list
 
     def voxcommando():
         playlistsize = playlist.size()
