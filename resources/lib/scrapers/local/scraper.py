@@ -33,6 +33,10 @@ class Main:
         self.movie = movie
         self.trailers = []
         self.tmp_trailers = []
+		if int( self.settings[ "trailer_play_mode" ] )== 1:
+			self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
+		else:
+			self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
 
     def fetch_trailers( self ):
         xbmc.log("%s - Fetching Trailers" % logmessage, level=xbmc.LOGNOTICE )
@@ -82,25 +86,13 @@ class Main:
             self._shuffle_trailers()
 
     def _get_watched( self ):
-        if int( self.settings[ "trailer_play_mode" ] )== 1:
-			base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
-		else:
-			base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-	    self.watched = utils.load_saved_list( base_path, "Trailer Watched List" )
+        self.watched = utils.load_saved_list( self.watched_path, "Trailer Watched List" )
 
     def _reset_watched( self ):
         xbmc.log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
-        if int( self.settings[ "trailer_play_mode" ] )== 1:
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
-        else:
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-        if xbmcvfs.exists( base_path ):
-            xbmcvfs.delete( base_path )
+        if xbmcvfs.exists( self.watched_path ):
+            xbmcvfs.delete( self.watched_path )
             self.watched = []
 
     def _save_watched( self ):
-        if int( self.settings[ "trailer_play_mode" ] )== 1:
-			base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
-		else:
-			base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-		utils.save_list( base_path, self.watched, "Watched Trailers" )
+        utils.save_list( self.watched_path, self.watched, "Watched Trailers" )
