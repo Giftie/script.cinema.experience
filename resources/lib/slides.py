@@ -12,9 +12,7 @@ BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-import xbmcgui,xbmc, xbmcaddon
-from xbmcvfs import delete as delete_file
-from xbmcvfs import exists as exists
+import xbmcgui,xbmc, xbmcaddon, xbmcvfs
 from xbmcvfs import copy as file_copy
 from folder import dirEntries, getFolders
 import utils
@@ -35,8 +33,8 @@ def _load_watched_trivia_file():
 
 def _reset_watched():
     base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
-    if exists( base_path ):
-        delete_file( base_path )
+    if xbmcvfs.exists( base_path ):
+        xbmcvfs.delete( base_path )
         watched = []
     return watched
 
@@ -104,15 +102,23 @@ def _get_slides( paths, movie_mpaa ):
 def _get_slides_xml( path ):
     source = os.path.join( path, "slides.xml" ).replace("\\\\","\\")
     destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "slides.xml" ).replace("\\\\","\\")
-    # if slides.xml does not exist, try in title case
-    if not exists( source ):
-        source = os.path.join( path, "Slides.xml" ).replace( "\\\\", "\\" )
-        # if no slides.xml exists return false
-        if not exists( source ):
-            return False, "", "", "", "", ""
-    file_copy( source, destination )
+    slides_xml_copied = False
+	# if no slides.xml exists return false
+    if not xbmcvfs.exists( source ):
+		# slides.xml not found, try Title case(Slides.xml)
+        source = os.path.join( path, "Slides.xml" ).replace("\\\\","\\")
+		if not xbmcvfs.exists( source ):
+			return False, "", "", "", "", ""
     # fetch data
-    xml = open( destination ).read()
+    try:
+		xml = xbmcvfs.File( source ).read()
+	except:
+		try:
+			xbmcvfs.copy( source, destination )
+			xml = xbmcvfs.File( destination ).read()
+			slides_xml_copied = True
+		except:
+			return False, "", "", "", "", ""
     # parse info
     #mpaa, theme, question_format, clue_format, answer_format = re.search( "<slides?(?:.+?rating=\"([^\"]*)\")?(?:.+?theme=\"([^\"]*)\")?.*?>.+?<question.+?format=\"([^\"]*)\".*?/>.+?<clue.+?format=\"([^\"]*)\".*?/>.+?<answer.+?format=\"([^\"]*)\".*?/>", xml, re.DOTALL ).groups()
     mpaa = theme = question_format = clue_format = answer_format = still_format = ""
@@ -135,7 +141,8 @@ def _get_slides_xml( path ):
     if still_match:
         still_format = still_match.group(1)
     #xbmc.log("[script.cinema.experience] mpaa: %s QF: %s == AF: %s == CF: %s == SF: %s" % (mpaa, question_format, answer_format, clue_format, still_format), xbmc.LOGNOTICE) 
-    delete_file ( destination )
+    if slides_xml_copied:
+		xbmcvfs.delete( destination )
     return True, mpaa, question_format, clue_format, answer_format, still_format
     
 def _shuffle_slides( tmp_slides, watched ):
