@@ -33,10 +33,10 @@ class Main:
         self.movie = movie
         self.trailers = []
         self.tmp_trailers = []
-		if int( self.settings[ "trailer_play_mode" ] )== 1:
-			self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
-		else:
-			self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+        if int( self.settings[ "trailer_play_mode" ] )== 1:
+            self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
+        else:
+            self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
 
     def fetch_trailers( self ):
         xbmc.log("%s - Fetching Trailers" % logmessage, level=xbmc.LOGNOTICE )

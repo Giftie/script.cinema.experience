@@ -28,14 +28,15 @@ def _fetch_slides( movie_mpaa ):
 
 def _load_watched_trivia_file():
     base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
+    watched = []
     watched = utils.load_saved_list( base_path, "Watched Trivia" )
-	return watched
+    return watched
 
 def _reset_watched():
     base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
     if xbmcvfs.exists( base_path ):
         xbmcvfs.delete( base_path )
-        watched = []
+    watched = []
     return watched
 
 def _get_slides( paths, movie_mpaa ):
@@ -103,22 +104,22 @@ def _get_slides_xml( path ):
     source = os.path.join( path, "slides.xml" ).replace("\\\\","\\")
     destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "slides.xml" ).replace("\\\\","\\")
     slides_xml_copied = False
-	# if no slides.xml exists return false
+    # if no slides.xml exists return false
     if not xbmcvfs.exists( source ):
-		# slides.xml not found, try Title case(Slides.xml)
+        # slides.xml not found, try Title case(Slides.xml)
         source = os.path.join( path, "Slides.xml" ).replace("\\\\","\\")
-		if not xbmcvfs.exists( source ):
-			return False, "", "", "", "", ""
+        if not xbmcvfs.exists( source ):
+            return False, "", "", "", "", ""
     # fetch data
     try:
-		xml = xbmcvfs.File( source ).read()
-	except:
-		try:
-			xbmcvfs.copy( source, destination )
-			xml = xbmcvfs.File( destination ).read()
-			slides_xml_copied = True
-		except:
-			return False, "", "", "", "", ""
+        xml = xbmcvfs.File( source ).read()
+    except:
+        try:
+            xbmcvfs.copy( source, destination )
+            xml = xbmcvfs.File( destination ).read()
+            slides_xml_copied = True
+        except:
+            return False, "", "", "", "", ""
     # parse info
     #mpaa, theme, question_format, clue_format, answer_format = re.search( "<slides?(?:.+?rating=\"([^\"]*)\")?(?:.+?theme=\"([^\"]*)\")?.*?>.+?<question.+?format=\"([^\"]*)\".*?/>.+?<clue.+?format=\"([^\"]*)\".*?/>.+?<answer.+?format=\"([^\"]*)\".*?/>", xml, re.DOTALL ).groups()
     mpaa = theme = question_format = clue_format = answer_format = still_format = ""
@@ -142,7 +143,7 @@ def _get_slides_xml( path ):
         still_format = still_match.group(1)
     #xbmc.log("[script.cinema.experience] mpaa: %s QF: %s == AF: %s == CF: %s == SF: %s" % (mpaa, question_format, answer_format, clue_format, still_format), xbmc.LOGNOTICE) 
     if slides_xml_copied:
-		xbmcvfs.delete( destination )
+        xbmcvfs.delete( destination )
     return True, mpaa, question_format, clue_format, answer_format, still_format
     
 def _shuffle_slides( tmp_slides, watched ):

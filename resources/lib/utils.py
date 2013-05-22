@@ -3,7 +3,7 @@
 # a collection of useful utilities
 
 import re, os, sys, traceback
-import xbmc
+import xbmc, xbmcvfs
 
 __scriptname__         = sys.modules[ "__main__" ].__addonname__
 __scriptID__           = sys.modules[ "__main__" ].__scriptID__
@@ -86,33 +86,32 @@ def log( text, severity=xbmc.LOGDEBUG ):
     message = ('[%s] - %s' % ( __scriptname__ ,text.__str__() ) )
     xbmc.log( msg=message, level=severity)
 
- def load_saved_list( f_name, type ):
-	saved_list = []
-	if xbmcvfs.exists( f_name ):
-		xbmc.log( "[script.cinema.experience] - Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
-		try:
-			f_object = File( f_name )
-			saved_list = f_object.read()
-			f_object.close()
-		except:
-			xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
-			traceback.print_exc()
-	else:
-		xbmc.log( "[script.cinema.experience] - List does not exist, %s" % type, level=xbmc.LOGNOTICE)
-	return saved_list
+def load_saved_list( f_name, type ):
+    saved_list = []
+    if xbmcvfs.exists( f_name ):
+        xbmc.log( "[script.cinema.experience] - Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+        try:
+            f_object = xbmcvfs.File( f_name )
+            saved_list = f_object.read()
+            f_object.close()
+        except:
+            xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+            traceback.print_exc()
+    else:
+        xbmc.log( "[script.cinema.experience] - List does not exist, %s" % type, level=xbmc.LOGNOTICE)
+    return saved_list
 
 def save_list( f_name, f_list, type ):
-	xbmc.log( "[script.cinema.experience] - Saving List, %s" % type, level=xbmc.LOGNOTICE)
-	try:
-		if not xbmcvfs.exists( os.path.dirname( f_name ) ):
-			xbmcvfs.mkdirs( os.path.dirname( f_name ) )
-		# open source path for writing
-		file_object = xbmcvfs.File( f_name, "w" )
-		# write xmlSource
-		file_object.write( repr( f_list ) )
-		# close file object
-		file_object.close()
-	except:
-		xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
-		traceback.print_exc()
-	
+    xbmc.log( "[script.cinema.experience] - Saving List, %s" % type, level=xbmc.LOGNOTICE)
+    try:
+        if not xbmcvfs.exists( os.path.dirname( f_name ) ):
+            xbmcvfs.mkdirs( os.path.dirname( f_name ) )
+        # open source path for writing
+        file_object = xbmcvfs.File( f_name, "w" )
+        # write xmlSource
+        file_object.write( repr( f_list ) )
+        # close file object
+        file_object.close()
+    except:
+        xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+        traceback.print_exc()
