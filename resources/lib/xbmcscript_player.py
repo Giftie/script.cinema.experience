@@ -47,7 +47,7 @@ class Main:
 
     def _save_trigger_list( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
-		utils.save_list( base_path, self.trigger_list, "Trigger List" )
+        utils.save_list( base_path, self.trigger_list, "Trigger List" )
         
     def _build_trigger_list( self ):
         if self.playlistsize == 1:

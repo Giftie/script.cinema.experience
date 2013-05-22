@@ -156,7 +156,7 @@ class Script():
     def load_trigger_list( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
         trigger_list = utils.load_saved_list( base_path, "Trigger List" )
-		return trigger_list
+        return trigger_list
 
     def voxcommando():
         playlistsize = playlist.size()

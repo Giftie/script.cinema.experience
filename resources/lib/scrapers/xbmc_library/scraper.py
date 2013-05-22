@@ -44,7 +44,7 @@ class Main:
         self.movie = movie
         #  initialize our trailer list
         self.trailers = []
-		self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+        self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         
 
     def fetch_trailers( self ):        

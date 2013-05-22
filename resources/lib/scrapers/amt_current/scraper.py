@@ -221,7 +221,7 @@ class Main:
 
     def _parse_xml_source( self, xmlSource ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-	    watched = utils.load_saved_list( base_path, "Trailer Watched List" )
+        watched = utils.load_saved_list( base_path, "Trailer Watched List" )
         # Parse xmlSource for videos
         parser = _Parser( xmlSource, self.mpaa, self.genre, self.settings, watched )
         # saved watched file
