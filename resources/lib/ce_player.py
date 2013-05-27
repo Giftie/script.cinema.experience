@@ -83,7 +83,7 @@ class Script():
                 if feature_settings[ "enable_notification" ]:
                     xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header1, message, time_delay, image) )
                 early_exit = False
-            # If for some reason the limit does not get reached and the window changed, cancel script
+        # If for some reason the limit does not get reached and the window changed, cancel script
         if playlist.size() < number_of_features and library_view != "oldway":
             if feature_settings[ "enable_notification" ]:
                 xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32544 ), time_delay, image) )
@@ -208,8 +208,8 @@ class Script():
 
     def trivia_intro( self ):
         xbmc.log( "[ script.cinema.experience ] - ## Intro ##", level=xbmc.LOGNOTICE)
+        _clear_playlists( "video" )
         play_list = playlist
-        play_list.clear()
         # initialize intro lists
         playlist_intro = []
         # get trivia intro videos
@@ -277,7 +277,8 @@ class Script():
                 self.trivia_intro()        
                 if playlist.size() > 0:
                     self._wait_until_end()
-                xbmc.sleep(500) # wait .5 seconds
+                xbmc.sleep(500) # wait .5 seconds 
+                xbmc.Player().stop()
                 path = _MA_.getAddonInfo('path')
                 question_type = 1
                 mode = ( True, False )[ trivia_settings[ "trivia_moviequiz_mode" ] ]
@@ -312,6 +313,8 @@ class Script():
                 xbmc.sleep(500) # wait .5 seconds 
                 self._wait_until_end()
             #xbmc.sleep(500) # wait .5 seconds 
+            # stop player, with out this there is a chance that one of the queued movies will start to play in the background.
+            xbmc.Player().stop()
             __builtin__.plist = plist
             __builtin__.slide_playlist = slide_playlist
             __builtin__.movie_mpaa = mpaa
@@ -335,4 +338,4 @@ class Script():
             script.Main()
             xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             xbmc.sleep(500) # wait .5 seconds
-            #xbmc.Player().play( playlist )
+            

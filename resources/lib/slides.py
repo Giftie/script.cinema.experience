@@ -113,11 +113,14 @@ def _get_slides( paths, movie_mpaa ):
 def _get_slides_xml( path ):
     source = os.path.join( path, "slides.xml" ).replace("\\\\","\\")
     destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "slides.xml" ).replace("\\\\","\\")
-    # if no slides.xml exists return false
+    # if slides.xml does not exist, try in title case
     if not exists( source ):
-        return False, "", "", "", "", ""
-    # fetch data
+        source = os.path.join( path, "Slides.xml" ).replace( "\\\\", "\\" )
+        # if no slides.xml exists return false
+        if not exists( source ):
+            return False, "", "", "", "", ""
     file_copy( source, destination )
+    # fetch data
     xml = open( destination ).read()
     # parse info
     #mpaa, theme, question_format, clue_format, answer_format = re.search( "<slides?(?:.+?rating=\"([^\"]*)\")?(?:.+?theme=\"([^\"]*)\")?.*?>.+?<question.+?format=\"([^\"]*)\".*?/>.+?<clue.+?format=\"([^\"]*)\".*?/>.+?<answer.+?format=\"([^\"]*)\".*?/>", xml, re.DOTALL ).groups()

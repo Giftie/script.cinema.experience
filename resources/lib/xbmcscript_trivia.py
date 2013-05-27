@@ -36,13 +36,13 @@ class Trivia( xbmcgui.WindowXML ):
         xbmcgui.WindowXML.__init__( self, *args, **kwargs )
         # update dialog
         self.settings = trivia_settings
-        self.playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
         self.mpaa = movie_mpaa
         self.genre = movie_genre
         # initialize our class variable
         self.plist = plist
         self.slide_playlist = slide_playlist
-        self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
+        if self.settings[ "trivia_music" ] > 0:
+            self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
         self._init_variables()
         self._get_global_timer( (self.settings[ "trivia_total_time" ] * 60 ) , self._exit_trivia )
         #display slideshow
@@ -74,9 +74,9 @@ class Trivia( xbmcgui.WindowXML ):
         return volume
 
     def _start_slideshow_music( self ):
-        xbmc.log( "[script.cinema.experience] - Starting Tivia Music", level=xbmc.LOGNOTICE)
-        # did user set this preference
         if self.settings[ "trivia_music" ] > 0:
+            xbmc.log( "[script.cinema.experience] - Starting Tivia Music", level=xbmc.LOGNOTICE)
+            # did user set this preference
             # check to see if script is to adjust the volume
             if self.settings[ "trivia_adjust_volume" ]:
                 xbmc.log( "[script.cinema.experience] - Adjusting Volume to %s" % self.settings[ "trivia_music_volume" ], level=xbmc.LOGNOTICE)
@@ -85,8 +85,6 @@ class Trivia( xbmcgui.WindowXML ):
                 # set the volume percent of current volume
                 xbmc.executebuiltin( "XBMC.SetVolume(%d)" % ( volume, ) )
             # play music
-            #if self.settings[ "trivia_music_file" ].endswith(".m3u"):
-            #    xbmc.Player().play( self.music_playlist )
             xbmc.sleep( 200 )
             CEPlayer().play( self.music_playlist )
 
@@ -96,13 +94,11 @@ class Trivia( xbmcgui.WindowXML ):
             self.slide_timer.cancel()
         # increment/decrement count
         self.image_count += slide
-        # check for invalid count, TODO: make sure you don't want to reset timer
-        # check to see if playlist has come to an end
-        if not CEPlayer().isPlayingAudio() and int(self.settings[ "trivia_music" ]) > 0:
+        # check to see if music playlist has come to an end
+        if self.settings[ "trivia_music" ] > 0:
+            if ( not CEPlayer().isPlayingAudio() ):
                 #build_music_playlist()
                 CEPlayer().play( self.music_playlist )
-        else:
-            pass
         if self.image_count < 0:
             self.image_count = 0
         # if no more slides, exit
