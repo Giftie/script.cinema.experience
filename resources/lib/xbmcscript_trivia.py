@@ -74,9 +74,9 @@ class Trivia( xbmcgui.WindowXML ):
         return volume
 
     def _start_slideshow_music( self ):
-        xbmc.log( "[script.cinema.experience] - Starting Tivia Music", level=xbmc.LOGNOTICE)
-        # did user set this preference
         if self.settings[ "trivia_music" ] > 0:
+            xbmc.log( "[script.cinema.experience] - Starting Tivia Music", level=xbmc.LOGNOTICE)
+            # did user set this preference
             # check to see if script is to adjust the volume
             if self.settings[ "trivia_adjust_volume" ]:
                 xbmc.log( "[script.cinema.experience] - Adjusting Volume to %s" % self.settings[ "trivia_music_volume" ], level=xbmc.LOGNOTICE)
@@ -98,7 +98,7 @@ class Trivia( xbmcgui.WindowXML ):
         self.image_count += slide
         # check for invalid count, TODO: make sure you don't want to reset timer
         # check to see if playlist has come to an end
-        if not CEPlayer().isPlayingAudio() and int(self.settings[ "trivia_music" ]) > 0:
+        if ( not CEPlayer().isPlayingAudio() ) and self.settings[ "trivia_music" ] > 0:
                 #build_music_playlist()
                 CEPlayer().play( self.music_playlist )
         else:

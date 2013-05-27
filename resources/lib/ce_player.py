@@ -83,7 +83,7 @@ class Script():
                 if feature_settings[ "enable_notification" ]:
                     xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header1, message, time_delay, image) )
                 early_exit = False
-            # If for some reason the limit does not get reached and the window changed, cancel script
+        # If for some reason the limit does not get reached and the window changed, cancel script
         if playlist.size() < number_of_features and library_view != "oldway":
             if feature_settings[ "enable_notification" ]:
                 xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32544 ), time_delay, image) )
