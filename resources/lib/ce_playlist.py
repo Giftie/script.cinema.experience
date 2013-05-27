@@ -373,11 +373,11 @@ def _get_queued_video_info( feature = 0 ):
 
 def _clear_playlists( mode="both" ):
     # clear playlists
-    if mode=="video" or mode=="both":
+    if mode in ( "video", "both" ):
         vplaylist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
         vplaylist.clear()
         xbmc.log( "[ script.cinema.experience ] - Video Playlist Cleared", level=xbmc.LOGNOTICE )
-    if mode=="music" or mode=="both":
+    if mode in ( "music", "both" ):
         mplaylist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
         mplaylist.clear()
         xbmc.log( "[ script.cinema.experience ] - Music Playlist Cleared", level=xbmc.LOGNOTICE )
