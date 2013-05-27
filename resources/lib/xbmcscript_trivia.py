@@ -42,7 +42,7 @@ class Trivia( xbmcgui.WindowXML ):
         self.plist = plist
         self.slide_playlist = slide_playlist
         if self.settings[ "trivia_music" ] > 0:
-			self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
+            self.music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
         self._init_variables()
         self._get_global_timer( (self.settings[ "trivia_total_time" ] * 60 ) , self._exit_trivia )
         #display slideshow
@@ -96,9 +96,9 @@ class Trivia( xbmcgui.WindowXML ):
         self.image_count += slide
         # check to see if music playlist has come to an end
         if self.settings[ "trivia_music" ] > 0:
-			if ( not CEPlayer().isPlayingAudio() ):
-				#build_music_playlist()
-				CEPlayer().play( self.music_playlist )
+            if ( not CEPlayer().isPlayingAudio() ):
+                #build_music_playlist()
+                CEPlayer().play( self.music_playlist )
         if self.image_count < 0:
             self.image_count = 0
         # if no more slides, exit
