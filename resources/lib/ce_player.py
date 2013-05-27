@@ -208,8 +208,8 @@ class Script():
 
     def trivia_intro( self ):
         xbmc.log( "[ script.cinema.experience ] - ## Intro ##", level=xbmc.LOGNOTICE)
+        _clear_playlists( "video" )
         play_list = playlist
-        play_list.clear()
         # initialize intro lists
         playlist_intro = []
         # get trivia intro videos
