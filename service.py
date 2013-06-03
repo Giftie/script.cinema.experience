@@ -11,6 +11,8 @@ __scriptID__     = __addonid__
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( __addon__.getAddonInfo('path') ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import utils
+
 home_automation_folder   = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" )
 home_automation_module   = os.path.join( home_automation_folder, "home_automation.py" )
 true = True
@@ -47,15 +49,15 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
                           }
 
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
+
 if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ) and ha_settings[ "ha_enable" ]:
     source = os.path.join( BASE_RESOURCE_PATH, "ha_scripts", "home_automation.py" )
     destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" )
     xbmcvfs.mkdir( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" ) )        
     xbmcvfs.copy( source, destination )
-    log( "[ script.cinema.experience ] - home_automation.py copied", level=xbmc.LOGNOTICE )
+    utils.log( "home_automation.py copied" )
 
 from launch_automation import Launch_automation
-from utils import log
 
 class CE_Monitor( xbmc.Monitor ):
     def __init__(self, *args, **kwargs):
@@ -74,27 +76,27 @@ class CE_Player( xbmc.Player ):
     def onPlayBackStarted( self ):
         xbmc.sleep( 1000 )
         if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-            log( 'Playback Started' )
+            utils.log( 'Playback Started' )
     
     def onPlayBackEnded( self ):
         # Will be called when xbmc stops playing a file
         if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-            log( "Playback Ended" )
+            utils.log( "Playback Ended" )
     
     def onPlayBackStopped( self ):
         # Will be called when user stops xbmc playing a file
         if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-            log( "Playback Stopped" )
+            utils.log( "Playback Stopped" )
     
     def onPlayBackPaused( self ):
         if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-            log( 'Playback Paused' )
+            utils.log( 'Playback Paused' )
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
     
     def onPlayBackResumed( self ):
         if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-            log( 'Playback Resumed' )
+            utils.log( 'Playback Resumed' )
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
     
@@ -109,7 +111,7 @@ class Main():
         self.Monitor = CE_Monitor( enabled = True, update_settings = self.update_settings )
     
     def update_settings( self ):
-        log( "service.py - Settings loaded" )
+        utils.log( "service.py - Settings loaded" )
         self.override_play           = eval( __setting__( "override_play" ) )
         self.ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) ),
                                        "ha_multi_trigger": eval( __setting__( "ha_multi_trigger" ) ),
@@ -149,9 +151,9 @@ class Main():
                     xbmc.sleep( 250 )
                 
 if (__name__ == "__main__"):
-    log('Cinema Experience service script version %s started' % __addonversion__)
+    utils.log('Cinema Experience service script version %s started' % __addonversion__)
     Main()
     del CE_Player
     del CE_Monitor
     del Main
-    log('Cinema Experience service script version %s stopped' % __addonversion__)
+    utils.log('Cinema Experience service script version %s stopped' % __addonversion__)
