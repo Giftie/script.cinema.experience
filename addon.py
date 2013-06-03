@@ -171,8 +171,8 @@ script_header = "[ %s ]" % __scriptID__
 from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info, _clear_playlists
 from slides import _fetch_slides
 from new_trailer_downloader import downloader
-from utils import settings_to_log
 from launch_automation import Launch_automation
+import utils
 
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
 if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" ) ):
@@ -180,16 +180,16 @@ if not xbmcvfs.exists( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "ho
     destination = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts", "home_automation.py" )
     xbmcvfs.mkdir( os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" ) )        
     xbmcvfs.copy( source, destination )
-    xbmc.log( "[ script.cinema.experience ] - home_automation.py copied", level=xbmc.LOGNOTICE )
+    utils.log( "home_automation.py copied", xbmc.LOGNOTICE )
 
 def footprints():
-    xbmc.log( "[ script.cinema.experience ] - Script Name: %s" % __script__, level=xbmc.LOGNOTICE )
-    xbmc.log( "[ script.cinema.experience ] - Script ID: %s" % __scriptID__, level=xbmc.LOGNOTICE )
-    xbmc.log( "[ script.cinema.experience ] - Script Version: %s" % __version__, level=xbmc.LOGNOTICE )
-    xbmc.log( "[ script.cinema.experience ] - Starting Window ID: %s" % xbmcgui.getCurrentWindowId(), level=xbmc.LOGNOTICE )
+    utils.log( "Script Name: %s" % __script__, xbmc.LOGNOTICE )
+    utils.log( "Script ID: %s" % __scriptID__, xbmc.LOGNOTICE )
+    utils.log( "Script Version: %s" % __version__, xbmc.LOGNOTICE )
+    utils.log( "Starting Window ID: %s" % xbmcgui.getCurrentWindowId(), xbmc.LOGNOTICE )
 
 def _clear_watched_items( clear_type ):
-    xbmc.log( "[ script.cinema.experience ] - _clear_watched_items( %s )" % ( clear_type ), level=xbmc.LOGNOTICE )
+    utils.log( "_clear_watched_items( %s )" % ( clear_type ), xbmc.LOGNOTICE )
     # initialize base_path
     base_paths = []
     # clear trivia or trailers
@@ -222,54 +222,54 @@ def _clear_watched_items( clear_type ):
 
 def _build_playlist( movies, mode = "movie_titles" ):
     if mode == "movie_titles":
-        xbmc.log( "[script.cinema.experience] - Movie Title Mode", level=xbmc.LOGNOTICE )
+        utils.log( "Movie Title Mode", xbmc.LOGNOTICE )
         for movie in movies:
-            xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie, level=xbmc.LOGNOTICE )
+            utils.log( "Movie Title: %s" % movie, xbmc.LOGNOTICE )
             xbmc.executehttpapi( "SetResponseFormat()" )
             xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
             # select Movie path from movieview Limit 1
             sql = "SELECT movieview.idMovie, movieview.c00, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
-            xbmc.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), level=xbmc.LOGDEBUG )
+            utils.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), xbmc.LOGDEBUG )
             # query database for info dummy is needed as there are two </field> formatters
             try:
                 movie_id, movie_title, movie_path, movie_filename, thumb, genre, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql ), ).split( "</field>" )
                 movie_id = int( movie_id )
             except:
                 traceback.print_exc()
-                xbmc.log( "[script.cinema.experience] - Unable to match movie", level=xbmc.LOGERROR )
+                utils.log( "Unable to match movie", xbmc.LOGERROR )
                 movie_id = 0
                 movie_title = movie_path = movie_filename = thumb = genre = dummy = ""
             movie_full_path = os.path.join(movie_path, movie_filename).replace("\\\\" , "\\")
-            xbmc.log( "[script.cinema.experience] - Movie Title: %s" % movie_title, level=xbmc.LOGNOTICE )
-            xbmc.log( "[script.cinema.experience] - Movie Path: %s" % movie_path, level=xbmc.LOGNOTICE )
-            xbmc.log( "[script.cinema.experience] - Movie Filename: %s" % movie_filename, level=xbmc.LOGNOTICE )
-            xbmc.log( "[script.cinema.experience] - Full Movie Path: %s" % movie_full_path, level=xbmc.LOGNOTICE )
+            utils.log( "Movie Title: %s" % movie_title, xbmc.LOGNOTICE )
+            utils.log( "Movie Path: %s" % movie_path, xbmc.LOGNOTICE )
+            utils.log( "Movie Filename: %s" % movie_filename, xbmc.LOGNOTICE )
+            utils.log( "Full Movie Path: %s" % movie_full_path, xbmc.LOGNOTICE )
             if not movie_id == 0:
                 json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % int( movie_id )
                 json_response = xbmc.executeJSONRPC(json_command)
-                xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % json_response, level=xbmc.LOGDEBUG )
+                utils.log( "JSONRPC Response: \n%s" % json_response, xbmc.LOGDEBUG )
                 xbmc.sleep( 50 )
     elif mode == "movie_ids":
-        xbmc.log( "[script.cinema.experience] - Movie ID Mode", level=xbmc.LOGNOTICE )
+        utils.log( "Movie ID Mode", xbmc.LOGNOTICE )
         for movie_id in movies:
-            xbmc.log( "[script.cinema.experience] - Movie ID: %s" % movie_id, level=xbmc.LOGNOTICE )
+            utils.log( "Movie ID: %s" % movie_id, xbmc.LOGNOTICE )
             json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % int( movie_id )
             json_response = xbmc.executeJSONRPC( json_command )
-            xbmc.log( "[script.cinema.experience] - JSONRPC Response: \n%s" % json_response, level=xbmc.LOGDEBUG )
+            utils.log( "JSONRPC Response: \n%s" % json_response, xbmc.LOGDEBUG )
             xbmc.sleep( 50 )
 
 if __name__ == "__main__" :
     #xbmc.sleep( 2000 )
     footprints()
     prev_trigger = ""
-    settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
+    utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
     # check to see if an argv has been passed to script
     xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "True" )
     from ce_player import Script
     try:
         try:
             if sys.argv[ 1 ]:
-                xbmc.log( "[ script.cinema.experience ] - Script Started With: %s" % sys.argv[ 1 ], level=xbmc.LOGNOTICE )
+                utils.log( "Script Started With: %s" % sys.argv[ 1 ], xbmc.LOGNOTICE )
                 try:
                     _command = ""
                     titles = ""
@@ -281,7 +281,7 @@ if __name__ == "__main__" :
                         _clear_playlists()
                         xbmc.sleep( 250 )
                         xbmc.executebuiltin( "Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ) )
-                        xbmc.log( "[ script.cinema.experience ] - Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ), level=xbmc.LOGNOTICE )
+                        utils.log( "Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ), xbmc.LOGNOTICE )
                         # we need to sleep so the video gets queued properly
                         xbmc.sleep( 250 )
                         exit = Script().start_script( "oldway" )
@@ -291,7 +291,7 @@ if __name__ == "__main__" :
                     elif sys.argv[ 1 ].startswith( "command" ):   # Command Arguments
                         _sys_arg = sys.argv[ 1 ].replace("<li>",";")
                         _command = re.split(";", _sys_arg, maxsplit=1)[1]
-                        xbmc.log( "[ script.cinema.experience ] - Command Call: %s" % _command, level=xbmc.LOGNOTICE )
+                        utils.log( "Command Call: %s" % _command, xbmc.LOGNOTICE )
                         if _command.startswith( "movie_title" ):   # Movie Title
                             _clear_playlists()
                             if _command.startswith( "movie_title;" ):
@@ -336,7 +336,7 @@ if __name__ == "__main__" :
                 __addon__.setSetting( id='number_of_features', value='0' ) # set number of features to 1
                 _clear_playlists()
                 xbmc.executebuiltin( "Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ) )
-                xbmc.log( "[ script.cinema.experience ] - Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ), level=xbmc.LOGNOTICE )
+                utils.log( "Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ), xbmc.LOGNOTICE )
                 # we need to sleep so the video gets queued properly
                 xbmc.sleep( 500 )
                 exit = Script().start_script( "oldway" )
@@ -344,7 +344,7 @@ if __name__ == "__main__" :
                 __addon__.openSettings()
                 exit = True
         #xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32545 ), time_delay, image) )
-        xbmc.log( "[ script.cinema.experience ] - messy_exit: %s" % exit, level=xbmc.LOGNOTICE )
+        utils.log( "messy_exit: %s" % exit, xbmc.LOGNOTICE )
         if exit:
             pass
         else:

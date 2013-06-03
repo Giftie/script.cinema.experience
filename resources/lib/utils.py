@@ -67,13 +67,13 @@ def unescape(text):
 
 def settings_to_log( settings_path, script_heading="[utils.py]" ):
     try:
-        log( "Settings\n", xbmc.LOGDEBUG)
+        log( "Settings\n", xbmc.LOGDEBUG )
         # set base watched file path
         base_path = os.path.join( settings_path, "settings.xml" )
         # open path
         settings_file = open( base_path, "r" )
         settings_file_read = settings_file.read()
-        settings_list = settings_file_read.replace("<settings>\n","").replace("</settings>\n","").split("/>\n")
+        settings_list = settings_file_read.replace( "<settings>\n", "" ).replace( "</settings>\n", "" ).split( "/>\n" )
         # close socket
         settings_file.close()
         for setting in settings_list:
@@ -86,7 +86,7 @@ def settings_to_log( settings_path, script_heading="[utils.py]" ):
         traceback.print_exc()
 
 def log( text, severity=xbmc.LOGDEBUG ):
-    if type( text).__name__=='unicode':
-        text = text.encode('utf-8')
-    message = ('[%s] - %s' % ( __scriptname__ ,text.__str__() ) )
-    xbmc.log( msg=message, level=severity)
+    if type( text).__name__ == 'unicode':
+        text = text.encode( 'utf-8' )
+    message = ( '[%s] - %s' % ( __scriptname__ ,text.__str__() ) )
+    xbmc.log( msg=message, level=severity )
