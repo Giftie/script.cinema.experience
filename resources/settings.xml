@@ -89,8 +89,8 @@
 <!-- 3D Movie Settings -->
     <category label="32108">
         <setting type="lsep" label="32108" />
-        <setting id="enable_3D_intro" type="enum" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32924" default="0" />
-        <setting id="3d_movie_tags" type="text" label="32925" enable="!eq(-1,0)" default="3D & HSBS & HOU" />
+        <setting id="enable_3d_intro" type="enum" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32924" default="0" />
+        <setting id="3d_movie_tags" type="text" label="32925" enable="!eq(-1,0)" default="3D & HSBS & H-SBS & HOU & H-OU" />
         <setting id="3d_intro_file" type="video" visible="!eq(-2,1)" label="32928" default="" />
         <setting id="3d_intro_folder" type="folder" visible="!gt(-3,1)" source="video" label="32929" default="" />
         <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-4,0)" default="true" />

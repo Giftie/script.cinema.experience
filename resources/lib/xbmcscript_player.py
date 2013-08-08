@@ -121,7 +121,7 @@ class Main:
                     mpaa, audio, genre, movie, equivalent_mpaa = self._add_intermission_videos()
             # otherwise just build for a single video
             else:
-                mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = 0 )
+                mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = 0 )
             self._create_playlist( mpaa, audio, genre, movie, equivalent_mpaa )
             # play the trivia slide show
         except:
@@ -132,7 +132,7 @@ class Main:
         count = 0
         index_count = 1
         for feature in range( 1, self.playlistsize ):
-            mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = index_count )
+            mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = index_count )
             #count = index_count
             # add intermission video
             if feature_settings[ "intermission_video" ] > 0:
@@ -192,7 +192,7 @@ class Main:
                     index_count += 1
             index_count += 1
         # return info from first movie in playlist
-        mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( 0 )
+        mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( 0 )
         return mpaa, audio, genre, movie, equivalent_mpaa
 
     def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa ):

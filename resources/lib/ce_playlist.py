@@ -37,6 +37,9 @@ def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download"
     if settings[ "trailer_play_mode" ] == 1 and mode == "playlist" and settings[ "trailer_scraper" ] in ( "amt_database", "amt_current" ):
         settings[ "trailer_scraper" ] = "local"
         settings[ "trailer_folder" ] = settings[ "trailer_download_folder" ]
+    if mode == "3D":
+        settings[ "trailer_scraper" ] = "local"
+        settings[ "trailer_folder" ] = settings[ "3d_trailer_folder" ]
     # get the correct scraper
     sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib", "scrapers" ) )
     exec "from %s import scraper as scraper" % ( settings[ "trailer_scraper" ], )
@@ -357,6 +360,7 @@ def _get_queued_video_info( feature = 0 ):
     except:
         traceback.print_exc()
         movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa = ""
+    is_3d_movie = test_for_3d( path )
     # spew queued video info to log
     xbmc.log( "%s - Queued Movie Information" % log_message, level=xbmc.LOGDEBUG )
     xbmc.log( "%s %s" % ( log_message,log_sep ), level=xbmc.LOGDEBUG )
@@ -365,11 +369,19 @@ def _get_queued_video_info( feature = 0 ):
     xbmc.log( "%s - Genre: %s" % ( log_message, genre, ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s - MPAA: %s" % ( log_message, short_mpaa, ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s - Audio: %s" % ( log_message, audio, ), level=xbmc.LOGDEBUG )
+    xbmc.log( "%s - 3D Movie: %s" % ( "False", "True" )[ is_3d_movie ], level=xbmc.LOGDEBUG )
     if video_settings[ "audio_videos_folder" ]:
         xbmc.log( "%s - Folder: %s" % ( log_message, ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) ), level=xbmc.LOGDEBUG )
     xbmc.log( "%s  %s" % ( log_message, log_sep ), level=xbmc.LOGDEBUG )
     # return results
-    return short_mpaa, audio, genre, path, equivalent_mpaa
+    return short_mpaa, audio, genre, path, equivalent_mpaa, is_3d_movie
+
+def test_for_3d( path ):
+    is_3d_movie = re.findall( video_settings[ "3d_movie_tags" ], path )
+    if is_3d_movie:
+        return True
+    else:
+        return False
 
 def _clear_playlists( mode="both" ):
     # clear playlists
