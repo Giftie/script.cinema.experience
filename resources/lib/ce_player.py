@@ -313,7 +313,6 @@ class Script():
                 xbmc.sleep(500) # wait .5 seconds 
                 self._wait_until_end()
             #xbmc.sleep(500) # wait .5 seconds 
-            # stop player, with out this there is a chance that one of the queued movies will start to play in the background.
             xbmc.Player().stop()
             __builtin__.plist = plist
             __builtin__.slide_playlist = slide_playlist
@@ -338,4 +337,4 @@ class Script():
             script.Main()
             xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             xbmc.sleep(500) # wait .5 seconds
-            
+            #xbmc.Player().play( playlist )
