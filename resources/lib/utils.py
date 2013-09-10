@@ -2,7 +2,7 @@
 
 # a collection of useful utilities
 
-import re, os, sys, traceback
+import re, os, sys, traceback, htmlentitydefs
 import xbmc
 
 __scriptname__         = sys.modules[ "__main__" ].__addonname__
