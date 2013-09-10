@@ -42,7 +42,7 @@ def retrieve_json_dict(json_query, items='items', force_log=False ):
     if response.startswith( "{" ):
         response = eval( response )
     try:
-        if response.has.key( 'result' )
+        if response.has_key( 'result' ):
             result = response['result']
             json_dict = result[items]
             return json_dict
