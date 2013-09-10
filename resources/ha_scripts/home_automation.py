@@ -2,8 +2,9 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import socket, sys
+import socket, sys, urllib2
 from threading import Thread
+from urllib import urlencode
 
 triggers       = sys.modules[ "__main__" ].triggers
 ha_settings    = sys.modules[ "__main__" ].ha_settings
@@ -11,6 +12,17 @@ ha_settings    = sys.modules[ "__main__" ].ha_settings
 class Automate:
     def __init__( self ):
         pass
+    
+    def sab_pause(self, mode):
+        apikey = ""
+        ip = "127.0.0.1" # address 
+        port = "5000"
+        url = "http://%s:%s/sabnzbd/" % ( ip, port )
+        query = {}
+        query[ "mode" ] = mode
+        query["apikey"] = apikey
+        response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
+        response_data = response.read()
     
     def broadcastUDP( self, data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's former HTTP API output port is 8278
         IPADDR = ipaddress
