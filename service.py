@@ -137,14 +137,18 @@ class Main():
         ha_settings = self.ha_settings
         
     def _daemon( self ):
-        while (not xbmc.abortRequested):
+        while ( not xbmc.abortRequested ):
             if not xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
                 xbmc.sleep( 250 )
             else:
-                if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and xbmc.getCondVisibility('VideoPlayer.Content(movies)') and override_play and not xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-                    #xbmc.sleep( 100 )
+                if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and override_play and not xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+                    #log( 'Something added to playlist.  Cinema Experince Running? %s' % xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) )
+                    while not int( xbmcgui.getCurrentWindowId() ) == 12005:
+                        xbmc.sleep( 100 )
+                        #log( 'Waiting for full screen video' )
                     xbmc.Player().stop()
                     xbmc.executebuiltin( "RunScript(script.cinema.experience,fromplay)" )
+                    xbmc.sleep( 3000 )
                 else:
                     xbmc.sleep( 250 )
                 
