@@ -963,3 +963,7 @@ msgstr ""
 msgctxt "#32946"
 msgid "Separate tags with '|'(pipe) and include spaces if required"
 msgstr ""
+
+msgctxt "#32947"
+msgid "Exit"
+msgstr ""

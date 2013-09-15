@@ -188,7 +188,15 @@ if __name__ == "__main__" :
                 xbmc.sleep( 500 )
                 exit = Script().start_script( "oldway" )
             else:
-                __addon__.openSettings()
+                import gui_settings
+                try:
+                    ui = gui_settings.GUI( "script-CExperience-Settings.xml" , __addon__.getAddonInfo('path'), "Default")
+                    xbmc.sleep( 2000 )
+                    ui.doModal()
+                    del ui
+                except:
+                    xbmc.log( "Error in script occured", xbmc.LOGNOTICE )
+                    traceback.print_exc()
                 exit = True
         #xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32545 ), time_delay, image) )
         utils.log( "messy_exit: %s" % exit, xbmc.LOGNOTICE )

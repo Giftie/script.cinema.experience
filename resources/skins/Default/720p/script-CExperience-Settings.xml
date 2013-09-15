@@ -1,0 +1,520 @@
+<window>
+    <!--<defaultcontrol>1001</defaultcontrol>
+    <animation effect="fade" time="250">WindowOpen</animation>
+    <animation effect="fade" time="250">WindowClose</animation>-->
+    <controls>
+        <control type="group">
+            <posx>0</posx>
+            <posy>0</posy>
+            <control type="image">  <!-- Main window -->
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1280</width>
+                <height>720</height>
+                <texture>background.jpg</texture>
+            </control>
+            
+            <control type="group" id="9007"> <!-- Help Screen -->
+                <posx>300</posx>
+                <posy>502</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!SubString(Window(10001).Property(help),true)">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="SubString(Window(10001).Property(help),true)">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="SubString(Window(10001).Property(help),true)">WindowClose</animation>
+                <!--
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(105) | ControlGroup(9006).HasFocus">conditional</animation>
+                -->
+                <visible>ControlGroup(9000).HasFocus | ControlGroup(9001).HasFocus | ControlGroup(9002).HasFocus | ControlGroup(9003).HasFocus | ControlGroup(9004).HasFocus | ControlGroup(9005).HasFocus | ControlGroup(9006).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>200</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="206">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Description/Help</label>
+                </control>
+                <control type="label" id="207">
+                    <description>Where the setting description goes</description>
+                    <posx>10</posx>
+                    <posy>40</posy>
+                    <width>960</width>
+                    <height>200</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <label>This is where a more descriptive explanation[CR]of the setting to assist the user[CR]Hopefully this will help all the users</label>
+                </control>
+            </control>
+            
+            <control type="group" id="9001"> <!-- Trivia Settings-->
+                <posx>0</posx>
+                <posy>0</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(100) & !ControlGroup(9001).HasFocus">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="Control.HasFocus(100) | ControlGroup(9001).HasFocus">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(100) | ControlGroup(9001).HasFocus">WindowClose</animation>
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(100) | ControlGroup(9001).HasFocus">conditional</animation>
+                <visible>Control.HasFocus(100) | ControlGroup(9001).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>500</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="200">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Trivia Settings</label>
+                </control>
+                <control type="button" id="110"> <!-- Trivia -->
+                    <description>First setting</description>
+                    <posx>20</posx>
+                    <posy>40</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32211]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright></onright>
+                    <onup>111</onup>
+                    <ondown>111</ondown>
+                </control>
+                <control type="label" id="120">
+                    <description>setting 1</description>
+                    <posx>800</posx>
+                    <posy>40</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label></label>
+                </control>
+                <control type="button" id="111"> <!-- Trivia -->
+                    <description>Second setting</description>
+                    <posx>50</posx>
+                    <posy>80</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32200]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright></onright>
+                    <onup>110</onup>
+                    <ondown>110</ondown>
+                    <visible>SubString(Window(10001).Property(trivia),true)</visible>
+                </control>
+                <control type="label" id="121">
+                    <description>setting 2</description>
+                    <posx>800</posx>
+                    <posy>80</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label></label>
+                    <visible>SubString(Window(10001).Property(trivia),true)</visible>
+                </control>
+            </control>
+            
+            <control type="group" id="9002"> <!-- Special Video Settings-->
+                <posx>0</posx>
+                <posy>0</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(101) & !ControlGroup(9002).HasFocus">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="Control.HasFocus(101) | ControlGroup(9002).HasFocus">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(101) | ControlGroup(9002).HasFocus">WindowClose</animation>
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(101) | ControlGroup(9002).HasFocus">conditional</animation>
+                <visible>Control.HasFocus(101) | ControlGroup(9002).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>500</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="201">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Special Video Settings</label>
+                </control>
+            </control>
+            
+            <control type="group" id="9003"> <!-- Trailer Settings-->
+                <posx>0</posx>
+                <posy>0</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(102) & !ControlGroup(9003).HasFocus">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="Control.HasFocus(102) | ControlGroup(9003).HasFocus">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(102) | ControlGroup(9003).HasFocus">WindowClose</animation>
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(102) | ControlGroup(9003).HasFocus">conditional</animation>
+                <visible>Control.HasFocus(102) | ControlGroup(9003).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>500</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="202">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Trailer Settings</label>
+                </control>
+            </control>
+            
+            <control type="group" id="9004"> <!-- Feature Presentation Settings-->
+                <posx>0</posx>
+                <posy>0</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(103) & !ControlGroup(9004).HasFocus">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="Control.HasFocus(103) | ControlGroup(9004).HasFocus">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(103) | ControlGroup(9004).HasFocus">WindowClose</animation>
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(103) | ControlGroup(9004).HasFocus">conditional</animation>
+                <visible>Control.HasFocus(103) | ControlGroup(9004).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>500</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="203">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Feature Presentation Settings</label>
+                </control>
+            </control>
+            
+            <control type="group" id="9005"> <!-- Home Automation Settings-->
+                <posx>0</posx>
+                <posy>0</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(104) & !ControlGroup(9005).HasFocus">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="Control.HasFocus(104) | ControlGroup(9005).HasFocus">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(104) | ControlGroup(9005).HasFocus">WindowClose</animation>
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(104) | ControlGroup(9005).HasFocus">conditional</animation>
+                <visible>Control.HasFocus(104) | ControlGroup(9005).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>500</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="204">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Home Automation Settings</label>
+                </control>
+            </control>
+            
+            <control type="group" id="9006"> <!-- Misc. Settings-->
+                <posx>0</posx>
+                <posy>0</posy>            
+                <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(105) & !ControlGroup(9006).HasFocus">conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="300" time="200" condition="Control.HasFocus(105) | ControlGroup(9006).HasFocus">conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(105) | ControlGroup(9006).HasFocus">WindowClose</animation>
+                <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(105) | ControlGroup(9006).HasFocus">conditional</animation>
+                <visible>Control.HasFocus(105) | ControlGroup(9006).HasFocus</visible>
+                <control type="image" id ="220">
+                    <!--
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    -->
+                    <width>980</width>
+                    <height>500</height>
+                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="label" id="205">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>10</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>Misc. Settings</label>
+                </control>
+            </control>
+            
+            <control type="group" id="9000"> <!-- Main Menu -->
+                <posx>0</posx>
+                <posy>300</posy>
+                <control type="image">  <!-- Menu Panel -->
+                    <description>Menu panel</description>
+                    <width>300</width>
+                    <height>402</height>
+                    <texture>default-menu.png</texture>
+                </control>
+                <control type="button" id="100"> <!-- Trivia -->
+                    <description>Trivia</description>
+                    <posx>20</posx>
+                    <posy>10</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32801]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick>9001</onclick>
+                    <onleft>9000</onleft>
+                    <onright>9001</onright>
+                    <onup>106</onup>
+                    <ondown>101</ondown>
+                </control>                
+                <control type="button" id="101"> <!-- Special Videos -->
+                    <description>Special Videos</description>
+                    <posx>20</posx>
+                    <posy>50</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32802]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright>9002</onright>
+                    <onup>100</onup>
+                    <ondown>102</ondown>
+                </control>
+                <control type="button" id="102"> <!-- Trailers -->
+                    <description>Trailers</description>
+                    <posx>20</posx>
+                    <posy>90</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32800]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright>9003</onright>
+                    <onup>101</onup>
+                    <ondown>103</ondown>
+                </control>                
+                <control type="button" id="103"> <!-- Feature Presentations -->
+                    <description>Feature Presentations</description>
+                    <posx>20</posx>
+                    <posy>130</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32803]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright>9004</onright>
+                    <onup>102</onup>
+                    <ondown>104</ondown>
+                </control>
+                <control type="button" id="104"> <!-- Home Automation Settings -->
+                    <description>Home Automation Settings</description>
+                    <posx>20</posx>
+                    <posy>170</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32805]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright>9005</onright>
+                    <onup>103</onup>
+                    <ondown>105</ondown>
+                </control>
+                <control type="button" id="105"> <!-- Misc. Settings -->
+                    <description>Misc. Settings</description>
+                    <posx>20</posx>
+                    <posy>210</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32804]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onclick></onclick>
+                    <onleft>9000</onleft>
+                    <onright>9006</onright>
+                    <onup>104</onup>
+                    <ondown>106</ondown>
+                </control>                
+                <control type="button" id="106"> <!-- Exit -->
+                    <description>Exit</description>
+                    <posx>20</posx>
+                    <posy>330</posy>
+                    <height>40</height>
+                    <width>270</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>250</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label>$ADDON[script.cinema.experience 32924]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft>9000</onleft>
+                    <onright>9000</onright>
+                    <onup>105</onup>
+                    <ondown>100</ondown>
+                </control>
+            </control>
+            <control type="image" id="200">  <!-- script Icon -->
+                <description>page header tab icon</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>260</width>
+                <height>260</height>
+                <aspectratio scalediffuse="false">keep</aspectratio>
+                <texture>icon.png</texture>
+            </control>
+            
+        </control>
+    </controls>
+</window>
