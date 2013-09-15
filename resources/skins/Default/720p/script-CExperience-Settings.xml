@@ -60,7 +60,7 @@
                     <focusedcolor>FFFFFFFF</focusedcolor>
                     <align>center</align>
                     <aligny>top</aligny>
-                    <label>This is where a more descriptive explanation[CR]of the setting to assist the user[CR]Hopefully this will help all the users</label>
+                    <label>This is where a more descriptive explanation[CR]of the setting will go[CR]Hopefully this will assist all the users</label>
                 </control>
             </control>
             
