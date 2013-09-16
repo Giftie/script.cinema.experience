@@ -967,3 +967,15 @@ msgstr ""
 msgctxt "#32947"
 msgid "Exit"
 msgstr ""
+
+msgctxt "#32948"
+msgid "Current Settings"
+msgstr ""
+
+msgctxt "#32949"
+msgid "Modify"
+msgstr ""
+
+msgctxt "#32950"
+msgid "Default"
+msgstr ""
