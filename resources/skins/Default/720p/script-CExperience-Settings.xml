@@ -94,12 +94,74 @@
                     <focusedcolor>FFFFFFFF</focusedcolor>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <label>Trivia Settings</label>
+                    <label>$ADDON[script.cinema.experience 32801]</label>
                 </control>
-                <control type="button" id="110"> <!-- Trivia -->
+                <control type="label" id="201">
+                    <description>Heading</description>
+                    <posx>360</posx>
+                    <posy>50</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>$ADDON[script.cinema.experience 32925]</label>
+                </control>
+                <control type="button" id="202">
+                    <description>Heading</description>
+                    <posx>160</posx>
+                    <posy>450</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>$ADDON[script.cinema.experience 32926]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft>9000</onleft>
+                    <onright>203</onright>
+                    <onup>203</onup>
+                    <ondown>203</ondown>
+                    <!--
+                    <visible>Control.HasFocus(202) | Control.HasFocus(203)</visible>
+                    -->
+                </control>
+                <control type="button" id="203">
+                    <description>Heading</description>
+                    <posx>420</posx>
+                    <posy>450</posy>
+                    <width>260</width>
+                    <height>40</height>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>$ADDON[script.cinema.experience 32927]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft>202</onleft>
+                    <onright>203</onright>
+                    <onup>202</onup>
+                    <ondown>202</ondown>
+                    <!--
+                    <visible>Control.HasFocus(202) | Control.HasFocus(203)</visible>
+                    -->
+                </control>
+                <control type="label" id="110"> <!-- Trivia -->
                     <description>First setting</description>
-                    <posx>20</posx>
-                    <posy>40</posy>
+                    <posx>10</posx>
+                    <posy>90</posy>
                     <height>40</height>
                     <width>270</width>
                     <textoffsetx>10</textoffsetx>
@@ -111,17 +173,11 @@
                     <label>$ADDON[script.cinema.experience 32211]</label>
                     <texturefocus border="5">button-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
-                    <pulseonselect>false</pulseonselect>
-                    <onclick></onclick>
-                    <onleft>9000</onleft>
-                    <onright></onright>
-                    <onup>111</onup>
-                    <ondown>111</ondown>
                 </control>
                 <control type="label" id="120">
                     <description>setting 1</description>
                     <posx>800</posx>
-                    <posy>40</posy>
+                    <posy>90</posy>
                     <height>40</height>
                     <width>270</width>
                     <textoffsetx>10</textoffsetx>
@@ -132,10 +188,10 @@
                     <focusedcolor>FFFFFFFF</focusedcolor>
                     <label></label>
                 </control>
-                <control type="button" id="111"> <!-- Trivia -->
+                <control type="label" id="111"> <!-- Trivia -->
                     <description>Second setting</description>
                     <posx>50</posx>
-                    <posy>80</posy>
+                    <posy>130</posy>
                     <height>40</height>
                     <width>270</width>
                     <textoffsetx>10</textoffsetx>
@@ -147,18 +203,12 @@
                     <label>$ADDON[script.cinema.experience 32200]</label>
                     <texturefocus border="5">button-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
-                    <pulseonselect>false</pulseonselect>
-                    <onclick></onclick>
-                    <onleft>9000</onleft>
-                    <onright></onright>
-                    <onup>110</onup>
-                    <ondown>110</ondown>
                     <visible>SubString(Window(10001).Property(trivia),true)</visible>
                 </control>
                 <control type="label" id="121">
                     <description>setting 2</description>
                     <posx>800</posx>
-                    <posy>80</posy>
+                    <posy>130</posy>
                     <height>40</height>
                     <width>270</width>
                     <textoffsetx>10</textoffsetx>
@@ -367,9 +417,9 @@
                     <texturefocus border="5">button-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <pulseonselect>false</pulseonselect>
-                    <onclick>9001</onclick>
+                    <onclick>202</onclick>
                     <onleft>9000</onleft>
-                    <onright>9001</onright>
+                    <onright>202</onright>
                     <onup>106</onup>
                     <ondown>101</ondown>
                 </control>                
