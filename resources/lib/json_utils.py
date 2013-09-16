@@ -34,9 +34,9 @@ def retrieve_json_dict(json_query, items='items', force_log=False ):
     true = True
     false = False
     null = None
-    json_response = xbmc.executeJSONRPC(json_query)
+    json_response = xbmc.executeJSONRPC( json_query )
     # disable debug logging if items = 'movies' or albums as these can fill spam the log with a lot of information
-    if (items != 'movies' and items != "albums" ) or force_log: 
+    if ( items != 'movies' and items != 'albums' ) or force_log: 
         xbmc.log( "[json_utils.py] - retrieve_json_dict - JSONRPC -\n%s" % json_response, level=xbmc.LOGDEBUG )
     response = json_response
     if response.startswith( "{" ):
@@ -44,11 +44,15 @@ def retrieve_json_dict(json_query, items='items', force_log=False ):
     try:
         if response.has_key( 'result' ):
             result = response['result']
-            json_dict = result[items]
+            json_dict = result[ items ]
             return json_dict
+        elif response.has_key( 'error' ):
+            xbmc.log( "[json_utils.py] - retrieve_json_dict - Error trying to get json response", level=xbmc.LOGDEBUG )
+            xbmc.log( "%s" % response, level=xbmc.LOGDEBUG )
+            return None
         else:
             xbmc.log( "[json_utils.py] - retrieve_json_dict - No response from XBMC", level=xbmc.LOGNOTICE )
-            xbmc.log( response, level=xbmc.LOGDEBUG )
+            xbmc.log( "%s" % response, level=xbmc.LOGDEBUG )
             return None
     except:
         traceback.print_exc()
