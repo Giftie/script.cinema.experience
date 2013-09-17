@@ -111,7 +111,7 @@
                     <label>$ADDON[script.cinema.experience 32925]</label>
                 </control>
                 <control type="button" id="202">
-                    <description>Heading</description>
+                    <description>Modify Button</description>
                     <posx>160</posx>
                     <posy>450</posy>
                     <width>260</width>
@@ -135,7 +135,7 @@
                     -->
                 </control>
                 <control type="button" id="203">
-                    <description>Heading</description>
+                    <description>Restore Defaults Button</description>
                     <posx>420</posx>
                     <posy>450</posy>
                     <width>260</width>
@@ -175,7 +175,7 @@
                     <texturenofocus>-</texturenofocus>
                 </control>
                 <control type="label" id="120">
-                    <description>setting 1</description>
+                    <description>Current Status</description>
                     <posx>800</posx>
                     <posy>90</posy>
                     <height>40</height>
