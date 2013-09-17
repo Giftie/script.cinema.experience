@@ -34,6 +34,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
             xbmcgui.Window(10001).setProperty( "trivia", "false" )
         self.getControl( 120 ).setLabel( ( __language__(32281), __language__(32212), __language__(32213) )[ trivia_settings[ "trivia_mode" ] ] )
         self.getControl( 121 ).setLabel( "%s" % trivia_settings[ "trivia_total_time" ] )
+        label1 = self.ControlLabel( x=100, y=250, width=125, height=75, label='Status', font='font13', textColor="0xFFFFFFFF" )
         
     def set_special_video_settings( self ):
         pass
