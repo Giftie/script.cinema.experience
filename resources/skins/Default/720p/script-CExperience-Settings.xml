@@ -16,7 +16,7 @@
             
             <control type="group" id="9007"> <!-- Help Screen -->
                 <posx>300</posx>
-                <posy>502</posy>            
+                <posy>602</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!SubString(Window(10001).Property(help),true)">conditional</animation>
                 <animation effect="fade" start="0" end="100" delay="300" time="200" condition="SubString(Window(10001).Property(help),true)">conditional</animation>
                 <animation effect="fade" start="100" end="0" time="0" condition="SubString(Window(10001).Property(help),true)">WindowClose</animation>
@@ -63,8 +63,8 @@
                     <label>This is where a more descriptive explanation[CR]of the setting will go[CR]Hopefully this will assist all the users</label>
                 </control>
             </control>
-            
-            <control type="group" id="9001"> <!-- Trivia Settings-->
+
+            <control type="group" id="9001">
                 <posx>0</posx>
                 <posy>0</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(100) & !ControlGroup(9001).HasFocus">conditional</animation>
@@ -73,47 +73,42 @@
                 <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(100) | ControlGroup(9001).HasFocus">conditional</animation>
                 <visible>Control.HasFocus(100) | ControlGroup(9001).HasFocus</visible>
                 <control type="image" id ="220">
-                    <!--
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    -->
                     <width>980</width>
-                    <height>500</height>
-                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
+                    <height>600</height>
                     <texture>default-menu.png</texture>
                 </control>
                 <control type="label" id="200">
-                    <description>Heading</description>
+                    <description>Heading1</description>
                     <posx>360</posx>
                     <posy>10</posy>
                     <width>260</width>
-                    <height>40</height>
+                    <height>30</height>
                     <font>font13</font>
                     <wrapmultiline>true</wrapmultiline>
                     <textcolor>FFFFFFFF</textcolor>
                     <focusedcolor>FFFFFFFF</focusedcolor>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <label>$ADDON[script.cinema.experience 32801]</label>
+                    <label></label>
                 </control>
                 <control type="label" id="201">
-                    <description>Heading</description>
+                    <description>Heading2</description>
                     <posx>360</posx>
-                    <posy>50</posy>
+                    <posy>40</posy>
                     <width>260</width>
-                    <height>40</height>
+                    <height>30</height>
                     <font>font13</font>
                     <wrapmultiline>true</wrapmultiline>
                     <textcolor>FFFFFFFF</textcolor>
                     <focusedcolor>FFFFFFFF</focusedcolor>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <label>$ADDON[script.cinema.experience 32925]</label>
+                    <label></label>
                 </control>
                 <control type="button" id="202">
                     <description>Modify Button</description>
                     <posx>160</posx>
-                    <posy>450</posy>
+                    <posy>560</posy>
                     <width>260</width>
                     <height>40</height>
                     <font>font13</font>
@@ -126,18 +121,16 @@
                     <texturefocus border="5">button-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <pulseonselect>false</pulseonselect>
+                    <visible>!SubString(Window(10001).Property(Settings_Modify),True)</visible>
                     <onleft>9000</onleft>
                     <onright>203</onright>
                     <onup>203</onup>
                     <ondown>203</ondown>
-                    <!--
-                    <visible>Control.HasFocus(202) | Control.HasFocus(203)</visible>
-                    -->
                 </control>
                 <control type="button" id="203">
                     <description>Restore Defaults Button</description>
                     <posx>420</posx>
-                    <posy>450</posy>
+                    <posy>560</posy>
                     <width>260</width>
                     <height>40</height>
                     <font>font13</font>
@@ -150,79 +143,504 @@
                     <texturefocus border="5">button-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
                     <pulseonselect>false</pulseonselect>
+                    <visible>!SubString(Window(10001).Property(Settings_Modify),True)</visible>
                     <onleft>202</onleft>
                     <onright>203</onright>
                     <onup>202</onup>
                     <ondown>202</ondown>
-                    <!--
-                    <visible>Control.HasFocus(202) | Control.HasFocus(203)</visible>
-                    -->
                 </control>
-                <control type="label" id="110"> <!-- Trivia -->
-                    <description>First setting</description>
-                    <posx>10</posx>
-                    <posy>90</posy>
+                <control type="button" id="202">
+                    <description>OK Button</description>
+                    <posx>160</posx>
+                    <posy>560</posy>
+                    <width>260</width>
                     <height>40</height>
-                    <width>270</width>
+                    <font>font13</font>
+                    <wrapmultiline>true</wrapmultiline>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>$ADDON[script.cinema.experience 32928]</label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <visible>SubString(Window(10001).Property(Settings_Modify),True)</visible>
+                    <onleft></onleft>
+                    <onright></onright>
+                    <onup>110</onup>
+                    <ondown></ondown>
+                </control>
+                <control type="button" id="110"> 
+                    <description>Setting 1</description>
+                    <posx>10</posx>
+                    <posy>70</posy>
+                    <height>30</height>
+                    <width>600</width>
                     <textoffsetx>10</textoffsetx>
-                    <textwidth>250</textwidth>
+                    <textwidth>500</textwidth>
                     <aligny>center</aligny>
                     <font>font13</font>
                     <textcolor>FFFFFFFF</textcolor>
                     <focusedcolor>FFFFFFFF</focusedcolor>
-                    <label>$ADDON[script.cinema.experience 32211]</label>
+                    <label></label>
                     <texturefocus border="5">button-focus.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft></onleft>
+                    <onright></onright>
+                    <onup>202</onup>
+                    <ondown>111</ondown>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.1))</visible>
+                </control>
+                <control type="label" id="150">
+                    <description>Value 1</description>
+                    <posx>960</posx>
+                    <posy>70</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.1))</visible>
+                </control>
+                <control type="button" id="111">
+                    <description>Setting 2</description>
+                    <posx>30</posx>
+                    <posy>100</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label></label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft></onleft>
+                    <onright></onright>
+                    <onup>110</onup>
+                    <ondown>112</ondown>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.2))</visible>
+                </control>
+                <control type="label" id="151">
+                    <description>Value 2</description>
+                    <posx>960</posx>
+                    <posy>100</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FF05B595</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.2))</visible>
+                </control>
+                <control type="button" id="112"> 
+                    <description>Setting 3</description>
+                    <posx>30</posx>
+                    <posy>130</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label></label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft></onleft>
+                    <onright></onright>
+                    <onup>111</onup>
+                    <ondown>113</ondown>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.3))</visible>
+                </control>
+                <control type="label" id="152">
+                    <description>Value 3</description>
+                    <posx>960</posx>
+                    <posy>130</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FF05B595</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.3))</visible>
+                </control>
+                <control type="button" id="113">
+                    <description>Setting 4</description>
+                    <posx>30</posx>
+                    <posy>160</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <focusedcolor>FFFFFFFF</focusedcolor>
+                    <label></label>
+                    <texturefocus border="5">button-focus.png</texturefocus>
+                    <texturenofocus>-</texturenofocus>
+                    <pulseonselect>false</pulseonselect>
+                    <onleft></onleft>
+                    <onright></onright>
+                    <onup>112</onup>
+                    <ondown>114</ondown>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.4))</visible>
+                </control>
+                <control type="label" id="153">
+                    <description>Value 4</description>
+                    <posx>960</posx>
+                    <posy>160</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FF05B595</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.4))</visible>
+                </control>
+                <control type="label" id="114">
+                    <description>Setting 5</description>
+                    <posx>30</posx>
+                    <posy>190</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.5))</visible>
+                </control>
+                <control type="label" id="154">
+                    <description>Value 5</description>
+                    <posx>960</posx>
+                    <posy>190</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FF05B595</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.5))</visible>
+                </control>
+                <control type="label" id="115">
+                    <description>Setting 6</description>
+                    <posx>30</posx>
+                    <posy>220</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.6))</visible>
+                </control>
+                <control type="label" id="155">
+                    <description>Value 6</description>
+                    <posx>960</posx>
+                    <posy>220</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.6))</visible>
+                </control>
+                <control type="label" id="116">
+                    <description>Setting 7</description>
+                    <posx>30</posx>
+                    <posy>250</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.7))</visible>
+                </control>
+                <control type="label" id="156">
+                    <description>Value 7</description>
+                    <posx>960</posx>
+                    <posy>250</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.7))</visible>
+                </control>
+                <control type="label" id="117">
+                    <description>Setting 8</description>
+                    <posx>30</posx>
+                    <posy>280</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.8))</visible>
+                </control>
+                <control type="label" id="157">
+                    <description>Value 8</description>
+                    <posx>960</posx>
+                    <posy>280</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.8))</visible>
+                </control>
+                <control type="label" id="118">
+                    <description>Setting 9</description>
+                    <posx>30</posx>
+                    <posy>310</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.9))</visible>
+                </control>
+                <control type="label" id="158">
+                    <description>Value 9</description>
+                    <posx>960</posx>
+                    <posy>310</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.9))</visible>
+                </control>
+                <control type="label" id="119">
+                    <description>Setting 10</description>
+                    <posx>30</posx>
+                    <posy>340</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.10))</visible>
+                </control>
+                <control type="label" id="159">
+                    <description>Value 10</description>
+                    <posx>960</posx>
+                    <posy>340</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.10))</visible>
                 </control>
                 <control type="label" id="120">
-                    <description>Current Status</description>
-                    <posx>800</posx>
-                    <posy>90</posy>
-                    <height>40</height>
-                    <width>270</width>
+                    <description>Setting 11</description>
+                    <posx>30</posx>
+                    <posy>370</posy>
+                    <height>30</height>
+                    <width>600</width>
                     <textoffsetx>10</textoffsetx>
-                    <textwidth>250</textwidth>
+                    <textwidth>500</textwidth>
                     <aligny>center</aligny>
                     <font>font13</font>
                     <textcolor>FFFFFFFF</textcolor>
-                    <focusedcolor>FFFFFFFF</focusedcolor>
                     <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.11))</visible>
                 </control>
-                <control type="label" id="111"> <!-- Trivia -->
-                    <description>Second setting</description>
-                    <posx>50</posx>
-                    <posy>130</posy>
-                    <height>40</height>
-                    <width>270</width>
+                <control type="label" id="160">
+                    <description>Value 11</description>
+                    <posx>960</posx>
+                    <posy>370</posy>
+                    <height>30</height>
+                    <width>600</width>
                     <textoffsetx>10</textoffsetx>
-                    <textwidth>250</textwidth>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
                     <aligny>center</aligny>
                     <font>font13</font>
                     <textcolor>FFFFFFFF</textcolor>
-                    <focusedcolor>FFFFFFFF</focusedcolor>
-                    <label>$ADDON[script.cinema.experience 32200]</label>
-                    <texturefocus border="5">button-focus.png</texturefocus>
-                    <texturenofocus>-</texturenofocus>
-                    <visible>SubString(Window(10001).Property(trivia),true)</visible>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.11))</visible>
                 </control>
                 <control type="label" id="121">
-                    <description>setting 2</description>
-                    <posx>800</posx>
-                    <posy>130</posy>
-                    <height>40</height>
-                    <width>270</width>
+                    <description>Setting 12</description>
+                    <posx>30</posx>
+                    <posy>400</posy>
+                    <height>30</height>
+                    <width>600</width>
                     <textoffsetx>10</textoffsetx>
-                    <textwidth>250</textwidth>
+                    <textwidth>500</textwidth>
                     <aligny>center</aligny>
                     <font>font13</font>
                     <textcolor>FFFFFFFF</textcolor>
-                    <focusedcolor>FFFFFFFF</focusedcolor>
                     <label></label>
-                    <visible>SubString(Window(10001).Property(trivia),true)</visible>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.12))</visible>
+                </control>
+                <control type="label" id="161">
+                    <description>Value 12</description>
+                    <posx>960</posx>
+                    <posy>400</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.12))</visible>
+                </control>
+                <control type="label" id="122">
+                    <description>Setting 13</description>
+                    <posx>30</posx>
+                    <posy>430</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.13))</visible>
+                </control>
+                <control type="label" id="162">
+                    <description>Value 13</description>
+                    <posx>960</posx>
+                    <posy>430</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.13))</visible>
+                </control>
+                <control type="label" id="123">
+                    <description>Setting 14</description>
+                    <posx>30</posx>
+                    <posy>460</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.14))</visible>
+                </control>
+                <control type="label" id="163">
+                    <description>Value 14</description>
+                    <posx>960</posx>
+                    <posy>460</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.14))</visible>
+                </control>
+                <control type="label" id="124">
+                    <description>Setting 15</description>
+                    <posx>30</posx>
+                    <posy>490</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.15))</visible>
+                </control>
+                <control type="label" id="164">                
+                    <description>Value 15</description>
+                    <posx>960</posx>
+                    <posy>490</posy>
+                    <height>30</height>
+                    <width>600</width>
+                    <textoffsetx>10</textoffsetx>
+                    <textwidth>500</textwidth>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label></label>
+                    <visible>!IsEmpty(Window(10001).Property(Setting.15))</visible>
                 </control>
             </control>
             
-            <control type="group" id="9002"> <!-- Special Video Settings-->
+            <control type="group" id="9002"> 
                 <posx>0</posx>
                 <posy>0</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(101) & !ControlGroup(9002).HasFocus">conditional</animation>
@@ -231,13 +649,8 @@
                 <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(101) | ControlGroup(9002).HasFocus">conditional</animation>
                 <visible>Control.HasFocus(101) | ControlGroup(9002).HasFocus</visible>
                 <control type="image" id ="220">
-                    <!--
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    -->
                     <width>980</width>
                     <height>500</height>
-                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
                     <texture>default-menu.png</texture>
                 </control>
                 <control type="label" id="201">
@@ -256,7 +669,7 @@
                 </control>
             </control>
             
-            <control type="group" id="9003"> <!-- Trailer Settings-->
+            <control type="group" id="9003"> 
                 <posx>0</posx>
                 <posy>0</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(102) & !ControlGroup(9003).HasFocus">conditional</animation>
@@ -265,13 +678,8 @@
                 <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(102) | ControlGroup(9003).HasFocus">conditional</animation>
                 <visible>Control.HasFocus(102) | ControlGroup(9003).HasFocus</visible>
                 <control type="image" id ="220">
-                    <!--
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    -->
                     <width>980</width>
                     <height>500</height>
-                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
                     <texture>default-menu.png</texture>
                 </control>
                 <control type="label" id="202">
@@ -290,7 +698,7 @@
                 </control>
             </control>
             
-            <control type="group" id="9004"> <!-- Feature Presentation Settings-->
+            <control type="group" id="9004">
                 <posx>0</posx>
                 <posy>0</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(103) & !ControlGroup(9004).HasFocus">conditional</animation>
@@ -299,13 +707,8 @@
                 <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(103) | ControlGroup(9004).HasFocus">conditional</animation>
                 <visible>Control.HasFocus(103) | ControlGroup(9004).HasFocus</visible>
                 <control type="image" id ="220">
-                    <!--
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    -->
                     <width>980</width>
                     <height>500</height>
-                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
                     <texture>default-menu.png</texture>
                 </control>
                 <control type="label" id="203">
@@ -324,7 +727,7 @@
                 </control>
             </control>
             
-            <control type="group" id="9005"> <!-- Home Automation Settings-->
+            <control type="group" id="9005"> 
                 <posx>0</posx>
                 <posy>0</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(104) & !ControlGroup(9005).HasFocus">conditional</animation>
@@ -333,13 +736,8 @@
                 <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(104) | ControlGroup(9005).HasFocus">conditional</animation>
                 <visible>Control.HasFocus(104) | ControlGroup(9005).HasFocus</visible>
                 <control type="image" id ="220">
-                    <!--
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    -->
                     <width>980</width>
                     <height>500</height>
-                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
                     <texture>default-menu.png</texture>
                 </control>
                 <control type="label" id="204">
@@ -357,8 +755,8 @@
                     <label>Home Automation Settings</label>
                 </control>
             </control>
-            
-            <control type="group" id="9006"> <!-- Misc. Settings-->
+
+            <control type="group" id="9006">
                 <posx>0</posx>
                 <posy>0</posy>            
                 <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(105) & !ControlGroup(9006).HasFocus">conditional</animation>
@@ -366,14 +764,9 @@
                 <animation effect="fade" start="100" end="0" time="0" condition="Control.HasFocus(105) | ControlGroup(9006).HasFocus">WindowClose</animation>
                 <animation effect="slide" end="300,0" time="600" tween="quadratic" easing="out" condition="Control.HasFocus(105) | ControlGroup(9006).HasFocus">conditional</animation>
                 <visible>Control.HasFocus(105) | ControlGroup(9006).HasFocus</visible>
-                <control type="image" id ="220">
-                    <!--
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    -->
+                <control type="image" id="220">
                     <width>980</width>
                     <height>500</height>
-                    <!--<aspectratio scalediffuse="false">keep</aspectratio>-->
                     <texture>default-menu.png</texture>
                 </control>
                 <control type="label" id="205">
@@ -563,8 +956,7 @@
                 <height>260</height>
                 <aspectratio scalediffuse="false">keep</aspectratio>
                 <texture>icon.png</texture>
-            </control>
-            
+            </control>            
         </control>
     </controls>
 </window>
