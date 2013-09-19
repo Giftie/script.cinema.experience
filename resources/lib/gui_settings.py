@@ -26,33 +26,153 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def setup_all( self ):
         self.setFocusId( 100 )
+     
+    def set_setting_properties( self ):
+        xbmcgui.Window(10001).setProperty( "Setting.1", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.5", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.6", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.7", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.8", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.9", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.10", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.11", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.12", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.13", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.14", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.15", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.16", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.17", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.18", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.19", "true" )
+        xbmcgui.Window(10001).setProperty( "Setting.20", "true" )
+        
+    def clear_setting_properties( self ):
+        xbmcgui.Window(10001).clearProperty( "Setting.1" )
+        xbmcgui.Window(10001).clearProperty( "Setting.2" )
+        xbmcgui.Window(10001).clearProperty( "Setting.3" )
+        xbmcgui.Window(10001).clearProperty( "Setting.4" )
+        xbmcgui.Window(10001).clearProperty( "Setting.5" )
+        xbmcgui.Window(10001).clearProperty( "Setting.6" )
+        xbmcgui.Window(10001).clearProperty( "Setting.7" )
+        xbmcgui.Window(10001).clearProperty( "Setting.8" )
+        xbmcgui.Window(10001).clearProperty( "Setting.9" )
+        xbmcgui.Window(10001).clearProperty( "Setting.10" )
+        xbmcgui.Window(10001).clearProperty( "Setting.11" )
+        xbmcgui.Window(10001).clearProperty( "Setting.12" )
+        xbmcgui.Window(10001).clearProperty( "Setting.13" )
+        xbmcgui.Window(10001).clearProperty( "Setting.14" )
+        xbmcgui.Window(10001).clearProperty( "Setting.15" )
+        xbmcgui.Window(10001).clearProperty( "Setting.16" )
+        xbmcgui.Window(10001).clearProperty( "Setting.17" )
+        xbmcgui.Window(10001).clearProperty( "Setting.18" )
+        xbmcgui.Window(10001).clearProperty( "Setting.19" )
+        xbmcgui.Window(10001).clearProperty( "Setting.20" )
         
     def set_trivia_settings( self ):
+        self.clear_setting_properties()
+        xbmcgui.Window(10001).setProperty( "Setting", "Trivia" )
+        self.getControl( 200 ).setLabel( __language__(32801) )
+        self.getControl( 201 ).setLabel( __language__(32925) )
+        xbmcgui.Window(10001).setProperty( "Setting.1", "true" )
+        self.getControl( 110 ).setLabel( __language__(32211) )
+        self.getControl( 150 ).setLabel( ( __language__(32281), __language__(32212), __language__(32213) )[ trivia_settings[ "trivia_mode" ] ] )
         if trivia_settings[ "trivia_mode" ] > 0:
-            xbmcgui.Window(10001).setProperty( "trivia", "true" )
-        if trivia_settings[ "trivia_mode" ] == 0:
-            xbmcgui.Window(10001).setProperty( "trivia", "false" )
-        self.getControl( 120 ).setLabel( ( __language__(32281), __language__(32212), __language__(32213) )[ trivia_settings[ "trivia_mode" ] ] )
-        self.getControl( 121 ).setLabel( "%s" % trivia_settings[ "trivia_total_time" ] )
-        label1 = self.ControlLabel( x=100, y=250, width=125, height=75, label='Status', font='font13', textColor="0xFFFFFFFF" )
-        
+            if trivia_settings[ "trivia_mode" ] == 1:
+                xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
+                self.getControl( 111 ).setLabel( __language__(32200) )
+                self.getControl( 151 ).setLabel( "%s" % trivia_settings[ "trivia_total_time" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
+                self.getControl( 112 ).setLabel( __language__(32210) )
+                self.getControl( 152 ).setLabel( trivia_settings[ "trivia_folder" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
+                self.getControl( 113 ).setLabel( __language__(32221) )
+                self.getControl( 153 ).setLabel( "%s" % trivia_settings[ "trivia_slide_time_q" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.5", "true" )
+                self.getControl( 114 ).setLabel( __language__(32222) )
+                self.getControl( 154 ).setLabel( "%s" % trivia_settings[ "trivia_slide_time_a" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.6", "true" )
+                self.getControl( 115 ).setLabel( __language__(32223) )
+                self.getControl( 155 ).setLabel( "%s" % trivia_settings[ "trivia_slide_time_c" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.7", "true" )
+                self.getControl( 116 ).setLabel( __language__(32220) )
+                self.getControl( 156 ).setLabel( "%s" % trivia_settings[ "trivia_slide_time_s" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.8", "true" )
+                self.getControl( 117 ).setLabel( __language__(32231) )
+                self.getControl( 157 ).setLabel( ( __language__(32281), __language__(32243), __language__(32244) )[ trivia_settings[ "trivia_music" ] ] )
+                if trivia_settings[ "trivia_music" ]:
+                    if trivia_settings[ "trivia_music" ] == 1:
+                        xbmcgui.Window(10001).setProperty( "Setting.9", "true" )
+                        self.getControl( 118 ).setLabel( __language__(32230) )
+                        self.getControl( 158 ).setLabel( trivia_settings[ "trivia_music_file" ] )
+                    elif trivia_settings[ "trivia_music" ] == 2:
+                        xbmcgui.Window(10001).setProperty( "Setting.9", "true" )
+                        self.getControl( 118 ).setLabel( __language__(32230) )
+                        self.getControl( 158 ).setLabel( trivia_settings[ "trivia_music_folder" ] )
+                    xbmcgui.Window(10001).setProperty( "Setting.10", "true" )
+                    self.getControl( 119 ).setLabel( __language__(32232) )
+                    self.getControl( 159 ).setLabel( ( "False", "True" )[ trivia_settings[ "trivia_adjust_volume" ] ] )
+                    if trivia_settings[ "trivia_adjust_volume" ]:
+                        xbmcgui.Window(10001).setProperty( "Setting.11", "true" )
+                        self.getControl( 120 ).setLabel( __language__(32240) )
+                        self.getControl( 160 ).setLabel( "%s" % trivia_settings[ "trivia_music_volume" ] )
+                        xbmcgui.Window(10001).setProperty( "Setting.12", "true" )
+                        self.getControl( 121 ).setLabel( __language__(32241) )
+                        self.getControl( 161 ).setLabel( ( "False", "True" )[ trivia_settings[ "trivia_fade_volume" ] ] )
+                        if trivia_settings[ "trivia_fade_volume" ]:
+                            xbmcgui.Window(10001).setProperty( "Setting.13", "true" )
+                            self.getControl( 122 ).setLabel( __language__(32242) )
+                            self.getControl( 162 ).setLabel( "%s" % trivia_settings[ "trivia_fade_time" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.14", "true" )
+                self.getControl( 123 ).setLabel( __language__(32270) )
+                self.getControl( 163 ).setLabel( ( "False", "True" )[ trivia_settings[ "trivia_unwatched_only" ] ] )
+                xbmcgui.Window(10001).setProperty( "Setting.15", "true" )
+                self.getControl( 124 ).setLabel( __language__(32291) )
+                self.getControl( 164 ).setLabel( "%s" % trivia_settings[ "trivia_rating" ] )
+            elif trivia_settings[ "trivia_mode" ] == 2:
+                xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
+                self.getControl( 111 ).setLabel( __language__(32217) )
+                self.getControl( 151 ).setLabel( ( __language__(32214), __language__(32215) )[ trivia_settings[ "trivia_moviequiz_mode" ] ] )
+                xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
+                self.getControl( 112 ).setLabel( __language__(32216) )
+                self.getControl( 152 ).setLabel( "%s" % trivia_settings[ "trivia_moviequiz_qlimit" ] )
+                xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
+                self.getControl( 113 ).setLabel( __language__(32290) )
+                self.getControl( 153 ).setLabel( ( "False", "True" )[ trivia_settings[ "trivia_limit_query" ] ] )
+            xbmcgui.Window(10001).setProperty( "Setting", "Trivia" )
+            
     def set_special_video_settings( self ):
-        pass
+        self.clear_setting_properties()
         
     def set_trailer_settings( self ):
-        pass
+        self.clear_setting_properties()
         
     def set_feature_settings( self ):
-        pass
+        self.clear_setting_properties()
         
     def set_home_automation_settings( self ):
-        pass
+        self.clear_setting_properties()
         
     def set_misc_settings( self ):
-        pass
+        self.clear_setting_properties()
+        
+    def onClick( self, controlId ):
+        #print "Control ID: %s" % controlId
+        if controlId == 202:
+            if xbmcgui.Window(10001).getProperty( "Settings_Modify" ) == "True":
+                xbmcgui.Window(10001).setProperty( "Settings_Modify", "False" )
+                xbmc.sleep( 100 )
+                self.setFocusId( 202 )
+            else:          
+                xbmcgui.Window(10001).setProperty( "Settings_Modify", "True" )
+                self.setFocusId( 110 )
+        if controlId == 106: #Exit
+            # add module to save settings
+            self.close()
         
     def onFocus( self, controlId ):
-        #
         if controlId == 100:
             self.set_trivia_settings()
         elif controlId == 101:
@@ -80,22 +200,6 @@ class GUI( xbmcgui.WindowXMLDialog ):
             #dialog_msg( "close" )
             self.close()
         
-    def onClick( self, controlId ):
-        if controlId == 100:
-            pass
-        if controlId == 101:
-            pass
-        if controlId == 102:
-            pass
-        if controlId == 103:
-            pass
-        if controlId == 104:
-            pass
-        if controlId == 105:
-            pass
-        if controlId == 106: #Exit
-            # add module to save settings
-            self.close()
         
 def onAction( self, action ):
     buttonCode =  action.getButtonCode()
