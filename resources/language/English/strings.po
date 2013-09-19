@@ -199,7 +199,7 @@ msgstr ""
 #empty string with id 32199
 
 msgctxt "#32200"
-msgid "Duration(in Minutes)"
+msgid "Slideshow Duration(in Minutes)"
 msgstr ""
 
 msgctxt "#32201"
@@ -978,4 +978,8 @@ msgstr ""
 
 msgctxt "#32950"
 msgid "Default"
+msgstr ""
+
+msgctxt "#32951"
+msgid "OK"
 msgstr ""
