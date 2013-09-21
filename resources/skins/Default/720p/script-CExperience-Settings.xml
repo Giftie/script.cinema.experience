@@ -419,6 +419,32 @@
                         <visible>!IsEmpty(Window(10001).Property(Setting.19))</visible>
                         <wrapmultiline>true</wrapmultiline>
                     </control>
+                    <control type="button" id="129">
+                        <description>Setting 20</description>
+                        <label></label>
+                        <label2></label2>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>ffffffff</textcolor>
+                        <textoffsetx>10</textoffsetx>
+                        <disabledcolor>60d0d0d0</disabledcolor>
+                        <shadowcolor>ff000000</shadowcolor>
+                        <visible>!IsEmpty(Window(10001).Property(Setting.20))</visible>
+                        <wrapmultiline>true</wrapmultiline>
+                    </control>
+                    <control type="button" id="130">
+                        <description>Setting 21</description>
+                        <label></label>
+                        <label2></label2>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>ffffffff</textcolor>
+                        <textoffsetx>10</textoffsetx>
+                        <disabledcolor>60d0d0d0</disabledcolor>
+                        <shadowcolor>ff000000</shadowcolor>
+                        <visible>!IsEmpty(Window(10001).Property(Setting.21))</visible>
+                        <wrapmultiline>true</wrapmultiline>
+                    </control>
                 </control> 
             </control>
             
