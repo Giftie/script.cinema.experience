@@ -212,34 +212,22 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.Window(10001).setProperty( "Setting.20", "true" )
         xbmcgui.Window(10001).setProperty( "CEmenu", "true" )
          
-    def set_feature_settings( self ):
+    def set_general_settings( self ):
         self.clear_setting_properties()
-        xbmcgui.Window(10001).setProperty( "Setting", "Feature" )
+        xbmcgui.Window(10001).setProperty( "Setting", "General" )
         # Heading 1
         self.getControl( 200 ).setLabel( __language__(32803) )
         # heading 2
         self.getControl( 201 ).setLabel( __language__(32925) )
         xbmcgui.Window(10001).setProperty( "Setting.1", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
+        self.getControl( 110 ).setLabel( __language__(32410), label2 = "%s" % ( feature_settings[ "number_of_features" ] + 1 ) )
+        if feature_settings[ "number_of_features" ] > 0:
+            xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
+            self.getControl( 111 ).setLabel( __language__(32445), label2 = ( "False", "True" )[ feature_settings[ "enable_notification" ] ] )
         xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
+        self.getControl( 112 ).setLabel( __language__(32403), label2 = ( "False", "True" )[ feature_settings[ "voxcommando" ] ] )
         xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.5", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.6", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.7", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.8", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.9", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.9", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.10", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.11", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.12", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.13", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.14", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.15", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.16", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.17", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.18", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.19", "true" )
-        xbmcgui.Window(10001).setProperty( "Setting.20", "true" )
+        self.getControl( 113 ).setLabel( __language__(32922), label2 = ( "False", "True" )[ feature_settings[ "override_play" ] ] )
         xbmcgui.Window(10001).setProperty( "CEmenu", "true" )
         
     def set_home_automation_settings( self ):
