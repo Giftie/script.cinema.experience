@@ -36,41 +36,10 @@ def downloader( mpaa, genre, equivalent_mpaa ):
     xbmc.log( "%s - Starting Trailer Downloader" % logmessage, level=xbmc.LOGNOTICE )
     genre = genre.replace( "_", " / " )
     trailer_list = _download_trailers( equivalent_mpaa, mpaa, genre, movie )
-    save_download_list( trailer_list )
-
-def save_download_list( download_trailers ):
     xbmc.log( "%s - Saving List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
-    success = False
-    try:
-        # base path to watched file
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
-        # if the path to the source file does not exist create it
-        if ( not os.path.isdir( os.path.dirname( base_path ) ) ):
-            os.makedirs( os.path.dirname( base_path ) )
-        # open source path for writing
-        file_object = xbmcvfs.File( base_path, "w" )
-        if download_trailers:
-            for trailer in download_trailers:
-                try:# write list
-                    file_object.write( repr( trailer[ 2 ] ) )
-                    success = True
-                except:
-                    file_object.write( "" )
-                    success = False
-        else:
-            file_object.write( "" )
-        # close file object
-        file_object.close()
-    except:
-        traceback.print_exc()
-    if not success:
-        try:
-            xbmc.log( "%s - Removing List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
-            if xbmcvfs.exists( base_path ):
-                xbmcvfs.delete( base_path )
-        except:
-            xbmc.log( "%s - Error Trying to Remove List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
-    
+    base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
+    utils.save_list( base_path, download_trailers, "Downloaded Trailers" )
+
 def _download_trailers( equivalent_mpaa, mpaa, genre, movie ):
     updated_trailers = []
     xbmc.log( "%s - Downloading Trailers: %s Trailers" % ( logmessage, trailer_settings[ "trailer_count" ] ), level=xbmc.LOGNOTICE )

@@ -69,7 +69,7 @@ def settings_to_log( settings_path, script_heading="[utils.py]" ):
     try:
         log( "Settings\n", xbmc.LOGDEBUG)
         base_path = os.path.join( settings_path, "settings.xml" )
-        settings_file = load_saved_list( base_path, "Settings" )
+        settings_file = xbmcvfs.File( base_path ).read()
         settings_list = settings_file.replace("<settings>\n","").replace("</settings>\n","").split("/>\n")
         for setting in settings_list:
             match = re.search('    <setting id="(.*?)" value="(.*?)"', setting)
@@ -92,11 +92,13 @@ def load_saved_list( f_name, type ):
         xbmc.log( "[script.cinema.experience] - Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
         try:
             f_object = xbmcvfs.File( f_name )
-            saved_list = f_object.read()
+            saved_list = eval( f_object.read() )
             f_object.close()
+            assert isinstance( saved_list, ( list, tuple ) ) and assert not isinstance( saved_list, basestring )
         except:
             xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
             traceback.print_exc()
+            saved_list = []
     else:
         xbmc.log( "[script.cinema.experience] - List does not exist, %s" % type, level=xbmc.LOGNOTICE)
     return saved_list

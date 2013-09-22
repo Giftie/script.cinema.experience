@@ -122,7 +122,7 @@ class Trivia( xbmcgui.WindowXML ):
             xbmc.log("[script.cinema.experience] Slide #%s Type %s - %s" % (self.image_count, slide_type, myslide), level=xbmc.LOGNOTICE)
             xbmcgui.Window( xbmcgui.getCurrentWindowId() ).setProperty( "Slide", myslide )
             # add id to watched file TODO: maybe don't add if not user preference
-            self.watched += xbmc.getCacheThumbName( self.slide_playlist[ self.image_count ] )
+            self.watched.append( xbmc.getCacheThumbName( self.slide_playlist[ self.image_count ] ) )
             # start slide timer
             self._get_slide_timer( slide_type )
         
