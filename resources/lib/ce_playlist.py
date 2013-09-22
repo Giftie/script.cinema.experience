@@ -64,7 +64,7 @@ def _getnfo( path ):
     xbmc.log("%s - Retrieving Trailer NFO file" % log_message, level=xbmc.LOGDEBUG )
     try:
         path = os.path.splitext( path )[0] + ".nfo"
-        usock = open( path, "r" )
+        usock = xbmcvfs.File( path )
         # read source
         xmlSource =  usock.read()
         # close socket
@@ -253,8 +253,9 @@ def build_music_playlist():
     if trivia_settings[ "trivia_music" ] == 1:
         if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
             xbmc.log( "%s - Music Playlist: %s" % ( log_message, trivia_settings[ "trivia_music_file" ] ), level=xbmc.LOGDEBUG)
-            playlist_file = open( trivia_settings[ "trivia_music_file" ], 'rb')
-            saved_playlist = playlist_file.readlines()
+            playlist_file = xbmcvfs.File( trivia_settings[ "trivia_music_file" ], 'rb')
+            saved_playlist = playlist_file.read().splitlines()
+            playlist_file.close()
             xbmc.log( "%s - Finished Reading Music Playlist" % log_message, level=xbmc.LOGDEBUG)
             track_info, track_location = parse_playlist( saved_playlist, xbmc.getSupportedMedia('music') )
         elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):
