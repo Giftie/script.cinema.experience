@@ -94,9 +94,11 @@ def load_saved_list( f_name, type ):
             f_object = xbmcvfs.File( f_name )
             saved_list = eval( f_object.read() )
             f_object.close()
+            assert isinstance( saved_list, ( list, tuple ) ) and assert not isinstance( saved_list, basestring )
         except:
             xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
             traceback.print_exc()
+            saved_list = []
     else:
         xbmc.log( "[script.cinema.experience] - List does not exist, %s" % type, level=xbmc.LOGNOTICE)
     return saved_list
