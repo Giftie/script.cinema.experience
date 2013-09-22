@@ -144,10 +144,10 @@ class Main():
                 xbmc.sleep( 250 )
             else:
                 if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and override_play and not xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
-                    #log( 'Something added to playlist.  Cinema Experince Running? %s' % xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) )
+                    #utils.log( 'Something added to playlist.  Cinema Experince Running? %s' % xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) )
                     while not int( xbmcgui.getCurrentWindowId() ) == 12005:
                         xbmc.sleep( 100 )
-                        #log( 'Waiting for full screen video' )
+                        #utils.log( 'Waiting for full screen video' )
                     xbmc.Player().stop()
                     xbmc.executebuiltin( "RunScript(script.cinema.experience,fromplay)" )
                     xbmc.sleep( 3000 )
