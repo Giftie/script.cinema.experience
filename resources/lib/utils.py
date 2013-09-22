@@ -67,7 +67,7 @@ def unescape(text):
 
 def settings_to_log( settings_path, script_heading="[utils.py]" ):
     try:
-        log( "Settings\n", xbmc.LOGDEBUG )
+        log( "Settings\n" )
         # set base watched file path
         base_path = os.path.join( settings_path, "settings.xml" )
         # open path
@@ -81,7 +81,7 @@ def settings_to_log( settings_path, script_heading="[utils.py]" ):
             if not match:
                 match = re.search("""    <setting id="(.*?)" value='(.*?)'""", setting)
             if match:
-                log( "%30s: %s" % ( match.group(1), str( unescape( match.group(2).decode('utf-8', 'ignore') ) ) ), xbmc.LOGDEBUG )
+                log( "%30s: %s" % ( match.group(1), str( unescape( match.group(2).decode('utf-8', 'ignore') ) ) ) )
     except:
         traceback.print_exc()
 

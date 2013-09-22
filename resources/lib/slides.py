@@ -29,7 +29,7 @@ def _fetch_slides( movie_mpaa ):
     return slide_playlist
 
 def _load_watched_trivia_file():
-    utils.log( "Loading Watch Slide List", xbmc.LOGDEBUG)
+    utils.log( "Loading Watch Slide List" )
     try:
         # set base watched file path
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" ).replace("\\\\","\\")
@@ -65,8 +65,8 @@ def _get_slides( paths, movie_mpaa ):
         # get a slides.xml if it exists
         slidesxml_exists, mpaa, question_format, clue_format, answer_format, still_format = _get_slides_xml( path )
         # check if rating is ok
-        utils.log( "Movie MPAA: %s" % movie_mpaa, xbmc.LOGDEBUG )
-        utils.log( "Slide MPAA: %s" % mpaa, xbmc.LOGDEBUG )
+        utils.log( "Movie MPAA: %s" % movie_mpaa )
+        utils.log( "Slide MPAA: %s" % mpaa )
         if ( slidesxml_exists and mpaa_ratings.get( movie_mpaa, -1 ) < mpaa_ratings.get( mpaa, -1 ) ):
             utils.log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE)
             continue
@@ -167,12 +167,12 @@ def _shuffle_slides( tmp_slides, watched ):
                 if ( slide ):
                     # add slide
                     slide_playlist += [ slide ]
-            utils.log( "-------- Unwatched --------     included - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ), xbmc.LOGDEBUG)
+            utils.log( "-------- Unwatched --------     included - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ) )
             
         else:
-            utils.log( "-------- Watched --------     skipped - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ), xbmc.LOGDEBUG)
+            utils.log( "-------- Watched --------     skipped - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ) )
 
-    utils.log( "-----------------------------", xbmc.LOGDEBUG)
+    utils.log( "-----------------------------" )
     utils.log( "Total slides selected: %d" % len( slide_playlist ), xbmc.LOGNOTICE)
 
     # reset watched automatically if no slides are left

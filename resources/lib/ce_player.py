@@ -196,10 +196,10 @@ class Script():
         xbmc.executehttpapi( "SetResponseFormat()" )
         xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
         sqlquery = "SELECT movieview.c00 FROM movieview JOIN genrelinkmovie ON genrelinkmovie.idMovie=movieview.idMovie JOIN genre ON genrelinkmovie.idGenre=genre.idGenre WHERE strGenre='Action' ORDER BY RANDOM() LIMIT 4"
-        utils.log( "[ script.cinema.experience ]  - SQL: %s" % ( sqlquery, ), level=xbmc.LOGDEBUG )
+        utils.log( "[ script.cinema.experience ]  - SQL: %s" % ( sqlquery, ) )
         try:
             sqlresult = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sqlquery ), )
-            utils.log( "sqlresult: %s" % sqlresult, level=xbmc.LOGDEBUG )
+            utils.log( "sqlresult: %s" % sqlresult )
             movies = sqlresult.split("</field>")
             movie_list = movies[ 0:len( movies ) -1 ]
         except:
@@ -236,17 +236,17 @@ class Script():
         utils.log( "Waiting Until End Of Video", level=xbmc.LOGNOTICE)
         try:
             self.psize = int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) - 1
-            utils.log( "Playlist Size: %s" % ( self.psize + 1 ), level=xbmc.LOGDEBUG)
+            utils.log( "Playlist Size: %s" % ( self.psize + 1 ) )
             while xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).getposition() < self.psize:
                 pass
-            utils.log( "Video TotalTime: %s" % self.player.getTotalTime(), level=xbmc.LOGDEBUG)
+            utils.log( "Video TotalTime: %s" % self.player.getTotalTime() )
             while self.player.getTime() < ( self.player.getTotalTime() - 1 ):
                 pass
-            utils.log( "Video getTime: %s"  % self.player.getTime(), level=xbmc.LOGDEBUG)
+            utils.log( "Video getTime: %s"  % self.player.getTime() )
             #xbmc.sleep(400)
         except:
             traceback.print_exc()
-            utils.log( "Video either stopped or skipped, Continuing on...", level=xbmc.LOGDEBUG)
+            utils.log( "Video either stopped or skipped, Continuing on..." )
 
     def _play_trivia( self, mpaa, genre, plist, equivalent_mpaa ):
         Launch_automation().launch_automation( triggers[0] ) # Script Start - Or where it seems to be

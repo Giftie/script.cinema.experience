@@ -77,7 +77,7 @@ class Main:
         if trailer_settings[ "trailer_play_mode" ] == 1:
             path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
             if xbmcvfs.exists( path ):
-                utils.log( "File Exists: downloaded_trailers.txt", xbmc.LOGDEBUG )
+                utils.log( "File Exists: downloaded_trailers.txt" )
                 trailer_list = self._load_trailer_list()
                 if trailer_list:
                     for trailer in trailer_list:
@@ -85,11 +85,11 @@ class Main:
                         self.downloaded_trailers += trailer_detail
                 else:
                     # Change trailer play mode to stream if no download 
-                    utils.log( "Empty File: downloaded_trailers.txt", xbmc.LOGDEBUG )
+                    utils.log( "Empty File: downloaded_trailers.txt" )
                     _A_.setSetting( id='trailer_play_mode', value='%d' % 0 )
             else:
                 # Change trailer play mode to stream if no download 
-                utils.log( "File Does Not Exists: downloaded_trailers.txt", xbmc.LOGDEBUG )
+                utils.log( "File Does Not Exists: downloaded_trailers.txt" )
                 _A_.setSetting( id='trailer_play_mode', value='%d' % 0 )
         else:
             pass
@@ -138,9 +138,9 @@ class Main:
             # add intermission video
             if feature_settings[ "intermission_video" ] > 0:
                 utils.log( "Inserting intermission Video(s): %s" % feature_settings[ "intermission_video" ], xbmc.LOGNOTICE )
-                utils.log( "    playlist Position: %d" % index_count, xbmc.LOGDEBUG )
+                utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-                utils.log( "    p_size: %d" % p_size, xbmc.LOGDEBUG )
+                utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=feature_settings[ "intermission_video" ],
                                            path=( feature_settings[ "intermission_video_file" ], feature_settings[ "intermission_video_folder" ], )[ feature_settings[ "intermission_video_type" ] == "folder" ],
@@ -158,9 +158,9 @@ class Main:
             # get rating video
             if video_settings[ "enable_ratings" ] and feature_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
                 utils.log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
-                utils.log( "    playlist Position: %d" % index_count, xbmc.LOGDEBUG )
+                utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-                utils.log( "    p_size: %d" % p_size, xbmc.LOGDEBUG )
+                utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
                                            path=video_settings[ "rating_videos_folder" ] + mpaa + ".avi",
@@ -176,9 +176,9 @@ class Main:
             # get Dolby/DTS videos
             if video_settings[ "enable_audio" ]  and feature_settings[ "intermission_audio" ] and video_settings[ "audio_videos_folder" ]:
                 utils.log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
-                utils.log( "    playlist Position: %d" % index_count, xbmc.LOGDEBUG )
+                utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-                utils.log( "    p_size: %d" % p_size, xbmc.LOGDEBUG )
+                utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
                                           path = video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],

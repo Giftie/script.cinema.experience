@@ -63,10 +63,10 @@ class Main:
             trailer_genre = trailer_info[ 9 ].split(" / ")
             trailer_rating = trailer_info[ 6 ].replace("Rated ", "")
             if self.settings[ "trailer_limit_genre" ] and ( not list(set(trailer_genre) & set(self.genre) ) ):
-                utils.log("%s - Genre Not Matched - Skipping Trailer" % logmessage, level=xbmc.LOGDEBUG )
+                utils.log("%s - Genre Not Matched - Skipping Trailer" % logmessage )
                 continue
             if self.settings[ "trailer_limit_mpaa" ] and ( not trailer_rating or not trailer_rating == self.mpaa ):
-                utils.log("%s - MPAA Not Matched - Skipping Trailer" % logmessage, level=xbmc.LOGDEBUG )
+                utils.log("%s - MPAA Not Matched - Skipping Trailer" % logmessage )
                 continue
             self.trailers += [ trailer_info ]
             # add id to watched file TODO: maybe don't add if not user preference

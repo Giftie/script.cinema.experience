@@ -229,7 +229,7 @@ def _build_playlist( movies, mode = "movie_titles" ):
             xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
             # select Movie path from movieview Limit 1
             sql = "SELECT movieview.idMovie, movieview.c00, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
-            utils.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ), xbmc.LOGDEBUG )
+            utils.log( "[script.cinema.experience]  - SQL: %s" % ( sql, ) )
             # query database for info dummy is needed as there are two </field> formatters
             try:
                 movie_id, movie_title, movie_path, movie_filename, thumb, genre, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql ), ).split( "</field>" )
@@ -247,7 +247,7 @@ def _build_playlist( movies, mode = "movie_titles" ):
             if not movie_id == 0:
                 json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % int( movie_id )
                 json_response = xbmc.executeJSONRPC(json_command)
-                utils.log( "JSONRPC Response: \n%s" % json_response, xbmc.LOGDEBUG )
+                utils.log( "JSONRPC Response: \n%s" % json_response )
                 xbmc.sleep( 50 )
     elif mode == "movie_ids":
         utils.log( "Movie ID Mode", xbmc.LOGNOTICE )
@@ -255,7 +255,7 @@ def _build_playlist( movies, mode = "movie_titles" ):
             utils.log( "Movie ID: %s" % movie_id, xbmc.LOGNOTICE )
             json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % int( movie_id )
             json_response = xbmc.executeJSONRPC( json_command )
-            utils.log( "JSONRPC Response: \n%s" % json_response, xbmc.LOGDEBUG )
+            utils.log( "JSONRPC Response: \n%s" % json_response )
             xbmc.sleep( 50 )
 
 if __name__ == "__main__" :

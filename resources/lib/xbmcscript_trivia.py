@@ -71,7 +71,7 @@ class Trivia( xbmcgui.WindowXML ):
         result = xbmc.executeJSONRPC( volume_query )
         match = re.search( '"volume" ?: ?([0-9]{1,3})', result )
         volume = int( match.group(1) )
-        utils.log( "Current Volume: %d" % volume, xbmc.LOGDEBUG)
+        utils.log( "Current Volume: %d" % volume )
         return volume
 
     def _start_slideshow_music( self ):
