@@ -61,7 +61,7 @@ def _getnfo( path ):
             studio=trailer[ 8 ],
             director=trailer[ 11 ]
     '''
-    log("Retrieving Trailer NFO file" )
+    log( "Retrieving Trailer NFO file" )
     try:
         path = os.path.splitext( path )[0] + ".nfo"
         usock = open( path, "r" )
@@ -79,12 +79,12 @@ def _getnfo( path ):
     #title = plot = runtime = mpaa = release_date = studio = genre = director = ""
     trailer = re.findall( '<movieinfo id="(.*?)"><title>(.*?)</title><quality>(.*?)</quality><runtime>(.*?)</runtime><releasedate>(.*?)</releasedate><mpaa>(.*?)</mpaa><genre>(.*?)</genre><studio>(.*?)</studio><director>(.*?)</director><cast>(.*?)</cast><plot>(.*?)</plot><thumb>(.*?)</thumb>', xmlSource )
     if trailer:
-        log("CE XML Match Found" )
+        log( "CE XML Match Found" )
         for item in trailer:
             new_trailer += item
         return new_trailer[ 1 ], new_trailer[ 10 ], new_trailer[ 3 ], new_trailer[ 5 ], new_trailer[ 4 ], new_trailer[ 7 ], new_trailer[ 6 ], new_trailer[ 8 ]
     else:
-        log("HD-Trailers.Net Downloader XML Match Found" )
+        log( "HD-Trailers.Net Downloader XML Match Found" )
         title = "".join(re.compile("<title>(.*?)</title>", re.DOTALL).findall(xmlSource)) or ""
         plot = "".join(re.compile("<plot>(.*?)</plot>", re.DOTALL).findall(xmlSource)) or ""
         runtime = "".join(re.compile("<runtime>(.*?)</runtime>", re.DOTALL).findall(xmlSource)) or ""
@@ -102,13 +102,13 @@ def _getnfo( path ):
         return title, plot, runtime, mpaa, release_date, studio, genre, director
     
 def _set_trailer_info( trailer ):
-    log("Setting Trailer Info" )
+    log( "Setting Trailer Info" )
     title = plot = runtime = mpaa = release_date = studio = genre = director = ""
     if exists( os.path.splitext( trailer )[ 0 ] + ".nfo" ):
-        log("Trailer .nfo file FOUND" )
+        log( "Trailer .nfo file FOUND" )
         title, plot, runtime, mpaa, release_date, studio, genre, director = _getnfo( trailer )
     else:
-        log("Trailer .nfo file NOT FOUND" )
+        log( "Trailer .nfo file NOT FOUND" )
     result = ( xbmc.getCacheThumbName( trailer ), # id
                title or os.path.basename( trailer ).split( "-trailer." )[ 0 ], # title
                trailer, # trailer
@@ -125,30 +125,30 @@ def _set_trailer_info( trailer ):
     return result
     
 def _get_trailer_thumbnail( path ):
-    log("Getting Trailer Thumbnail" )
+    log( "Getting Trailer Thumbnail" )
     # check for a thumb based on trailername.tbn
     thumbnail = os.path.splitext( path )[ 0 ] + ".tbn"
-    log("Looking for thumbnail: %s" % thumbnail )
+    log( "Looking for thumbnail: %s" % thumbnail )
     # if thumb does not exist try stripping -trailer
     if not exists( thumbnail ):
         thumbnail = os.path.splitext( path )[ 0 ] + ".jpg"
-        log("Looking for thumbnail: %s" % thumbnail )
+        log( "Looking for thumbnail: %s" % thumbnail )
         if not exists( thumbnail ):
             thumbnail = "%s.tbn" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
-            log("Thumbnail not found, Trying: %s" % thumbnail )
+            log( "Thumbnail not found, Trying: %s" % thumbnail )
             if not exists( thumbnail ):
                 thumbnail = "%s.jpg" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
-                log("Looking for thumbnail: %s" % thumbnail )
+                log( "Looking for thumbnail: %s" % thumbnail )
                 if not exists( thumbnail ):
                     thumbnail = os.path.join( os.path.dirname( path ), "movie.tbn" )
-                    log("Thumbnail not found, Trying: %s" % thumbnail )
+                    log( "Thumbnail not found, Trying: %s" % thumbnail )
                     # if thumb does not exist return empty
                     if not exists( thumbnail ):
                         # set empty string
                         thumbnail = ""
-                        log("Thumbnail not found" )
+                        log( "Thumbnail not found" )
     if thumbnail:
-        log("Thumbnail found: %s" thumbnail )
+        log( "Thumbnail found: %s" thumbnail )
     # return result
     return thumbnail
 
@@ -201,7 +201,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
                 playlist.add( path, listitem, index=index )
         except:
             if items > count:
-                log( "Looking for %d files, but only found %d" % ( items, count), xbmc.LOGNOTICE)
+                log( "Looking for %d files, but only found %d" % ( items, count), xbmc.LOGNOTICE )
                 break
             else:
                 traceback.print_exc()
@@ -245,7 +245,7 @@ def _get_thumbnail( url ):
     return thumbnail
 
 def build_music_playlist():
-    log( "Building Music Playlist", xbmc.LOGNOTICE)
+    log( "Building Music Playlist", xbmc.LOGNOTICE )
     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioPlaylist.Clear", "id": 1}')
     music_playlist = xbmc.PlayList( xbmc.PLAYLIST_MUSIC )
     track_location = []

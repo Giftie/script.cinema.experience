@@ -68,7 +68,7 @@ def _get_slides( paths, movie_mpaa ):
         log( "Movie MPAA: %s" % movie_mpaa )
         log( "Slide MPAA: %s" % mpaa )
         if ( slidesxml_exists and mpaa_ratings.get( movie_mpaa, -1 ) < mpaa_ratings.get( mpaa, -1 ) ):
-            log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE)
+            log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE )
             continue
         # initialize these to True so we add a new list item to start
         question = clue = answer = still = True
@@ -147,7 +147,7 @@ def _get_slides_xml( path ):
     return True, mpaa, question_format, clue_format, answer_format, still_format
     
 def _shuffle_slides( tmp_slides, watched ):
-    log( "Sorting Watched/Unwatched and Shuffing Slides ", xbmc.LOGNOTICE)
+    log( "Sorting Watched/Unwatched and Shuffing Slides ", xbmc.LOGNOTICE )
     slide_playlist = []
     # randomize the groups and create our play list
     count = 0
@@ -173,7 +173,7 @@ def _shuffle_slides( tmp_slides, watched ):
             log( "-------- Watched --------     skipped - %s, %s, %s" % ( os.path.basename( slides[ 0 ] ), os.path.basename( slides[ 1 ] ), os.path.basename( slides[ 2 ] ), ) )
 
     log( "-----------------------------" )
-    log( "Total slides selected: %d" % len( slide_playlist ), xbmc.LOGNOTICE)
+    log( "Total slides selected: %d" % len( slide_playlist ), xbmc.LOGNOTICE )
 
     # reset watched automatically if no slides are left
     if ( len( slide_playlist ) == 0 and slide_settings[ "trivia_unwatched_only" ] and len( watched ) > 0 ):

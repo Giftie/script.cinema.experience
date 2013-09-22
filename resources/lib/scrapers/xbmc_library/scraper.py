@@ -116,7 +116,7 @@ class Main:
             return []
 
     def _get_watched( self ):
-        log("%s - Getting Watched List" % logmessage, xbmc.LOGNOTICE )
+        log( "%s - Getting Watched List" % logmessage, xbmc.LOGNOTICE )
         try:
             # base path to watched file
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
@@ -130,14 +130,14 @@ class Main:
             self.watched = []
 
     def _reset_watched( self ):
-        log("%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
+        log( "%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         if os.path.isfile( base_path ):
             os.remove( base_path )
             self.watched = []
 
     def _save_watched( self ):
-        log("%s - Saving Watched List" % logmessage, xbmc.LOGNOTICE )
+        log( "%s - Saving Watched List" % logmessage, xbmc.LOGNOTICE )
         try:
             # base path to watched file
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] +"_watched.txt" )

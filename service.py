@@ -155,9 +155,9 @@ class Main():
                     xbmc.sleep( 250 )
                 
 if (__name__ == "__main__"):
-    log('Cinema Experience service script version %s started' % __addonversion__)
+    log( 'Cinema Experience service script version %s started' % __addonversion__ )
     Main()
     del CE_Player
     del CE_Monitor
     del Main
-    log('Cinema Experience service script version %s stopped' % __addonversion__)
+    log( 'Cinema Experience service script version %s stopped' % __addonversion__ )

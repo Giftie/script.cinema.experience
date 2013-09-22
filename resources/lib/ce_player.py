@@ -154,7 +154,7 @@ class Script():
         s.close()
     
     def load_trigger_list( self ):
-        log( "Loading Trigger List", xbmc.LOGNOTICE)
+        log( "Loading Trigger List", xbmc.LOGNOTICE )
         try:
             # set base watched file path
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
@@ -165,7 +165,7 @@ class Script():
             # close socket
             usock.close()
         except:
-            log( "Error Loading Trigger List", xbmc.LOGNOTICE)
+            log( "Error Loading Trigger List", xbmc.LOGNOTICE )
             traceback.print_exc()
             trigger_list = []
         return trigger_list
@@ -196,7 +196,7 @@ class Script():
         xbmc.executehttpapi( "SetResponseFormat()" )
         xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
         sqlquery = "SELECT movieview.c00 FROM movieview JOIN genrelinkmovie ON genrelinkmovie.idMovie=movieview.idMovie JOIN genre ON genrelinkmovie.idGenre=genre.idGenre WHERE strGenre='Action' ORDER BY RANDOM() LIMIT 4"
-        log( "[ script.cinema.experience ]  - SQL: %s" % ( sqlquery, ) )
+        log( "[ script.cinema.experience ]  - SQL: %s" % sqlquery )
         try:
             sqlresult = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sqlquery ), )
             log( "sqlresult: %s" % sqlresult )
@@ -207,7 +207,7 @@ class Script():
         return movie_list
 
     def trivia_intro( self ):
-        log( "## Intro ##", xbmc.LOGNOTICE)
+        log( "## Intro ##", xbmc.LOGNOTICE )
         _clear_playlists( "video" )
         play_list = playlist
         # initialize intro lists
@@ -233,7 +233,7 @@ class Script():
             pass
             
     def _wait_until_end( self ): # wait until the end of the playlist(for Trivia Intro)
-        log( "Waiting Until End Of Video", xbmc.LOGNOTICE)
+        log( "Waiting Until End Of Video", xbmc.LOGNOTICE )
         try:
             self.psize = int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) - 1
             log( "Playlist Size: %s" % ( self.psize + 1 ) )

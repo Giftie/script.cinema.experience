@@ -46,7 +46,7 @@ class Main:
         _A_.setSetting( id='trailer_play_mode', value='%d' % int( self._play_mode ) )        
 
     def _save_trigger_list( self ):
-        log( "Saving trigger List", xbmc.LOGNOTICE)
+        log( "Saving trigger List", xbmc.LOGNOTICE )
         try:
             # base path to watched file
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
@@ -62,7 +62,7 @@ class Main:
             # close file object
             file_object.close()
         except:
-            log( "Error saving trigger List", xbmc.LOGNOTICE)
+            log( "Error saving trigger List", xbmc.LOGNOTICE )
             traceback.print_exc()       
     
     def _build_trigger_list( self ):
@@ -95,7 +95,7 @@ class Main:
             pass
                     
     def _load_trailer_list( self ):
-        log( "Loading Downloaded Trailer List", xbmc.LOGNOTICE)
+        log( "Loading Downloaded Trailer List", xbmc.LOGNOTICE )
         try:
             # set base watched file path
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )

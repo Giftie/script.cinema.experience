@@ -67,7 +67,7 @@ def unescape(text):
 
 def settings_to_log( settings_path, script_heading="[utils.py]" ):
     try:
-        log( "Settings\n" )
+        log( "Settings" )
         # set base watched file path
         base_path = os.path.join( settings_path, "settings.xml" )
         # open path
