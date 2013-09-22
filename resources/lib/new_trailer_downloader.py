@@ -35,41 +35,10 @@ def downloader( mpaa, genre, equivalent_mpaa ):
     log( "Starting Trailer Downloader", xbmc.LOGNOTICE )
     genre = genre.replace( "_", " / " )
     trailer_list = _download_trailers( equivalent_mpaa, mpaa, genre, movie )
-    save_download_list( trailer_list )
+    xbmc.log( "%s - Saving List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
+    base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
+    utils.save_list( base_path, download_trailers, "Downloaded Trailers" )
 
-def save_download_list( download_trailers ):
-    log( "Saving List of Downloaded Trailers", xbmc.LOGNOTICE )
-    success = False
-    try:
-        # base path to watched file
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
-        # if the path to the source file does not exist create it
-        if ( not os.path.isdir( os.path.dirname( base_path ) ) ):
-            os.makedirs( os.path.dirname( base_path ) )
-        # open source path for writing
-        file_object = open( base_path, "w" )
-        if download_trailers:
-            for trailer in download_trailers:
-                try:# write list
-                    file_object.write( repr( trailer[ 2 ] ) )
-                    success = True
-                except:
-                    file_object.write( "" )
-                    success = False
-        else:
-            file_object.write( "" )
-        # close file object
-        file_object.close()
-    except:
-        traceback.print_exc()
-    if not success:
-        try:
-            log( "Removing List of Downloaded Trailers", xbmc.LOGNOTICE )
-            if ( os.path.isfile( base_path ) ):
-                os.remove( base_path )
-        except:
-            log( "Error Trying to Remove List of Downloaded Trailers", xbmc.LOGNOTICE )
-    
 def _download_trailers( equivalent_mpaa, mpaa, genre, movie ):
     updated_trailers = []
     log( "Downloading Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
@@ -93,7 +62,7 @@ def _download_trailers( equivalent_mpaa, mpaa, genre, movie ):
         filename = filename + "-trailer" + ext
         file_path = os.path.join( trailer_settings[ "trailer_download_folder" ], filename ).replace( "\\\\", "\\" )
         # check to see if trailer is already downloaded
-        if os.path.isfile( file_path ):
+        if xbmcvfs.exists( file_path ):
             success = True
             destination = file_path
             thumb = os.path.splitext( file_path )[0] + ".tbn"
@@ -167,7 +136,7 @@ def _save_nfo_file( nfoSource, trailer_nfopath ):
     destination = os.path.splitext( trailer_nfopath )[0] + ".nfo"
     try:
         # open source path for writing
-        file_object = open( destination.encode( "utf-8" ), "w" )
+        file_object = xbmcvfs.File( destination.encode( "utf-8" ), "w" )
         # write xmlSource
         file_object.write( nfoSource.encode( "utf-8" ) )
         # close file object

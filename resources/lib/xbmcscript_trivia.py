@@ -4,11 +4,9 @@ __script__ = "Cinema Experience"
 __scriptID__ = "script.cinema.experience"
 
 # main imports
-import os, sys, traceback, threading, binascii, re, time
+import os, sys, traceback, threading, re, time
 from random import shuffle, random
-import xbmc, xbmcgui, xbmcaddon
-from xbmcvfs import delete as delete_file
-from xbmcvfs import exists as exists
+import xbmc, xbmcgui, xbmcaddon, xbmcvfs
 
 trivia_settings          = sys.modules["__main__"].trivia_settings
 trailer_settings         = sys.modules["__main__"].trailer_settings
@@ -22,7 +20,7 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from ce_playlist import build_music_playlist, _rebuild_playlist
 from folder import dirEntries
-from utils import log
+import utils
 
 CEPlayer           = xbmc.Player
 volume_query = '{"jsonrpc": "2.0", "method": "Application.GetProperties", "params": { "properties": [ "volume" ] }, "id": 1}'
@@ -124,46 +122,25 @@ class Trivia( xbmcgui.WindowXML ):
             log( "Slide #%s Type %s - %s" % (self.image_count, slide_type, myslide), xbmc.LOGNOTICE )
             xbmcgui.Window( xbmcgui.getCurrentWindowId() ).setProperty( "Slide", myslide )
             # add id to watched file TODO: maybe don't add if not user preference
-            self.watched += [ xbmc.getCacheThumbName( self.slide_playlist[ self.image_count ] ) ]
+            self.watched.append( xbmc.getCacheThumbName( self.slide_playlist[ self.image_count ] ) )
             # start slide timer
             self._get_slide_timer( slide_type )
         
 
     def _load_watched_trivia_file( self ):
-        log( "Loading Watch Slide List", xbmc.LOGNOTICE )
-        try:
-            # set base watched file path
-            base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
-            # open path
-            usock = open( base_path, "r" )
-            # read source
-            self.watched = eval( usock.read() )
-            # close socket
-            usock.close()
-        except:
-            self.watched = []
-
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
+        self.watched = utils.load_saved_list( base_path, "Watched Trivia" )
+        print self.watched
+        
     def _save_watched_trivia_file( self ):
-        log( "Saving Watch Slide List", xbmc.LOGNOTICE )
-        try:
-            # base path to watched file
-            base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
-            # if the path to the source file does not exist create it
-            if not os.path.isdir( os.path.dirname( base_path ) ):
-                os.makedirs( os.path.dirname( base_path ) )
-            # open source path for writing
-            file_object = open( base_path, "w" )
-            # write xmlSource
-            file_object.write( repr( self.watched ) )
-            # close file object
-            file_object.close()
-        except:
-            traceback.print_exc()
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
+        print self.watched
+        utils.save_list( base_path, self.watched, "Watched Trivia" )
 
     def _reset_watched( self ):
-        base_path = os.path.join( self.BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
-        if exists( base_path ):
-            delete_file( base_path )
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
+        if xbmcvfs.exists( base_path ):
+            xbmcvfs.delete( base_path )
             self.watched = []
 
     def _get_slide_timer( self, slide_type="still" ):

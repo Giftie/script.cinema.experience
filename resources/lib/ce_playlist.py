@@ -25,7 +25,7 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from json_utils import find_movie_details, retrieve_json_dict
 from utils import list_to_string, log
-from xbmcvfs import exists as exists
+import xbmcvfs
 from folder import dirEntries
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
@@ -64,7 +64,7 @@ def _getnfo( path ):
     log( "Retrieving Trailer NFO file" )
     try:
         path = os.path.splitext( path )[0] + ".nfo"
-        usock = open( path, "r" )
+        usock = xbmcvfs.File( path )
         # read source
         xmlSource =  usock.read()
         # close socket
@@ -104,7 +104,7 @@ def _getnfo( path ):
 def _set_trailer_info( trailer ):
     log( "Setting Trailer Info" )
     title = plot = runtime = mpaa = release_date = studio = genre = director = ""
-    if exists( os.path.splitext( trailer )[ 0 ] + ".nfo" ):
+    if xbmcvfs.exists( os.path.splitext( trailer )[ 0 ] + ".nfo" ):
         log( "Trailer .nfo file FOUND" )
         title, plot, runtime, mpaa, release_date, studio, genre, director = _getnfo( trailer )
     else:
@@ -130,20 +130,20 @@ def _get_trailer_thumbnail( path ):
     thumbnail = os.path.splitext( path )[ 0 ] + ".tbn"
     log( "Looking for thumbnail: %s" % thumbnail )
     # if thumb does not exist try stripping -trailer
-    if not exists( thumbnail ):
+    if not xbmcvfs.exists( thumbnail ):
         thumbnail = os.path.splitext( path )[ 0 ] + ".jpg"
         log( "Looking for thumbnail: %s" % thumbnail )
-        if not exists( thumbnail ):
+        if not xbmcvfs.exists( thumbnail ):
             thumbnail = "%s.tbn" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
             log( "Thumbnail not found, Trying: %s" % thumbnail )
-            if not exists( thumbnail ):
+            if not xbmcvfs.exists( thumbnail ):
                 thumbnail = "%s.jpg" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
                 log( "Looking for thumbnail: %s" % thumbnail )
-                if not exists( thumbnail ):
+                if not xbmcvfs.exists( thumbnail ):
                     thumbnail = os.path.join( os.path.dirname( path ), "movie.tbn" )
                     log( "Thumbnail not found, Trying: %s" % thumbnail )
                     # if thumb does not exist return empty
-                    if not exists( thumbnail ):
+                    if not xbmcvfs.exists( thumbnail ):
                         # set empty string
                         thumbnail = ""
                         log( "Thumbnail not found" )
@@ -162,7 +162,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
         log( "No Items added to playlist" )
         return
     # if path is a file check if file exists
-    if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not exists( path ):
+    if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not xbmcvfs.exists( path ):
         log( "_get_special_items() - File Does not Exist" )
         return
     # set default paths list
@@ -237,9 +237,9 @@ def _get_thumbnail( url ):
     thumbnail = os.path.join( BASE_CACHE_PATH, filename[ 0 ], filename )
     log( "Thumbnail Cached Filename: %s" % filename )
     # if cached thumb does not exist try auto generated
-    if not exists( thumbnail ):
+    if not xbmcvfs.exists( thumbnail ):
         thumbnail = os.path.join( BASE_CACHE_PATH, filename[ 0 ], "auto-" + filename )
-    if not exists( thumbnail ):
+    if not xbmcvfs.exists( thumbnail ):
         thumbnail = "DefaultVideo.png"
     # return result
     return thumbnail
@@ -253,8 +253,9 @@ def build_music_playlist():
     if trivia_settings[ "trivia_music" ] == 1:
         if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
             log( "Music Playlist: %s" % trivia_settings[ "trivia_music_file" ] )
-            playlist_file = open( trivia_settings[ "trivia_music_file" ], 'rb')
-            saved_playlist = playlist_file.readlines()
+            playlist_file = xbmcvfs.File( trivia_settings[ "trivia_music_file" ], 'rb')
+            saved_playlist = playlist_file.read().splitlines()
+            playlist_file.close()
             log( "Finished Reading Music Playlist" )
             track_info, track_location = parse_playlist( saved_playlist, xbmc.getSupportedMedia('music') )
         elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):

@@ -9,6 +9,7 @@ from random import shuffle, random
 from xml.sax.saxutils import unescape
 
 import xbmc
+import xbmcvfs
 
 #__useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
@@ -19,9 +20,11 @@ class _urlopener( urllib.FancyURLopener ):
 # set for user agent
 urllib._urlopener = _urlopener()
 
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import utils
 
 class _Parser:
     """
@@ -182,7 +185,7 @@ class Main:
                 usock = urllib.urlopen( base_url )
             else:
                 # open path
-                usock = open( base_path, "r" )
+                usock = xbmcvfs.File( base_path, "r" )
             # read source
             xmlSource = usock.read()
             # close socket
@@ -205,7 +208,7 @@ class Main:
             if ( not os.path.isdir( os.path.dirname( base_path ) ) ):
                 os.makedirs( os.path.dirname( base_path ) )
             # open source path for writing
-            file_object = open( base_path, "w" )
+            file_object = xbmcvfs.File( base_path, "w" )
             # write xmlSource
             file_object.write( xmlSource )
             # close file object
@@ -218,13 +221,8 @@ class Main:
             return False
 
     def _parse_xml_source( self, xmlSource ):
-        # base path to watched file
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-        # get watched file
-        try:
-            watched = eval( self._get_xml_source( base_path ) )
-        except:
-            watched = []
+        watched = utils.load_saved_list( base_path, "Trailer Watched List" )
         # Parse xmlSource for videos
         parser = _Parser( xmlSource, self.mpaa, self.genre, self.settings, watched )
         # saved watched file

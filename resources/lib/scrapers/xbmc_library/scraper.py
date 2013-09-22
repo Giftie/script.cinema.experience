@@ -14,7 +14,7 @@ if sys.version_info < (2, 7):
 else:
     import json as simplejson
 
-import xbmc
+import xbmc, xbmcvfs
 
 logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 
@@ -44,6 +44,8 @@ class Main:
         self.movie = movie
         #  initialize our trailer list
         self.trailers = []
+        self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
+        
 
     def fetch_trailers( self ):        
         # get watched list
@@ -95,7 +97,7 @@ class Main:
                                          trailer_rating, # mpaa
                                          '', # release date
                                          '', # studio
-                                         list_to_string( trailer['genre'] ), # genre
+                                         utils.list_to_string( trailer['genre'] ), # genre
                                          'Trailer', # writer
                                          '', # director 32613
                                         )
@@ -116,41 +118,14 @@ class Main:
             return []
 
     def _get_watched( self ):
-        log( "%s - Getting Watched List" % logmessage, xbmc.LOGNOTICE )
-        try:
-            # base path to watched file
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-            # open path
-            usock = open( base_path, "r" )
-            # read source
-            self.watched = eval( usock.read() )
-            # close socket
-            usock.close()
-        except:
-            self.watched = []
+        self.watched = utils.load_saved_list( self.watched_path, "Trailer Watched List" )
 
     def _reset_watched( self ):
         log( "%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
-        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-        if os.path.isfile( base_path ):
-            os.remove( base_path )
+        if xbmcvfs.exists( self.watched_path ):
+            xbmcvfs.delete( self.watched_path )
             self.watched = []
 
     def _save_watched( self ):
-        log( "%s - Saving Watched List" % logmessage, xbmc.LOGNOTICE )
-        try:
-            # base path to watched file
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] +"_watched.txt" )
-            # if the path to the source file does not exist create it
-            if not os.path.isdir( os.path.dirname( base_path ) ):
-                os.makedirs( os.path.dirname( base_path ) )
-            # open source path for writing
-            file_object = open( base_path, "w" )
-            # write xmlSource
-            file_object.write( repr( self.watched ) )
-            # close file object
-            file_object.close()
-        except:
-            traceback.print_exc()
-            pass
+        utils.save_list( self.watched_path, self.watched, "Watched Trailers" )
 

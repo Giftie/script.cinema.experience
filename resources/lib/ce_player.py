@@ -154,20 +154,8 @@ class Script():
         s.close()
     
     def load_trigger_list( self ):
-        log( "Loading Trigger List", xbmc.LOGNOTICE )
-        try:
-            # set base watched file path
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
-            # open path
-            usock = open( base_path, "r" )
-            # read source
-            trigger_list = eval( usock.read() )
-            # close socket
-            usock.close()
-        except:
-            log( "Error Loading Trigger List", xbmc.LOGNOTICE )
-            traceback.print_exc()
-            trigger_list = []
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
+        trigger_list = utils.load_saved_list( base_path, "Trigger List" )
         return trigger_list
 
     def voxcommando():
