@@ -27,6 +27,7 @@ from json_utils import find_movie_details, retrieve_json_dict
 from utils import list_to_string
 from xbmcvfs import exists as exists
 from folder import dirEntries
+import utils
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
     utils.log( "[ce_playlist.py] - _get_trailers started", xbmc.LOGDEBUG )

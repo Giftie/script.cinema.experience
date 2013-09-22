@@ -25,11 +25,12 @@ BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_thumbnail, _get_trailer_thumbnail
 from utils import list_to_string
+import utils
 
 __useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
 class Main:
-    xbmc.log( "%s - XBMC Movie Library Trailer Scraper" % logmessage, level=xbmc.LOGNOTICE )
+    utils.log( "%s - XBMC Movie Library Trailer Scraper" % logmessage, level=xbmc.LOGNOTICE )
     
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.settings = settings
@@ -108,15 +109,15 @@ class Main:
                         if count == self.settings[ "trailer_count" ]:
                            break
             else:
-                xbmc.log( "No Movie Trailers found", level=xbmc.LOGNOTICE )
+                utils.log( "No Movie Trailers found", level=xbmc.LOGNOTICE )
             self._save_watched()
             return self.trailers
         else:
-            xbmc.log( "No results found", level=xbmc.LOGNOTICE )
+            utils.log( "No results found", level=xbmc.LOGNOTICE )
             return []
 
     def _get_watched( self ):
-        xbmc.log("%s - Getting Watched List" % logmessage, level=xbmc.LOGNOTICE )
+        utils.log("%s - Getting Watched List" % logmessage, level=xbmc.LOGNOTICE )
         try:
             # base path to watched file
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
@@ -130,14 +131,14 @@ class Main:
             self.watched = []
 
     def _reset_watched( self ):
-        xbmc.log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
+        utils.log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         if os.path.isfile( base_path ):
             os.remove( base_path )
             self.watched = []
 
     def _save_watched( self ):
-        xbmc.log("%s - Saving Watched List" % logmessage, level=xbmc.LOGNOTICE )
+        utils.log("%s - Saving Watched List" % logmessage, level=xbmc.LOGNOTICE )
         try:
             # base path to watched file
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] +"_watched.txt" )
