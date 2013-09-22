@@ -18,7 +18,6 @@ trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
-extra_settings           = sys.modules[ "__main__" ].extra_settings
 _3d_settings             = sys.modules[ "__main__" ]._3d_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
@@ -161,13 +160,13 @@ class Script():
                 utils.log( "Feature #%-2d - %s" % ( feature_count, movie_title ), xbmc.LOGNOTICE )
                 movie_titles = movie_titles + movie_title + "<li>"
             movie_titles = movie_titles.rstrip("<li>")
-            if extra_settings[ "voxcommando" ]:
+            if general_settings[ "voxcommando" ]:
                 utils.broadcastUDP( "<b>CElaunch." + str( playlistsize ) + "<li>" + movie_titles + "</b>", port = 33000 )
         else:
             # get the queued video info
             movie_title = playlist[ 0 ].getdescription()
             utils.log( "Feature - %s" % movie_title, xbmc.LOGNOTICE )
-            if extra_settings[ "voxcommando" ]:
+            if general_settings[ "voxcommando" ]:
                 utils.broadcastUDP( "<b>CElaunch<li>" + movie_title + "</b>", port = 33000 )
 
     def _jsonrpc_query( self, jsonquery ):

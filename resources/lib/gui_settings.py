@@ -5,9 +5,10 @@ import xbmcgui, xbmc, xbmcaddon
 
 trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
-feature_settings         = sys.modules[ "__main__" ].feature_settings
+general_settings         = sys.modules[ "__main__" ].general_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
 audio_formats            = sys.modules[ "__main__" ].audio_formats
+ha_settings              = sys.modules[ "__main__" ].ha_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
@@ -26,8 +27,29 @@ class GUI( xbmcgui.WindowXMLDialog ):
         
     def setup_all( self ):
         self.setFocusId( 100 )
-     
+    
     def clear_setting_properties( self ):
+        self.getControl( 110 ).setLabel( "", label2 = "" )
+        self.getControl( 111 ).setLabel( "", label2 = "" )
+        self.getControl( 112 ).setLabel( "", label2 = "" )
+        self.getControl( 113 ).setLabel( "", label2 = "" )
+        self.getControl( 114 ).setLabel( "", label2 = "" )
+        self.getControl( 115 ).setLabel( "", label2 = "" )
+        self.getControl( 116 ).setLabel( "", label2 = "" )
+        self.getControl( 117 ).setLabel( "", label2 = "" )
+        self.getControl( 118 ).setLabel( "", label2 = "" )
+        self.getControl( 119 ).setLabel( "", label2 = "" )
+        self.getControl( 120 ).setLabel( "", label2 = "" )
+        self.getControl( 121 ).setLabel( "", label2 = "" )
+        self.getControl( 122 ).setLabel( "", label2 = "" )
+        self.getControl( 123 ).setLabel( "", label2 = "" )
+        self.getControl( 124 ).setLabel( "", label2 = "" )
+        self.getControl( 125 ).setLabel( "", label2 = "" )
+        self.getControl( 126 ).setLabel( "", label2 = "" )
+        self.getControl( 127 ).setLabel( "", label2 = "" )
+        self.getControl( 128 ).setLabel( "", label2 = "" )
+        self.getControl( 129 ).setLabel( "", label2 = "" )
+        self.getControl( 130 ).setLabel( "", label2 = "" )
         xbmcgui.Window(10001).clearProperty( "Setting.1" )
         xbmcgui.Window(10001).clearProperty( "Setting.2" )
         xbmcgui.Window(10001).clearProperty( "Setting.3" )
@@ -128,7 +150,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
                 xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
                 self.getControl( 112 ).setLabel( __language__(32185), label2 = ( __language__(32186), __language__(32187) )[ trailer_settings[ "trailer_play_mode" ] ] )
                 xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
-                self.getControl( 113 ).setLabel( __language__(32170), label2 = ( trailer_settings[ "trailer_quality" ], __language(32171) )[ trailer_setting[ "trailer_quality" ] == "Standard" ] ) 
+                self.getControl( 113 ).setLabel( __language__(32170), label2 = ( trailer_settings[ "trailer_quality" ], __language__(32171) )[ trailer_settings[ "trailer_quality" ] == "Standard" ] ) 
                 # TO-DO: remove all AMT Database settings, as script no longer works
                 if trailer_settings[ "trailer_scraper" ] == "amt_database":
                     xbmcgui.Window(10001).setProperty( "Setting.5", "true" )
@@ -168,6 +190,9 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 200 ).setLabel( __language__(32802) )
         # heading 2
         self.getControl( 201 ).setLabel( __language__(32925) )
+        xbmcgui.Window(10001).setProperty( "CEmenu", "true" )
+    
+    def temp( self ):
         xbmcgui.Window(10001).setProperty( "Setting.1", "true" )
         xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
         xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
@@ -189,8 +214,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         xbmcgui.Window(10001).setProperty( "Setting.18", "true" )
         xbmcgui.Window(10001).setProperty( "Setting.19", "true" )
         xbmcgui.Window(10001).setProperty( "Setting.20", "true" )
-        xbmcgui.Window(10001).setProperty( "CEmenu", "true" )
-         
+        
     def set_general_settings( self ):
         self.clear_setting_properties()
         xbmcgui.Window(10001).setProperty( "Setting", "General" )
@@ -199,14 +223,14 @@ class GUI( xbmcgui.WindowXMLDialog ):
         # heading 2
         self.getControl( 201 ).setLabel( __language__(32925) )
         xbmcgui.Window(10001).setProperty( "Setting.1", "true" )
-        self.getControl( 110 ).setLabel( __language__(32410), label2 = "%s" % ( feature_settings[ "number_of_features" ] + 1 ) )
-        if feature_settings[ "number_of_features" ] > 0:
+        self.getControl( 110 ).setLabel( __language__(32410), label2 = "%s" % ( general_settings[ "number_of_features" ] + 1 ) )
+        if general_settings[ "number_of_features" ] > 0:
             xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
-            self.getControl( 111 ).setLabel( __language__(32445), label2 = ( "False", "True" )[ feature_settings[ "enable_notification" ] ] )
+            self.getControl( 111 ).setLabel( __language__(32445), label2 = ( "False", "True" )[ general_settings[ "enable_notification" ] ] )
         xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
-        self.getControl( 112 ).setLabel( __language__(32403), label2 = ( "False", "True" )[ feature_settings[ "voxcommando" ] ] )
+        self.getControl( 112 ).setLabel( __language__(32403), label2 = ( "False", "True" )[ general_settings[ "voxcommando" ] ] )
         xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
-        self.getControl( 113 ).setLabel( __language__(32922), label2 = ( "False", "True" )[ feature_settings[ "override_play" ] ] )
+        self.getControl( 113 ).setLabel( __language__(32922), label2 = ( "False", "True" )[ general_settings[ "override_play" ] ] )
         xbmcgui.Window(10001).setProperty( "CEmenu", "true" )
         
     def set_home_automation_settings( self ):
@@ -216,85 +240,63 @@ class GUI( xbmcgui.WindowXMLDialog ):
         self.getControl( 200 ).setLabel( __language__(32805) )
         # heading 2
         self.getControl( 201 ).setLabel( __language__(32925) )
-        <setting id="ha_enable" type="bool" label="32920" default="false" />
-        <setting id="ha_multi_trigger" type="bool" label="32900" visible="eq(-1,true)" default="true" />
-        <setting id="ha_script_start" type="bool" label="32901" visible="eq(-2,true)" default="false" />
-        <setting id="ha_trivia_intro" type="bool" label="32902" visible="eq(-3,true)" default="false" />
-        <setting id="ha_trivia_start" type="bool" label="32903" visible="eq(-4,true)" default="false" />
-        <setting id="ha_trivia_outro" type="bool" label="32904" visible="eq(-5,true)" default="false" />
-        <setting id="ha_cav_intro" type="bool" label="32905" visible="eq(-6,true)" default="false" />
-        <setting id="ha_trailer_start" type="bool" label="32906" visible="eq(-7,true)" default="false" />
-        <setting id="ha_cav_outro" type="bool" label="32907" visible="eq(-8,true)" default="false"/>
-        <setting id="ha_mte_intro" type="bool" label="32908" visible="eq(-9,true)" default="false"/>
-        <setting id="ha_countdown_video" type="bool" label="32909" visible="eq(-10,true)" default="false"/>
-        <setting id="ha_mpaa_rating" type="bool" label="32910" visible="eq(-11,true)" default="false"/>
-        <setting id="ha_audio_format" type="bool" label="32911" visible="eq(-12,true)" default="false"/>
-        <setting id="ha_fpv_intro" type="bool" label="32912" visible="eq(-13,true)" default="false"/>
-        <setting id="ha_movie" type="bool" label="32913" visible="eq(-14,true)" default="false"/>
-        <setting id="ha_intermission" type="bool" label="32914" visible="eq(-15,true)" default="false"/>
-        <setting id="ha_fpv_outro" type="bool" label="32915" visible="eq(-16,true)" default="false"/>
-        <setting id="ha_mte_outro" type="bool" label="32916" visible="eq(-17,true)" default="false"/>
-        <setting id="ha_script_end" type="bool" label="32917" visible="eq(-18,true)" default="false" />
-        <setting type="sep" />
-        <setting id="ha_paused" type="bool" label="32918" visible="eq(-20,true)" default="false" />
-        <setting id="ha_resumed" type="bool" label="32919" visible="eq(-21,true)" default="false" />
         xbmcgui.Window(10001).setProperty( "Setting.1", "true" )
         self.getControl( 110 ).setLabel( __language__(32920), label2 = ( "False", "True" )[ ha_settings[ "ha_enable" ] ] )
         if ha_settings[ "ha_enable" ]:
             xbmcgui.Window(10001).setProperty( "Setting.2", "true" )
-            self.getControl( 111 ).setLabel( __language__(32900), label2 = ( "False", "True" )[ha_settings[ "ha_multi_trigger" ] ] )
+            self.getControl( 111 ).setLabel( __language__(32900), label2 = ( "False", "True" )[ ha_settings[ "ha_multi_trigger" ] ] )
             xbmcgui.Window(10001).setProperty( "Setting.3", "true" )
             self.getControl( 112 ).setLabel( __language__(32901), label2 = ( "False", "True" )[ ha_settings[ "ha_script_start" ] ] )
             if trivia_settings[ "trivia_mode" ] > 0:
                 if video_settings[ "trivia_intro" ] > 0:
                     xbmcgui.Window(10001).setProperty( "Setting.4", "true" )
-                    self.getControl( 113 ).setLabel( __language__(32902), ( "False", "True" )[ ha_settings[ "ha_trivia_intro" ] ] )
+                    self.getControl( 113 ).setLabel( __language__(32902), label2 = ( "False", "True" )[ ha_settings[ "ha_trivia_intro" ] ] )
                 xbmcgui.Window(10001).setProperty( "Setting.5", "true" )
-                self.getControl( 114 ).setLabel( __language__(32903), ( "False", "True" )[ ha_settings[ "ha_trivia_start" ] ] )
+                self.getControl( 114 ).setLabel( __language__(32903), label2 = ( "False", "True" )[ ha_settings[ "ha_trivia_start" ] ] )
                 if video_settings[ "trivia_outro" ] > 0:
                     xbmcgui.Window(10001).setProperty( "Setting.6", "true" )
-                    self.getControl( 115 ).setLabel( __language__(32904), ( "False", "True" )[ ha_settings[ "ha_trivia_outro" ] ] )
-            if trailer_settings[ ""trailer_count"" ] > 0:
+                    self.getControl( 115 ).setLabel( __language__(32904), label2 = ( "False", "True" )[ ha_settings[ "ha_trivia_outro" ] ] )
+            if trailer_settings[ "trailer_count" ] > 0:
                 if video_settings[ "cav_intro" ] > 0:
                     xbmcgui.Window(10001).setProperty( "Setting.7", "true" )
-                    self.getControl( 116 ).setLabel( __language__(32905), ( "False", "True" )[ ha_settings[ "ha_cav_intro" ] ] )
+                    self.getControl( 116 ).setLabel( __language__(32905), label2 = ( "False", "True" )[ ha_settings[ "ha_cav_intro" ] ] )
                 xbmcgui.Window(10001).setProperty( "Setting.8", "true" )
-                self.getControl( 117 ).setLabel( __language__(32906), ( "False", "True" )[ ha_settings[ "ha_trailer_start" ] ] )
+                self.getControl( 117 ).setLabel( __language__(32906), label2 = ( "False", "True" )[ ha_settings[ "ha_trailer_start" ] ] )
                 if video_settings[ "cav_outro" ] > 0:
                     xbmcgui.Window(10001).setProperty( "Setting.9", "true" )
-                    self.getControl( 118 ).setLabel( __language__(32907), ( "False", "True" )[ ha_settings[ "ha_outro_outro" ] ] )
+                    self.getControl( 118 ).setLabel( __language__(32907), label2 = ( "False", "True" )[ ha_settings[ "ha_outro_outro" ] ] )
             if video_settings[ "mte_intro" ] > 0:
                 xbmcgui.Window(10001).setProperty( "Setting.10", "true" )
-                self.getControl( 119 ).setLabel( __language__(32908), ( "False", "True" )[ ha_settings[ "ha_mte_intro" ] ] )
+                self.getControl( 119 ).setLabel( __language__(32908), label2 = ( "False", "True" )[ ha_settings[ "ha_mte_intro" ] ] )
             if video_settings[ "countdown_video" ] > 0:
                 xbmcgui.Window(10001).setProperty( "Setting.11", "true" )
-                self.getControl( 120 ).setLabel( __language__(32909), ( "False", "True" )[ ha_settings[ "ha_countdown_video" ] ] )
+                self.getControl( 120 ).setLabel( __language__(32909), label2 = ( "False", "True" )[ ha_settings[ "ha_countdown_video" ] ] )
             if video_settings[ "enable_ratings" ]:
                 xbmcgui.Window(10001).setProperty( "Setting.12", "true" )
-                self.getControl( 121 ).setLabel( __language__(32910), ( "False", "True" )[ ha_settings[ "ha_mpaa_rating" ] ] )
+                self.getControl( 121 ).setLabel( __language__(32910), label2 = ( "False", "True" )[ ha_settings[ "ha_mpaa_rating" ] ] )
             if video_settings[ "enable_audio" ]:
                 xbmcgui.Window(10001).setProperty( "Setting.13", "true" )
-                self.getControl( 122 ).setLabel( __language__(32911), ( "False", "True" )[ ha_settings[ "ha_audio_format" ] ] )
+                self.getControl( 122 ).setLabel( __language__(32911), label2 = ( "False", "True" )[ ha_settings[ "ha_audio_format" ] ] )
             if video_settings[ "fpv_intro" ] > 0:
                 xbmcgui.Window(10001).setProperty( "Setting.14", "true" )
-                self.getControl( 123 ).setLabel( __language__(32912), ( "False", "True" )[ ha_settings[ "ha_fpv_intro" ] ] )
+                self.getControl( 123 ).setLabel( __language__(32912), label2 = ( "False", "True" )[ ha_settings[ "ha_fpv_intro" ] ] )
             xbmcgui.Window(10001).setProperty( "Setting.15", "true" )
-            self.getControl( 124 ).setLabel( __language__(32913), ( "False", "True" )[ ha_settings[ "ha_movie" ] ] )
-            if feature_settings[ "intermission_video" ] > 0:
+            self.getControl( 124 ).setLabel( __language__(32913), label2 = ( "False", "True" )[ ha_settings[ "ha_movie" ] ] )
+            if video_settings[ "intermission_video" ] > 0:
                 xbmcgui.Window(10001).setProperty( "Setting.16", "true" )
-                self.getControl( 125 ).setLabel( __language__(32914), ( "False", "True" )[ ha_settings[ "ha_intermission" ] ] )
+                self.getControl( 125 ).setLabel( __language__(32914), label2 = ( "False", "True" )[ ha_settings[ "ha_intermission" ] ] )
             if video_settings[ "fpv_ontro" ] > 0:
                 xbmcgui.Window(10001).setProperty( "Setting.17", "true" )
-                self.getControl( 126 ).setLabel( __language__(32915), ( "False", "True" )[ ha_settings[ "ha_fpv_outro" ] ] )
+                self.getControl( 126 ).setLabel( __language__(32915), label2 = ( "False", "True" )[ ha_settings[ "ha_fpv_outro" ] ] )
             if video_settings[ "mte_outro" ] > 0:
                 xbmcgui.Window(10001).setProperty( "Setting.18", "true" )
-                self.getControl( 127 ).setLabel( __language__(32916), ( "False", "True" )[ ha_settings[ "ha_mte_outro" ] ] )
+                self.getControl( 127 ).setLabel( __language__(32916), label2 = ( "False", "True" )[ ha_settings[ "ha_mte_outro" ] ] )
             xbmcgui.Window(10001).setProperty( "Setting.19", "true" )
-            self.getControl( 128 ).setLabel( __language__(32918), ( "False", "True" )[ ha_settings[ "ha_script_end" ] ] )
+            self.getControl( 128 ).setLabel( __language__(32918), label2 = ( "False", "True" )[ ha_settings[ "ha_script_end" ] ] )
             xbmcgui.Window(10001).setProperty( "Setting.20", "true" )
-            self.getControl( 129 ).setLabel( __language__(32918), ( "False", "True" )[ ha_settings[ "ha_paused" ] ] )
+            self.getControl( 129 ).setLabel( __language__(32918), label2 = ( "False", "True" )[ ha_settings[ "ha_paused" ] ] )
             xbmcgui.Window(10001).setProperty( "Setting.21", "true" )
-            self.getControl( 130 ).setLabel( __language__(32919), ( "False", "True" )[ ha_settings[ "ha_resumed" ] ] )
+            self.getControl( 130 ).setLabel( __language__(32919), label2 = ( "False", "True" )[ ha_settings[ "ha_resumed" ] ] )
         xbmcgui.Window(10001).setProperty( "CEmenu", "true" )
         
     def set_misc_settings( self ):
@@ -347,7 +349,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
         elif controlId == 101:
             self.set_trailer_settings()
         elif controlId == 102:
-            self.set_feature_settings()
+            self.set_general_settings()
         elif controlId == 103:
             self.set_special_video_settings()
         elif controlId == 104:
