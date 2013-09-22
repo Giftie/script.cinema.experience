@@ -8,16 +8,16 @@ BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 home_automation_folder   = sys.modules[ "__main__" ].home_automation_folder
 home_automation_module   = sys.modules[ "__main__" ].home_automation_module
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-import utils
+from utils import log
 
 if not xbmcvfs.exists( home_automation_module ):
     source = os.path.join( BASE_RESOURCE_PATH, "ha_scripts", "home_automation.py" )
     xbmcvfs.mkdir( home_automation_folder )
     success = xbmcvfs.copy( source, home_automation_module )
     if success:
-        utils.log( "home_automation.py copied", xbmc.LOGNOTICE )
+        log( "home_automation.py copied", xbmc.LOGNOTICE )
     else:
-        utils.log( "home_automation.py not copied", xbmc.LOGNOTICE )
+        log( "home_automation.py not copied", xbmc.LOGNOTICE )
 
 try:
     sys.path.append( home_automation_folder )
@@ -26,7 +26,7 @@ try:
     ha_imported = True
 except ImportError:
     # or ha_imported to False if unsuccessful
-    utils.log( "Failed to import Automate", xbmc.LOGNOTICE )
+    log( "Failed to import Automate", xbmc.LOGNOTICE )
     ha_imported = False
 except:
     traceback.print_exc()
