@@ -24,7 +24,7 @@ from ce_playlist import _set_trailer_info
 from utils import log
 
 class Main:
-    log("%s - Local Folder Trailer Scraper Started" % logmessage, level=xbmc.LOGNOTICE )
+    log("%s - Local Folder Trailer Scraper Started" % logmessage, xbmc.LOGNOTICE )
     
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.mpaa = equivalent_mpaa
@@ -35,7 +35,7 @@ class Main:
         self.tmp_trailers = []
 
     def fetch_trailers( self ):
-        log("%s - Fetching Trailers" % logmessage, level=xbmc.LOGNOTICE )
+        log("%s - Fetching Trailers" % logmessage, xbmc.LOGNOTICE )
         # get watched list
         self._get_watched()
         # fetch all trailers recursively
@@ -49,7 +49,7 @@ class Main:
 
     def _shuffle_trailers( self ):
         # randomize the groups and create our play list
-        log("%s - Shuffling Trailers" % logmessage, level=xbmc.LOGNOTICE )
+        log("%s - Shuffling Trailers" % logmessage, xbmc.LOGNOTICE )
         shuffle( self.tmp_trailers )
         # reset counter
         count = 0
@@ -82,7 +82,7 @@ class Main:
             self._shuffle_trailers()
 
     def _get_watched( self ):
-        log("%s - Getting Watched List" % logmessage, level=xbmc.LOGNOTICE )
+        log("%s - Getting Watched List" % logmessage, xbmc.LOGNOTICE )
         try:
             # base path to watched file
             if int( self.settings[ "trailer_play_mode" ] )== 1:
@@ -99,7 +99,7 @@ class Main:
             self.watched = []
 
     def _reset_watched( self ):
-        log("%s - Resetting Watched List" % logmessage, level=xbmc.LOGNOTICE )
+        log("%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
         if int( self.settings[ "trailer_play_mode" ] )== 1:
             base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloader" + "_watched.txt" )
         else:
@@ -109,7 +109,7 @@ class Main:
             self.watched = []
 
     def _save_watched( self ):
-        log("%s - Saving Watched List" % logmessage, level=xbmc.LOGNOTICE )
+        log("%s - Saving Watched List" % logmessage, xbmc.LOGNOTICE )
         try:
             # base path to watched file
             if int( self.settings[ "trailer_play_mode" ] )== 1:

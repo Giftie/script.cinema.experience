@@ -98,7 +98,7 @@ class Trivia( xbmcgui.WindowXML ):
         # check to see if music playlist has come to an end
         if self.settings[ "trivia_music" ] > 0:
             if ( not CEPlayer().isPlayingAudio() ):
-                log( "Restarting Music Playback", level=xbmc.LOGNOTICE )
+                log( "Restarting Music Playback", xbmc.LOGNOTICE )
                 CEPlayer().play( self.music_playlist )
         if self.image_count < 0:
             self.image_count = 0

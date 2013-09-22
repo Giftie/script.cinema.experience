@@ -55,11 +55,11 @@ class Automate:
                 
         """
         if not trigger:
-            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - No Trigger Sent, Returning", level=xbmc.LOGNOTICE )
+            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - No Trigger Sent, Returning", xbmc.LOGNOTICE )
             return
-        xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - activate_on( %s ) Triggered" % trigger, level=xbmc.LOGNOTICE )
+        xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - activate_on( %s ) Triggered" % trigger, xbmc.LOGNOTICE )
         if trigger in triggers:
-            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Trigger %s" % trigger, level=xbmc.LOGNOTICE )
+            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Trigger %s" % trigger, xbmc.LOGNOTICE )
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
             # place code below this line
@@ -137,4 +137,4 @@ class Automate:
             pass
             # place code below this line
         else:
-            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Opps. Something happened", level=xbmc.LOGNOTICE )
+            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )

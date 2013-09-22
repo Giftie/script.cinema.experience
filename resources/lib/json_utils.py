@@ -52,7 +52,7 @@ def retrieve_json_dict(json_query, items='items', force_log=False ):
             log( "%s" % response )
             return None
         else:
-            log( "[json_utils.py] - retrieve_json_dict - No response from XBMC", level=xbmc.LOGNOTICE )
+            log( "[json_utils.py] - retrieve_json_dict - No response from XBMC", xbmc.LOGNOTICE )
             log( "%s" % response )
             return None
     except:
