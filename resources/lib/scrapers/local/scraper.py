@@ -21,10 +21,10 @@ BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from folder import dirEntries
 from ce_playlist import _set_trailer_info
-from utils import log
+import utils
 
 class Main:
-    log( "%s - Local Folder Trailer Scraper Started" % logmessage, xbmc.LOGNOTICE )
+    utils.log( "%s - Local Folder Trailer Scraper Started" % logmessage, xbmc.LOGNOTICE )
     
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.mpaa = equivalent_mpaa
@@ -39,7 +39,7 @@ class Main:
             self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
 
     def fetch_trailers( self ):
-        log( "%s - Fetching Trailers" % logmessage, xbmc.LOGNOTICE )
+        utils.log( "%s - Fetching Trailers" % logmessage, xbmc.LOGNOTICE )
         # get watched list
         self._get_watched()
         # fetch all trailers recursively
@@ -53,7 +53,7 @@ class Main:
 
     def _shuffle_trailers( self ):
         # randomize the groups and create our play list
-        log( "%s - Shuffling Trailers" % logmessage, xbmc.LOGNOTICE )
+        utils.log( "%s - Shuffling Trailers" % logmessage, xbmc.LOGNOTICE )
         shuffle( self.tmp_trailers )
         # reset counter
         count = 0
@@ -67,10 +67,10 @@ class Main:
             trailer_genre = trailer_info[ 9 ].split(" / ")
             trailer_rating = trailer_info[ 6 ].replace("Rated ", "")
             if self.settings[ "trailer_limit_genre" ] and ( not list(set(trailer_genre) & set(self.genre) ) ):
-                log( "%s - Genre Not Matched - Skipping Trailer" % logmessage )
+                utils.log( "%s - Genre Not Matched - Skipping Trailer" % logmessage )
                 continue
             if self.settings[ "trailer_limit_mpaa" ] and ( not trailer_rating or not trailer_rating == self.mpaa ):
-                log( "%s - MPAA Not Matched - Skipping Trailer" % logmessage )
+                utils.log( "%s - MPAA Not Matched - Skipping Trailer" % logmessage )
                 continue
             self.trailers += [ trailer_info ]
             # add id to watched file TODO: maybe don't add if not user preference
@@ -89,7 +89,7 @@ class Main:
         self.watched = utils.load_saved_list( self.watched_path, "Trailer Watched List" )
 
     def _reset_watched( self ):
-        log( "%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
+        utils.log( "%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
         if xbmcvfs.exists( self.watched_path ):
             xbmcvfs.delete( self.watched_path )
             self.watched = []

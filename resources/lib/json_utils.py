@@ -2,7 +2,7 @@
 
 import xbmc, xbmcaddon
 import traceback
-from utils import log
+import utils
 
 def RepresentsNumber(s):
     try: 
@@ -31,14 +31,14 @@ def retrieve_json_dict(json_query, items='items', force_log=False ):
             json_query - a properly formed json rpc request for return
             items - the specific key being looked for, example for VideoLibrary.GetMovies - 'movies' is the key, 'items' is a common response(can be left blank then)
     """
-    log( "[json_utils.py] - JSONRPC Query -\n%s" % json_query )
+    utils.log( "[json_utils.py] - JSONRPC Query -\n%s" % json_query )
     true = True
     false = False
     null = None
     json_response = xbmc.executeJSONRPC( json_query )
     # disable debug logging if items = 'movies' or albums as these can fill spam the log with a lot of information
     if ( items != 'movies' and items != 'albums' ) or force_log: 
-        log( "[json_utils.py] - retrieve_json_dict - JSONRPC -\n%s" % json_response )
+        utils.log( "[json_utils.py] - retrieve_json_dict - JSONRPC -\n%s" % json_response )
     response = json_response
     if response.startswith( "{" ):
         response = eval( response )
@@ -48,16 +48,16 @@ def retrieve_json_dict(json_query, items='items', force_log=False ):
             json_dict = result[ items ]
             return json_dict
         elif response.has_key( 'error' ):
-            log( "[json_utils.py] - retrieve_json_dict - Error trying to get json response" )
-            log( "%s" % response )
+            utils.log( "[json_utils.py] - retrieve_json_dict - Error trying to get json response" )
+            utils.log( "%s" % response )
             return None
         else:
-            log( "[json_utils.py] - retrieve_json_dict - No response from XBMC", xbmc.LOGNOTICE )
-            log( "%s" % response )
+            utils.log( "[json_utils.py] - retrieve_json_dict - No response from XBMC", xbmc.LOGNOTICE )
+            utils.log( "%s" % response )
             return None
     except:
         traceback.print_exc()
-        log( "[json_utils.py] - retrieve_json_dict - Error trying to get json response" )
+        utils.log( "[json_utils.py] - retrieve_json_dict - Error trying to get json response" )
         return None
 
 def retrieve_movie_db():
@@ -69,9 +69,9 @@ def retrieve_movie_db():
     movies_query = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"fields": ["title", "thumbnail", "file", "plot", "plotoutline", "rating", "runtime", "director", "genre", "mpaa", "votes", "trailer", "tagline", "top250", "studio", "year", "writer", "streamDetails" ] }, "id": 1}'
     movie_db = retrieve_json_dict( movies_query, 'movies' )
     if movie_db:
-        log( "[json_utils.py] - retrieve_movie_database - Successfully retrieved database" )
+        utils.log( "[json_utils.py] - retrieve_movie_database - Successfully retrieved database" )
     else:
-        log( "[json_utils.py] - retrieve_movie_database - No database found" )
+        utils.log( "[json_utils.py] - retrieve_movie_database - No database found" )
     return movie_db
 
 def retrieve_video_playlist():
@@ -94,7 +94,7 @@ def find_movie_details( movie_db=None, field="title", match_value=None ):
             movie_db = a dict containing the contents from retrieve_movie_database, if left empty will retrieve database dict from retrieve_movie_database
             match_value = what is being searched for 
     """
-    log( "[json_utils.py] - find_movie_details - field: %s, matche_value: %s" % ( field, match_value ) )
+    utils.log( "[json_utils.py] - find_movie_details - field: %s, matche_value: %s" % ( field, match_value ) )
     movie_return = None
     if not movie_db:
         movie_db = retrieve_movie_db()
@@ -114,7 +114,7 @@ def find_movie_details( movie_db=None, field="title", match_value=None ):
                         movie_return = movie
                         break
     else:
-        log( "[json_utils.py] - find_movie_details - No database found" )
+        utils.log( "[json_utils.py] - find_movie_details - No database found" )
     return movie_return
     
 def insert_movie_into_playlist( movie_db=None, title="", index=0 ):
@@ -132,20 +132,20 @@ def insert_movie_into_playlist( movie_db=None, title="", index=0 ):
     insert_movieid_to_video_playlist = '{"jsonrpc": "2.0", "method": "VideoPlaylist.Insert", "params": {"item": {"movieid": %d}, "index": %d}, "id": 1}'
     matched_movie = find_movie_details( movie_db=movie_db, field='title', match_value=title )
     if matched_movie:
-        log( "[json_utils.py] - insert_movie_into_playlist - Matched Title: %s" % title )
+        utils.log( "[json_utils.py] - insert_movie_into_playlist - Matched Title: %s" % title )
         result = xbmc.executeJSONRPC( insert_movieid_into_video_playlist % matched_movie['movieid'] )
-        log( "[json_utils.py] - insert_movie_into_playlist - JSONRPC Result -\n%s" % result )
+        utils.log( "[json_utils.py] - insert_movie_into_playlist - JSONRPC Result -\n%s" % result )
         true = True
         false = False
         null = None
         if result.startswith( "{" ):
             result = eval( result )
         if result['result'] == "OK":
-            log( "[json_utils.py] - insert_movie_into_playlist - Title: %s, Succeeded" % title )
+            utils.log( "[json_utils.py] - insert_movie_into_playlist - Title: %s, Succeeded" % title )
         else:
-            log( "[json_utils.py] - insert_movie_into_playlist - Title: %s, Failed" % title )
+            utils.log( "[json_utils.py] - insert_movie_into_playlist - Title: %s, Failed" % title )
     else:
-        log( "[json_utils.py] - insert_movie_into_playlist - Unable to match Title: %s" % title )
+        utils.log( "[json_utils.py] - insert_movie_into_playlist - Unable to match Title: %s" % title )
 
 def add_movie_to_playlist( movie_db=None, title="" ):
     """ add_movie_to_playlist( title )
@@ -161,17 +161,17 @@ def add_movie_to_playlist( movie_db=None, title="" ):
     add_movieid_to_video_playlist = '{"jsonrpc": "2.0", "method": "VideoPlaylist.Add", "params": {"item": {"movieid": %d} }, "id": 1}'
     matched_movie = find_movie_details( movie_db=movie_db, field='title', match_value=title )
     if matched_movie:
-        log( "[json_utils.py] - add_movie_to_playlist - Matched Title: %s" % title )
+        utils.log( "[json_utils.py] - add_movie_to_playlist - Matched Title: %s" % title )
         result = xbmc.executeJSONRPC( add_movieid_to_video_playlist % matched_movie['movieid'] )
-        log( "[json_utils.py] - add_movie_to_playlist - JSONRPC Result -\n%s" % result )
+        utils.log( "[json_utils.py] - add_movie_to_playlist - JSONRPC Result -\n%s" % result )
         true = True
         false = False
         null = None
         if result.startswith( "{" ):
             result = eval( result )
         if result['result'] == "OK":
-            log( "[json_utils.py] - add_movie_to_playlist - Title: %s, Succeeded" % title )
+            utils.log( "[json_utils.py] - add_movie_to_playlist - Title: %s, Succeeded" % title )
         else:
-            log( "[json_utils.py] - add_movie_to_playlist - Title: %s, Failed" % title )
+            utils.log( "[json_utils.py] - add_movie_to_playlist - Title: %s, Failed" % title )
     else:
-        log( "[json_utils.py] - add_movie_to_playlist - Unable to match Title: %s" % title )
+        utils.log( "[json_utils.py] - add_movie_to_playlist - Unable to match Title: %s" % title )

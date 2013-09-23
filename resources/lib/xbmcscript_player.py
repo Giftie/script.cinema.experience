@@ -31,7 +31,7 @@ import utils
 _A_ = xbmcaddon.Addon( __scriptID__ )
 
 from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info, _get_queued_video_info
-from utils import log
+from utils
 
 class Main:
     def __init__( self ):
@@ -62,7 +62,7 @@ class Main:
         if trailer_settings[ "trailer_play_mode" ] == 1:
             path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
             if xbmcvfs.exists( path ):
-                log( "File Exists: downloaded_trailers.txt" )
+                utils.log( "File Exists: downloaded_trailers.txt" )
                 trailer_list = self._load_trailer_list()
                 if trailer_list:
                     for trailer in trailer_list:
@@ -70,11 +70,11 @@ class Main:
                         self.downloaded_trailers += trailer_detail
                 else:
                     # Change trailer play mode to stream if no download 
-                    log( "Empty File: downloaded_trailers.txt" )
+                    utils.log( "Empty File: downloaded_trailers.txt" )
                     _A_.setSetting( id='trailer_play_mode', value='%d' % 0 )
             else:
                 # Change trailer play mode to stream if no download 
-                log( "File Does Not Exists: downloaded_trailers.txt" )
+                utils.log( "File Does Not Exists: downloaded_trailers.txt" )
                 _A_.setSetting( id='trailer_play_mode', value='%d' % 0 )
         else:
             pass
@@ -103,7 +103,7 @@ class Main:
             traceback.print_exc()
 
     def _add_intermission_videos( self ):
-        log( "Adding intermission Video(s)", xbmc.LOGNOTICE )
+        utils.log( "Adding intermission Video(s)", xbmc.LOGNOTICE )
         count = 0
         index_count = 1
         for feature in range( 1, self.playlistsize ):
@@ -111,10 +111,10 @@ class Main:
             #count = index_count
             # add intermission video
             if feature_settings[ "intermission_video" ] > 0:
-                log( "Inserting intermission Video(s): %s" % feature_settings[ "intermission_video" ], xbmc.LOGNOTICE )
-                log( "    playlist Position: %d" % index_count )
+                utils.log( "Inserting intermission Video(s): %s" % feature_settings[ "intermission_video" ], xbmc.LOGNOTICE )
+                utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-                log( "    p_size: %d" % p_size )
+                utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=feature_settings[ "intermission_video" ],
                                            path=( feature_settings[ "intermission_video_file" ], feature_settings[ "intermission_video_folder" ], )[ feature_settings[ "intermission_video_type" ] == "folder" ],
@@ -131,10 +131,10 @@ class Main:
                     index_count += feature_settings[ "intermission_video" ]
             # get rating video
             if video_settings[ "enable_ratings" ] and feature_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
-                log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
-                log( "    playlist Position: %d" % index_count )
+                utils.log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
+                utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-                log( "    p_size: %d" % p_size )
+                utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
                                            path=video_settings[ "rating_videos_folder" ] + mpaa + ".avi",
@@ -149,10 +149,10 @@ class Main:
                     index_count += 1
             # get Dolby/DTS videos
             if video_settings[ "enable_audio" ]  and feature_settings[ "intermission_audio" ] and video_settings[ "audio_videos_folder" ]:
-                log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
-                log( "    playlist Position: %d" % index_count )
+                utils.log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
+                utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-                log( "    p_size: %d" % p_size )
+                utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
                                           path = video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
@@ -172,9 +172,9 @@ class Main:
 
     def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa ):
         # TODO: try to get a local thumb for special videos?
-        log( "Building Cinema Experience Playlist", xbmc.LOGNOTICE )
+        utils.log( "Building Cinema Experience Playlist", xbmc.LOGNOTICE )
         # Add Countdown video
-        log( "Adding Countdown Videos: %s Video(s)" % video_settings[ "countdown_video" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Countdown Videos: %s Video(s)" % video_settings[ "countdown_video" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "countdown_video" ],
@@ -188,7 +188,7 @@ class Main:
             self.trigger_list.insert( 0, "Countdown" )
         # get Dolby/DTS videos
         if video_settings[ "enable_audio" ] and video_settings[ "audio_videos_folder" ]:
-            log( "Adding Audio Format Video", xbmc.LOGNOTICE )
+            utils.log( "Adding Audio Format Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
@@ -202,7 +202,7 @@ class Main:
                 self.trigger_list.insert( 0, "Audio Format" )
         # get rating video
         if video_settings[ "enable_ratings" ]:
-            log( "Adding Ratings Video", xbmc.LOGNOTICE )
+            utils.log( "Adding Ratings Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
@@ -215,7 +215,7 @@ class Main:
                 # Insert Rating Label into Trigger List
                 self.trigger_list.insert( 0, "MPAA Rating" )
         # get feature presentation intro videos
-        log( "Adding Feature Presentation Intro Videos: %s Videos" % video_settings[ "fpv_intro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Feature Presentation Intro Videos: %s Videos" % video_settings[ "fpv_intro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "fpv_intro" ],
@@ -228,7 +228,7 @@ class Main:
             # Insert Feature Presentation Label into Trigger List
             self.trigger_list.insert( 0, "Feature Presentation Intro" )
         # get trailers
-        log( "Retriving Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
+        utils.log( "Retriving Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
         trailers = _get_trailers(  items=trailer_settings[ "trailer_count" ],
                          equivalent_mpaa=equivalent_mpaa,
                                     mpaa=mpaa,
@@ -237,7 +237,7 @@ class Main:
                                     mode="playlist"
                                 )
         # get coming attractions outro videos
-        log( "Adding Coming Attraction Outro Video: %s Videos" % video_settings[ "cav_outro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Coming Attraction Outro Video: %s Videos" % video_settings[ "cav_outro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "cav_outro" ] * ( len( trailers ) > 0 ),
@@ -250,7 +250,7 @@ class Main:
             # Insert Coming Attraction Outro Label into Trigger List
             self.trigger_list.insert( 0, "Coming Attractions Outro" )
         # enumerate through our list of trailers and add them to our playlist
-        log( "Adding Trailers: %s Trailers" % len( trailers ), xbmc.LOGNOTICE )
+        utils.log( "Adding Trailers: %s Trailers" % len( trailers ), xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         for trailer in trailers:
             # get trailers
@@ -273,7 +273,7 @@ class Main:
             # Insert Trailer Label into Trigger List
             self.trigger_list.insert( 0, "Movie Trailer" )
         # get coming attractions intro videos
-        log( "Adding Coming Attraction Intro Videos: %s Videos" % video_settings[ "cav_intro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Coming Attraction Intro Videos: %s Videos" % video_settings[ "cav_intro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "cav_intro" ] * ( len( trailers ) > 0 ),
@@ -286,7 +286,7 @@ class Main:
             # Insert Coming Attraction Intro Label into Trigger List
             self.trigger_list.insert( 0, "Coming Attractions Intro" )
         # get movie theater experience intro videos
-        log( "Adding Movie Theatre Intro Videos: %s Videos" % video_settings[ "mte_intro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Movie Theatre Intro Videos: %s Videos" % video_settings[ "mte_intro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "mte_intro" ],
@@ -300,7 +300,7 @@ class Main:
             self.trigger_list.insert( 0, "Movie Theater Intro" )
         # get trivia outro video(s)
         if trivia_settings[ "trivia_mode" ] != 0:
-            log( "Adding Trivia Outro Videos: %s Videos" % video_settings[ "trivia_outro" ], xbmc.LOGNOTICE )
+            utils.log( "Adding Trivia Outro Videos: %s Videos" % video_settings[ "trivia_outro" ], xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=video_settings[ "trivia_outro" ],
@@ -314,7 +314,7 @@ class Main:
                 # Insert Trivia Outro Label into Trigger List
                 self.trigger_list.insert( 0, "Trivia Outro" )
         # get feature presentation outro videos
-        log( "Adding Feature Presentation Outro Videos: %s Videos" % video_settings[ "fpv_outro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Feature Presentation Outro Videos: %s Videos" % video_settings[ "fpv_outro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "fpv_outro" ],
@@ -326,7 +326,7 @@ class Main:
             # Insert Feature Presentation Outro Label into Trigger List
             self.trigger_list.append( "Feature Presentation Outro" )
         # get movie theater experience outro videos
-        log( "Adding Movie Theatre Outro Videos: %s Videos" % video_settings[ "mte_outro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Movie Theatre Outro Videos: %s Videos" % video_settings[ "mte_outro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items( playlist=self.playlist,
                                   items=video_settings[ "mte_outro" ],
@@ -337,6 +337,6 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Movie Theatre Outro Label into Trigger List
             self.trigger_list.append( "Movie Theatre Outro" )
-        log( "Playlist Size: %s" % xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size(), xbmc.LOGNOTICE )
-        log( "Trigger List Size: %d" % len(self.trigger_list), xbmc.LOGNOTICE )
+        utils.log( "Playlist Size: %s" % xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size(), xbmc.LOGNOTICE )
+        utils.log( "Trigger List Size: %d" % len(self.trigger_list), xbmc.LOGNOTICE )
         return self.trigger_list

@@ -57,7 +57,6 @@ class _Parser:
             # randomize the trailers and create our play list
             shuffle( movies )
             # enumerate thru the movies list and gather info
-            print movies
             for id, movie in movies:
                 # user preference to skip watch trailers
                 if ( self.settings[ "trailer_unwatched_only" ] and id in self.watched ):
@@ -149,7 +148,7 @@ class _Parser:
 
 
 class Main:
-    print "Apple Movie Trailers Newest trailers scraper"
+    utils.log( "Apple Movie Trailers Newest trailers scraper", xbmc.LOGERROR )
     # base url
     BASE_CURRENT_URL = "http://www.apple.com/trailers/home/xml/newest%s.xml"
     
@@ -195,7 +194,7 @@ class Main:
                 ok = self._save_xml_source( xmlSource, base_path )
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            utils.log( "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], ), xbmc.LOGERROR )
             ok = False
         if ( ok ):
             return xmlSource
@@ -217,7 +216,7 @@ class Main:
             return True
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            utils.log( "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], ), xbmc.LOGERROR )
             return False
 
     def _parse_xml_source( self, xmlSource ):

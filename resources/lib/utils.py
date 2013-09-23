@@ -84,27 +84,27 @@ def log( text, severity=xbmc.LOGDEBUG ):
     if type( text).__name__=='unicode':
         text = text.encode('utf-8')
     message = ('[%s] - %s' % ( __scriptname__ ,text.__str__() ) )
-    xbmc.log( msg=message, level=severity)
+    xbmc.log( msg=message, level=severity )
 
 def load_saved_list( f_name, type ):
     saved_list = []
     if xbmcvfs.exists( f_name ):
-        xbmc.log( "[script.cinema.experience] - Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+        log( "Loading Saved List, %s" % type, xbmc.LOGNOTICE )
         try:
             f_object = xbmcvfs.File( f_name )
             saved_list = eval( f_object.read() )
             f_object.close()
-            assert isinstance( saved_list, ( list, tuple ) ) and assert not isinstance( saved_list, basestring )
+            #assert isinstance( saved_list, ( list, tuple ) ) and assert not isinstance( saved_list, basestring )
         except:
-            xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+            log( "Error Loading Saved List, %s" % type, xbmc.LOGNOTICE )
             traceback.print_exc()
             saved_list = []
     else:
-        xbmc.log( "[script.cinema.experience] - List does not exist, %s" % type, level=xbmc.LOGNOTICE)
+        log( "List does not exist, %s" % type, xbmc.LOGNOTICE )
     return saved_list
 
 def save_list( f_name, f_list, type ):
-    xbmc.log( "[script.cinema.experience] - Saving List, %s" % type, level=xbmc.LOGNOTICE)
+    log( "Saving List, %s" % type, xbmc.LOGNOTICE )
     try:
         if not xbmcvfs.exists( os.path.dirname( f_name ) ):
             xbmcvfs.mkdirs( os.path.dirname( f_name ) )
@@ -115,5 +115,5 @@ def save_list( f_name, f_list, type ):
         # close file object
         file_object.close()
     except:
-        xbmc.log( "[script.cinema.experience] - Error Loading Saved List, %s" % type, level=xbmc.LOGNOTICE)
+        log( "Error Loading Saved List, %s" % type, xbmc.LOGNOTICE )
         traceback.print_exc()

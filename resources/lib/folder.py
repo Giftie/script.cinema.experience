@@ -2,7 +2,7 @@
 
 import sys, os, re
 import xbmc
-from utils import log
+import utils
 from json_utils import retrieve_json_dict
 
 def dirEntries( dir_name, media_type="files", recursive="FALSE", contains="" ):
@@ -14,7 +14,7 @@ def dirEntries( dir_name, media_type="files", recursive="FALSE", contains="" ):
             media_type - valid types: video, music, pictures, files, programs
             recursive  - Setting to "TRUE" searches Parent and subdirectories, Setting to "FALSE" only search Parent Directory
     '''
-    log( "[folder.py] - dirEntries Activated" )
+    utils.log( "[folder.py] - dirEntries Activated" )
     fileList = []
     json_query = '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "%s"}, "id": 1}' % ( escapeDirJSON( dir_name ), media_type )
     json_folder_detail = retrieve_json_dict(json_query, items='files', force_log=True)
@@ -40,7 +40,7 @@ def getFolders( dir_name, recursive="FALSE" ):
             dir_name   - the name of the directory to be searched
             recursive  - Setting to "TRUE" searches Parent and subdirectories, Setting to "FALSE" only search Parent Directory
     '''
-    log( "[folder.py] - getFolders Activated" )
+    utils.log( "[folder.py] - getFolders Activated" )
     folderList = []
     json_query = '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % ( escapeDirJSON( dir_name ) )
     json_folder_detail = retrieve_json_dict(json_query, items='files', force_log=True)
@@ -62,7 +62,7 @@ def escapeDirJSON ( dir_name ):
         escapeDirJSON( dir_name )
             dir_name    - the name of the directory
     '''
-    log( "[folder.py] - escapeDirJSON Activated" )
+    utils.log( "[folder.py] - escapeDirJSON Activated" )
     if dir_name.find(":"):
         dir_name = dir_name.replace("\\", "\\\\")
     return dir_name

@@ -69,16 +69,16 @@ class Trivia( xbmcgui.WindowXML ):
         result = xbmc.executeJSONRPC( volume_query )
         match = re.search( '"volume" ?: ?([0-9]{1,3})', result )
         volume = int( match.group(1) )
-        log( "Current Volume: %d" % volume )
+        utils.log( "Current Volume: %d" % volume )
         return volume
 
     def _start_slideshow_music( self ):
         if self.settings[ "trivia_music" ] > 0:
-            log( "Starting Tivia Music", xbmc.LOGNOTICE )
+            utils.log( "Starting Tivia Music", xbmc.LOGNOTICE )
             # did user set this preference
             # check to see if script is to adjust the volume
             if self.settings[ "trivia_adjust_volume" ]:
-                log( "Adjusting Volume to %s" % self.settings[ "trivia_music_volume" ], xbmc.LOGNOTICE )
+                utils.log( "Adjusting Volume to %s" % self.settings[ "trivia_music_volume" ], xbmc.LOGNOTICE )
                 # calculate the new volume
                 volume = self.settings[ "trivia_music_volume" ]
                 # set the volume percent of current volume
@@ -96,7 +96,7 @@ class Trivia( xbmcgui.WindowXML ):
         # check to see if music playlist has come to an end
         if self.settings[ "trivia_music" ] > 0:
             if ( not CEPlayer().isPlayingAudio() ):
-                log( "Restarting Music Playback", xbmc.LOGNOTICE )
+                utils.log( "Restarting Music Playback", xbmc.LOGNOTICE )
                 CEPlayer().play( self.music_playlist )
         if self.image_count < 0:
             self.image_count = 0
@@ -119,7 +119,7 @@ class Trivia( xbmcgui.WindowXML ):
             elif (re.search("__still__", myslide)) :
                 slide_type = "still"
                 myslide = myslide.replace("__still__", "")
-            log( "Slide #%s Type %s - %s" % (self.image_count, slide_type, myslide), xbmc.LOGNOTICE )
+            utils.log( "Slide #%s Type %s - %s" % (self.image_count, slide_type, myslide), xbmc.LOGNOTICE )
             xbmcgui.Window( xbmcgui.getCurrentWindowId() ).setProperty( "Slide", myslide )
             # add id to watched file TODO: maybe don't add if not user preference
             self.watched.append( xbmc.getCacheThumbName( self.slide_playlist[ self.image_count ] ) )
@@ -152,7 +152,7 @@ class Trivia( xbmcgui.WindowXML ):
             timer = self.settings[ "trivia_slide_time_c" ]
         elif slide_type == "still":
             timer = self.settings[ "trivia_slide_time_s" ]
-        log( "Slide delay %s seconds type is %s" % ( timer, slide_type ), xbmc.LOGNOTICE )
+        utils.log( "Slide delay %s seconds type is %s" % ( timer, slide_type ), xbmc.LOGNOTICE )
         self.slide_timer = threading.Timer( timer, self._next_slide,() )
         self.slide_timer.start() 
 
@@ -176,7 +176,7 @@ class Trivia( xbmcgui.WindowXML ):
     def _show_intro_outro( self, type="intro" ):
         is_playing = True
         if type == "outro":
-            log( "## Outro ##", xbmc.LOGNOTICE )
+            utils.log( "## Outro ##", xbmc.LOGNOTICE )
             if self.settings[ "trivia_fade_volume" ] and self.settings[ "trivia_adjust_volume"]:
                 self._fade_volume()
             self._play_video_playlist()
@@ -198,7 +198,7 @@ class Trivia( xbmcgui.WindowXML ):
         self.close()
 
     def _cancel_timers( self ):
-        log( "[script.cinema.experience] Canceling timers...", xbmc.LOGNOTICE )
+        utils.log( "[script.cinema.experience] Canceling timers...", xbmc.LOGNOTICE )
         # cancel all timers
         if self.slide_timer is not None:
             self.slide_timer.cancel()
@@ -214,20 +214,20 @@ class Trivia( xbmcgui.WindowXML ):
         sleep_time = 0.5 / len( volumes )
         # if fading out reverse order
         if out:
-            log( "Fading Volume", xbmc.LOGNOTICE )
+            utils.log( "Fading Volume", xbmc.LOGNOTICE )
             volumes = range( 1, self.settings[ "trivia_music_volume" ] )
             volumes.reverse()
             # calc sleep time, for fade time
             sleep_time = ( self.settings[ "trivia_fade_time" ] * 1.0 ) / len( volumes )
         else:
-            log( "Raising Volume", xbmc.LOGNOTICE )
+            utils.log( "Raising Volume", xbmc.LOGNOTICE )
         # loop thru and set volume
-        log( "Start Volume: %d " % ( self._get_current_volume() ), xbmc.LOGNOTICE )
+        utils.log( "Start Volume: %d " % ( self._get_current_volume() ), xbmc.LOGNOTICE )
         for volume in volumes:
             xbmc.executebuiltin( "XBMC.SetVolume(%d)" % volume  )
             # sleep
             xbmc.sleep( int( sleep_time * 1000 ) )
-        log( "Finish Volume: %d " % ( self._get_current_volume() ), xbmc.LOGNOTICE )
+        utils.log( "Finish Volume: %d " % ( self._get_current_volume() ), xbmc.LOGNOTICE )
 
     def onClick( self, controlId ):
         pass

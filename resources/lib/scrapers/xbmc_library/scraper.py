@@ -16,20 +16,18 @@ else:
 
 import xbmc, xbmcvfs
 
-logmessage = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
-
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from ce_playlist import _get_thumbnail, _get_trailer_thumbnail
-from utils import list_to_string, log
+import utils
 
 __useragent__ = "QuickTime/7.2 (qtver=7.2;os=Windows NT 5.1Service Pack 3)"
 
 class Main:
-    log( "%s - XBMC Movie Library Trailer Scraper" % logmessage, xbmc.LOGNOTICE )
+    utils.log( "XBMC Movie Library Trailer Scraper", xbmc.LOGNOTICE )
     
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.settings = settings
@@ -110,18 +108,18 @@ class Main:
                         if count == self.settings[ "trailer_count" ]:
                            break
             else:
-                log( "No Movie Trailers found", xbmc.LOGNOTICE )
+                utils.log( "No Movie Trailers found", xbmc.LOGNOTICE )
             self._save_watched()
             return self.trailers
         else:
-            log( "No results found", xbmc.LOGNOTICE )
+            utils.log( "No results found", xbmc.LOGNOTICE )
             return []
 
     def _get_watched( self ):
         self.watched = utils.load_saved_list( self.watched_path, "Trailer Watched List" )
 
     def _reset_watched( self ):
-        log( "%s - Resetting Watched List" % logmessage, xbmc.LOGNOTICE )
+        utils.log( "Resetting Watched List", xbmc.LOGNOTICE )
         if xbmcvfs.exists( self.watched_path ):
             xbmcvfs.delete( self.watched_path )
             self.watched = []
