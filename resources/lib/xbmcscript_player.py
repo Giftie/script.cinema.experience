@@ -31,7 +31,7 @@ import utils
 _A_ = xbmcaddon.Addon( __scriptID__ )
 
 from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info, _get_queued_video_info
-from utils
+import utils
 
 class Main:
     def __init__( self ):
