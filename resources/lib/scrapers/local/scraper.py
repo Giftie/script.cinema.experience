@@ -19,7 +19,7 @@ BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-from folder import dirEntries
+from folder import absolute_listdir
 from ce_playlist import _set_trailer_info
 import utils
 
@@ -43,7 +43,7 @@ class Main:
         # get watched list
         self._get_watched()
         # fetch all trailers recursively
-        self.tmp_trailers = dirEntries( self.settings[ "trailer_folder" ], "video", "TRUE", "-trailer" )
+        self.tmp_trailers = absolute_listdir( self.settings[ "trailer_folder" ], media_type = "video", recursive = True, contains = "-trailer" )
         # get a random number of trailers
         self._shuffle_trailers()
         # save watched list

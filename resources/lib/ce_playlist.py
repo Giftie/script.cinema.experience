@@ -26,7 +26,7 @@ from music import parse_playlist
 from json_utils import find_movie_details, retrieve_json_dict
 import utils
 import xbmcvfs
-from folder import dirEntries
+from folder import absolute_listdir
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
     utils.log( "[ce_playlist.py] - _get_trailers started" )
@@ -171,7 +171,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
     if path.endswith( "/" ) or path.endswith( "\\" ):
         utils.log( "_get_special_items() - Path: %s" % path )
         # initialize our lists
-        tmp_paths = dirEntries( path, media_type, "TRUE" )
+        tmp_paths = absolute_listdir( path, media_type = "video", recursive = True )
         shuffle( tmp_paths )
     # enumerate thru and add our videos/pictures
     for count in range( items ):
@@ -265,7 +265,7 @@ def build_music_playlist():
     else:
         if trivia_settings[ "trivia_music_folder" ]:
             # search given folder and subfolders for files
-            track_location = dirEntries( trivia_settings[ "trivia_music_folder" ], "music", "TRUE" )
+            track_location = absolute_listdir( trivia_settings[ "trivia_music_folder" ], media_type = "music", recursive = True )
     # shuffle playlist
     shuffle( track_location )
     for track in track_location:

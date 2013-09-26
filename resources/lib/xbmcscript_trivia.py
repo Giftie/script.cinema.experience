@@ -19,7 +19,6 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 from music import parse_playlist
 from ce_playlist import build_music_playlist, _rebuild_playlist
-from folder import dirEntries
 import utils
 
 CEPlayer           = xbmc.Player
