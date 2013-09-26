@@ -35,7 +35,7 @@ def downloader( mpaa, genre, equivalent_mpaa ):
     utils.log( "Starting Trailer Downloader", xbmc.LOGNOTICE )
     genre = genre.replace( "_", " / " )
     trailer_list = _download_trailers( equivalent_mpaa, mpaa, genre, movie )
-    xbmc.log( "%s - Saving List of Downloaded Trailers" % logmessage, level=xbmc.LOGNOTICE )
+    utils.log( "Saving List of Downloaded Trailers", xbmc.LOGNOTICE )
     base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "downloaded_trailers.txt" )
     utils.save_list( base_path, download_trailers, "Downloaded Trailers" )
 
