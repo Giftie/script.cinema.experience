@@ -170,7 +170,6 @@ script_header = "[ %s ]" % __scriptID__
 
 from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info, _clear_playlists
 from slides import _fetch_slides
-from new_trailer_downloader import downloader
 import utils
 from launch_automation import Launch_automation
 
