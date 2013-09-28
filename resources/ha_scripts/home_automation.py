@@ -2,7 +2,7 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import socket, sys, urllib2
+import sys, urllib2, os
 from threading import Thread
 from urllib import urlencode
 
