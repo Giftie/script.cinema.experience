@@ -103,7 +103,7 @@ video_settings             = { "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float
                      "trivia_intro_folder": xbmc.translatePath( __setting__( "trivia_intro_folder" ) ).decode('utf-8'),
                             "trivia_outro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "trivia_outro" ) ) ) ],
                        "trivia_outro_type": ( "file", "folder" )[ int( float( __setting__( "trivia_outro" ) ) ) > 1 ],
-                       "trivia_outro_file": xbmc.translatePath( "3d_movie_tags""trivia_outro_file" ) ).decode('utf-8'),
+                       "trivia_outro_file": xbmc.translatePath( "trivia_outro_file" ) ).decode('utf-8'),
                      "trivia_outro_folder": xbmc.translatePath( __setting__( "trivia_outro_folder" ) ).decode('utf-8'),
                            "3d_movie_tags": __settings__( "3d_movie_tags" ).replace( " & ", "|" )
                          "enable_3d_intro": eval( __setting__( "enable_3d_intro" ) ),
