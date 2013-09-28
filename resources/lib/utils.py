@@ -2,7 +2,7 @@
 
 # a collection of useful utilities
 
-import re, os, sys, traceback, htmlentitydefs
+import re, os, sys, traceback, htmlentitydefs, socket
 import xbmc, xbmcvfs
 
 __scriptname__         = sys.modules[ "__main__" ].__addonname__
@@ -118,7 +118,7 @@ def save_list( f_name, f_list, type ):
         log( "Error Loading Saved List, %s" % type, xbmc.LOGNOTICE )
         traceback.print_exc()
         
-def broadcastUDP( self, data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's former HTTP API output port is 8278
+def broadcastUDP( data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's former HTTP API output port is 8278
     IPADDR = ipaddress
     PORTNUM = port
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
