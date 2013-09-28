@@ -9,6 +9,7 @@ from random import shuffle, random
 from xml.sax.saxutils import unescape
 
 import xbmc
+import xbmcvfs
 
 #__useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
@@ -19,9 +20,11 @@ class _urlopener( urllib.FancyURLopener ):
 # set for user agent
 urllib._urlopener = _urlopener()
 
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import utils
 
 class _Parser:
     """
@@ -54,7 +57,6 @@ class _Parser:
             # randomize the trailers and create our play list
             shuffle( movies )
             # enumerate thru the movies list and gather info
-            print movies
             for id, movie in movies:
                 # user preference to skip watch trailers
                 if ( self.settings[ "trailer_unwatched_only" ] and id in self.watched ):
@@ -146,7 +148,7 @@ class _Parser:
 
 
 class Main:
-    print "Apple Movie Trailers Newest trailers scraper"
+    utils.log( "Apple Movie Trailers Newest trailers scraper", xbmc.LOGERROR )
     # base url
     BASE_CURRENT_URL = "http://www.apple.com/trailers/home/xml/newest%s.xml"
     
@@ -182,7 +184,7 @@ class Main:
                 usock = urllib.urlopen( base_url )
             else:
                 # open path
-                usock = open( base_path, "r" )
+                usock = xbmcvfs.File( base_path, "r" )
             # read source
             xmlSource = usock.read()
             # close socket
@@ -192,7 +194,7 @@ class Main:
                 ok = self._save_xml_source( xmlSource, base_path )
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            utils.log( "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], ), xbmc.LOGERROR )
             ok = False
         if ( ok ):
             return xmlSource
@@ -205,7 +207,7 @@ class Main:
             if ( not os.path.isdir( os.path.dirname( base_path ) ) ):
                 os.makedirs( os.path.dirname( base_path ) )
             # open source path for writing
-            file_object = open( base_path, "w" )
+            file_object = xbmcvfs.File( base_path, "w" )
             # write xmlSource
             file_object.write( xmlSource )
             # close file object
@@ -214,17 +216,12 @@ class Main:
             return True
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            utils.log( "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], ), xbmc.LOGERROR )
             return False
 
     def _parse_xml_source( self, xmlSource ):
-        # base path to watched file
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
-        # get watched file
-        try:
-            watched = eval( self._get_xml_source( base_path ) )
-        except:
-            watched = []
+        watched = utils.load_saved_list( base_path, "Trailer Watched List" )
         # Parse xmlSource for videos
         parser = _Parser( xmlSource, self.mpaa, self.genre, self.settings, watched )
         # saved watched file

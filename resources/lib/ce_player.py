@@ -16,12 +16,12 @@ video_settings           = sys.modules[ "__main__" ].video_settings
 feature_settings         = sys.modules[ "__main__" ].feature_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
-__addon__ = xbmcaddon.Addon( __scriptID__ )
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+__addon__                = xbmcaddon.Addon( __scriptID__ )
 # language method
-__language__ = __addon__.getLocalizedString
+__language__             = __addon__.getLocalizedString
 
 number_of_features = feature_settings[ "number_of_features" ] + 1
 playback = ""
@@ -37,9 +37,9 @@ script_header = "[ %s ]" % __scriptID__
 
 from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playlist, _store_playlist, _get_queued_video_info, _clear_playlists
 from slides import _fetch_slides
-from new_trailer_downloader import downloader
-from utils import settings_to_log
+from trailer_downloader import downloader
 from launch_automation import Launch_automation
+import utils
 
 class Script():
     def __init__(self, *args, **kwargs):
@@ -50,7 +50,7 @@ class Script():
         
     def start_script( self, library_view = "oldway" ):
         messy_exit = False
-        xbmc.log( "[ script.cinema.experience ] - Library_view: %s" % library_view, level=xbmc.LOGNOTICE )
+        utils.log( "Library_view: %s" % library_view, xbmc.LOGNOTICE )
         early_exit = False
         movie_next = False
         prev_trigger = None
@@ -62,11 +62,11 @@ class Script():
             if feature_settings[ "enable_notification" ]:
                 xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32546 ), 300000, image) )
             # wait until playlist is full to the required number of features
-            xbmc.log( "[ script.cinema.experience ] - Waiting for queue to be filled with %s Feature films" % number_of_features, level=xbmc.LOGNOTICE )
+            utils.log( "Waiting for queue to be filled with %s Feature films" % number_of_features, xbmc.LOGNOTICE )
             count = 0
             while playlist.size() < number_of_features:
                 if playlist.size() > count:
-                    xbmc.log( "[ script.cinema.experience ] - User queued %s of %s Feature films" % (playlist.size(), number_of_features), level=xbmc.LOGNOTICE )
+                    utils.log( "User queued %s of %s Feature films" % (playlist.size(), number_of_features), xbmc.LOGNOTICE )
                     header1 = header + " - Feature " + "%d" % playlist.size()
                     message = __language__( 32543 ) + playlist[playlist.size() -1].getdescription()
                     if feature_settings[ "enable_notification" ]:
@@ -76,7 +76,7 @@ class Script():
                 if not xbmc.getCondVisibility( "Container.Content(movies)" ):
                     early_exit = True
                     break
-            xbmc.log( "[ script.cinema.experience ] - User queued %s Feature films" % playlist.size(), level=xbmc.LOGNOTICE )
+            utils.log( "User queued %s Feature films" % playlist.size(), xbmc.LOGNOTICE )
             if not early_exit:
                 header1 = header + " - Feature " + "%d" % playlist.size()
                 message = __language__( 32543 ) + playlist[playlist.size() -1].getdescription()
@@ -105,10 +105,10 @@ class Script():
             while not playlist.getposition() == ( playlist.size() - 1 ):
                 if playlist.getposition() > count:
                     try:
-                        xbmc.log( "[ script.cinema.experience ] - Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], level=xbmc.LOGNOTICE )
+                        utils.log( "Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], xbmc.LOGNOTICE )
                     except:
-                        xbmc.log( "[ script.cinema.experience ] - Problem With Trigger List", level=xbmc.LOGNOTICE )
-                    xbmc.log( "[ script.cinema.experience ] - Playlist Position: %s  Playlist Size: %s " % ( ( playlist.getposition() + 1 ), ( playlist.size() ) ), level=xbmc.LOGNOTICE )
+                        utils.log( "Problem With Trigger List", xbmc.LOGNOTICE )
+                    utils.log( "Playlist Position: %s  Playlist Size: %s " % ( ( playlist.getposition() + 1 ), ( playlist.size() ) ), xbmc.LOGNOTICE )
                     if not playlist.getposition() == ( playlist.size() - 1 ):
                         prev_trigger = Launch_automation().launch_automation( trigger_list[ playlist.getposition() ], prev_trigger )
                         count = playlist.getposition()
@@ -117,57 +117,35 @@ class Script():
                 try:
                     #if not self.player.isPlayingVideo() and not is_paused:
                     if not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ):
-                        xbmc.log( "[ script.cinema.experience ] - Video may have stopped", level=xbmc.LOGNOTICE )
+                        utils.log( "Video may have stopped", xbmc.LOGNOTICE )
                         xbmc.sleep( 5000 )  # wait 5 seconds for fullscreen video to show up(during playback)
                         if not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ): # if fullscreen video does not show up, break and exit script
                             messy_exit = True
                             break
                 except:
                     if xbmc.getCondVisibility( "Container.Content(movies)" ):
-                        xbmc.log( "[ script.cinema.experience ] - Video Definitely Stopped", level=xbmc.LOGNOTICE )
+                        utils.log( "Video Definitely Stopped", xbmc.LOGNOTICE )
                         messy_exit = True
                         break
             if not playlist.size() < 1 and not messy_exit: # To catch an already running script when a new instance started
-                xbmc.log( "[ script.cinema.experience ] - Playlist Position: %s  Playlist Size: %s " % ( playlist.getposition() + 1, ( playlist.size() ) ), level=xbmc.LOGNOTICE )
+                utils.log( "Playlist Position: %s  Playlist Size: %s " % ( playlist.getposition() + 1, ( playlist.size() ) ), xbmc.LOGNOTICE )
                 prev_trigger = Launch_automation().launch_automation( trigger_list[ playlist.getposition() ], prev_trigger )
                 if trigger_list[ playlist.getposition() ] == "Movie":
-                    xbmc.log( "[ script.cinema.experience ] - Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], level=xbmc.LOGNOTICE )
+                    utils.log( "Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], xbmc.LOGNOTICE )
                 else:
-                    xbmc.log( "[ script.cinema.experience ] - Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], level=xbmc.LOGNOTICE )
+                    utils.log( "Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], xbmc.LOGNOTICE )
                 messy_exit = False
                 xbmc.sleep(1000)
                 self._wait_until_end()
             else:
-                xbmc.log( "[ script.cinema.experience ] - User might have pressed stop", level=xbmc.LOGNOTICE )
-                xbmc.log( "[ script.cinema.experience ] - Stopping Script", level=xbmc.LOGNOTICE )
+                utils.log( "User might have pressed stop", xbmc.LOGNOTICE )
+                utils.log( "Stopping Script", xbmc.LOGNOTICE )
                 messy_exit = False
         return messy_exit
-    
-    def broadcastUDP( self, data, port = 8278 ): # XBMC's former HTTP API output port is 8278
-        IPADDR = '255.255.255.255'
-        PORTNUM = port
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
-        if hasattr(socket,'SO_BROADCAST'):
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        s.connect((IPADDR, PORTNUM))
-        s.send(data)
-        s.close()
-    
+        
     def load_trigger_list( self ):
-        xbmc.log( "[script.cinema.experience] - Loading Trigger List", level=xbmc.LOGNOTICE)
-        try:
-            # set base watched file path
-            base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
-            # open path
-            usock = open( base_path, "r" )
-            # read source
-            trigger_list = eval( usock.read() )
-            # close socket
-            usock.close()
-        except:
-            xbmc.log( "[script.cinema.experience] - Error Loading Trigger List", level=xbmc.LOGNOTICE)
-            traceback.print_exc()
-            trigger_list = []
+        base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
+        trigger_list = utils.load_saved_list( base_path, "Trigger List" )
         return trigger_list
 
     def voxcommando():
@@ -177,17 +155,17 @@ class Script():
             #for feature_count in range (1, playlistsize + 1):
             for feature_count in range (1, playlistsize):
                 movie_title = playlist[ feature_count - 1 ].getdescription()
-                xbmc.log( "[ script.cinema.experience ] - Feature #%-2d - %s" % ( feature_count, movie_title ), level=xbmc.LOGNOTICE )
+                utils.log( "Feature #%-2d - %s" % ( feature_count, movie_title ), xbmc.LOGNOTICE )
                 movie_titles = movie_titles + movie_title + "<li>"
             movie_titles = movie_titles.rstrip("<li>")
             if extra_settings[ "voxcommando" ]:
-                self.broadcastUDP( "<b>CElaunch." + str( playlistsize ) + "<li>" + movie_titles + "</b>", port = 33000 )
+                utils.broadcastUDP( "<b>CElaunch." + str( playlistsize ) + "<li>" + movie_titles + "</b>", port = 33000 )
         else:
             # get the queued video info
             movie_title = playlist[ 0 ].getdescription()
-            xbmc.log( "[ script.cinema.experience ] - Feature - %s" % movie_title, level=xbmc.LOGNOTICE )
+            utils.log( "Feature - %s" % movie_title, xbmc.LOGNOTICE )
             if extra_settings[ "voxcommando" ]:
-                self.broadcastUDP( "<b>CElaunch<li>" + movie_title + "</b>", port = 33000 )
+                utils.broadcastUDP( "<b>CElaunch<li>" + movie_title + "</b>", port = 33000 )
 
     # No longer works in Frodo to be removed
     def _sqlquery( self, sqlquery ):
@@ -196,18 +174,18 @@ class Script():
         xbmc.executehttpapi( "SetResponseFormat()" )
         xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
         sqlquery = "SELECT movieview.c00 FROM movieview JOIN genrelinkmovie ON genrelinkmovie.idMovie=movieview.idMovie JOIN genre ON genrelinkmovie.idGenre=genre.idGenre WHERE strGenre='Action' ORDER BY RANDOM() LIMIT 4"
-        xbmc.log( "[ script.cinema.experience ]  - SQL: %s" % ( sqlquery, ), level=xbmc.LOGDEBUG )
+        utils.log( "[ script.cinema.experience ]  - SQL: %s" % sqlquery )
         try:
             sqlresult = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sqlquery ), )
-            xbmc.log( "[ script.cinema.experience ] - sqlresult: %s" % sqlresult, level=xbmc.LOGDEBUG )
+            utils.log( "sqlresult: %s" % sqlresult )
             movies = sqlresult.split("</field>")
             movie_list = movies[ 0:len( movies ) -1 ]
         except:
-            xbmc.log( "[ script.cinema.experience ] - Error searching database", level=xbmc.LOGNOTICE )
+            utils.log( "Error searching database", xbmc.LOGNOTICE )
         return movie_list
 
     def trivia_intro( self ):
-        xbmc.log( "[ script.cinema.experience ] - ## Intro ##", level=xbmc.LOGNOTICE)
+        utils.log( "## Intro ##", xbmc.LOGNOTICE )
         _clear_playlists( "video" )
         play_list = playlist
         # initialize intro lists
@@ -226,32 +204,32 @@ class Script():
     def start_downloader( self, mpaa, genre, equivalent_mpaa ):
         # start the downloader if Play Mode is set to stream and if scraper is not Local or XBMC_library
         if trailer_settings[ "trailer_play_mode" ] == 1 and  ( trailer_settings[ "trailer_scraper" ] in ( "amt_database", "amt_current" ) ):
-            xbmc.log( "[ script.cinema.experience ] - Starting Downloader Thread", level=xbmc.LOGNOTICE )
+            utils.log( "Starting Downloader Thread", xbmc.LOGNOTICE )
             thread = Thread( target=downloader, args=( mpaa, genre, equivalent_mpaa ) )
             thread.start()
         else:
             pass
             
     def _wait_until_end( self ): # wait until the end of the playlist(for Trivia Intro)
-        xbmc.log( "[ script.cinema.experience ] - Waiting Until End Of Video", level=xbmc.LOGNOTICE)
+        utils.log( "Waiting Until End Of Video", xbmc.LOGNOTICE )
         try:
             self.psize = int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) - 1
-            xbmc.log( "[ script.cinema.experience ] - Playlist Size: %s" % ( self.psize + 1 ), level=xbmc.LOGDEBUG)
+            utils.log( "Playlist Size: %s" % ( self.psize + 1 ) )
             while xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).getposition() < self.psize:
                 pass
-            xbmc.log( "[ script.cinema.experience ] - Video TotalTime: %s" % self.player.getTotalTime(), level=xbmc.LOGDEBUG)
+            utils.log( "Video TotalTime: %s" % self.player.getTotalTime() )
             while self.player.getTime() < ( self.player.getTotalTime() - 1 ):
                 pass
-            xbmc.log( "[ script.cinema.experience ] - Video getTime: %s"  % self.player.getTime(), level=xbmc.LOGDEBUG)
+            utils.log( "Video getTime: %s"  % self.player.getTime() )
             #xbmc.sleep(400)
         except:
             traceback.print_exc()
-            xbmc.log( "[ script.cinema.experience ] - Video either stopped or skipped, Continuing on...", level=xbmc.LOGDEBUG)
+            utils.log( "Video either stopped or skipped, Continuing on..." )
 
     def _play_trivia( self, mpaa, genre, plist, equivalent_mpaa ):
         Launch_automation().launch_automation( triggers[0] ) # Script Start - Or where it seems to be
         if trivia_settings[ "trivia_mode" ] == 2: # Start Movie Quiz Script
-            xbmc.log( "[ script.cinema.experience ] - Starting script.moviequiz", level=xbmc.LOGNOTICE )
+            utils.log( "Starting script.moviequiz", xbmc.LOGNOTICE )
             self.start_downloader( mpaa, genre, equivalent_mpaa )
             try:
                 _MA_= xbmcaddon.Addon( "script.moviequiz" )
@@ -259,18 +237,18 @@ class Script():
                 sys.path.append( BASE_MOVIEQUIZ_PATH )
                 try:
                     import quizlib.question as question
-                    xbmc.log( "[ script.cinema.experience ] - Loaded question module", level=xbmc.LOGNOTICE )
+                    utils.log( "Loaded question module", xbmc.LOGNOTICE )
                 except ImportError:
                     traceback.print_exc()
-                    xbmc.log( "[ script.cinema.experience ] - Failed to Load question module", level=xbmc.LOGNOTICE )
+                    utils.log( "Failed to Load question module", xbmc.LOGNOTICE )
                 except:
                     traceback.print_exc()
                 try:
                     import quizlib.mq_ce_play as moviequiz
-                    xbmc.log( "[ script.cinema.experience ] - Loaded mq_ce_play module", level=xbmc.LOGNOTICE )
+                    utils.log( "Loaded mq_ce_play module", xbmc.LOGNOTICE )
                 except ImportError:
                     traceback.print_exc()
-                    xbmc.log( "[ script.cinema.experience ] - Failed to Load mq_ce_play module", level=xbmc.LOGNOTICE )
+                    utils.log( "Failed to Load mq_ce_play module", xbmc.LOGNOTICE )
                 except:
                     traceback.print_exc()
     #            pDialog.close()
@@ -286,12 +264,12 @@ class Script():
                 question_limit = trivia_settings[ "trivia_moviequiz_qlimit" ]
                 completion = moviequiz.runCinemaExperience( question_type, mode, mpaa, genre, question_limit )
                 if completion:
-                    xbmc.log( "[ script.cinema.experience ] - Completed script.moviequiz", level=xbmc.LOGNOTICE )
+                    utils.log( "Completed script.moviequiz", xbmc.LOGNOTICE )
                 else:
-                    xbmc.log( "[ script.cinema.experience ] - Failed in script.moviequiz", level=xbmc.LOGNOTICE )
+                    utils.log( "Failed in script.moviequiz", xbmc.LOGNOTICE )
             except:
                 traceback.print_exc()
-                xbmc.log( "[ script.cinema.experience ] - Failed to start script.moviequiz", level=xbmc.LOGNOTICE )
+                utils.log( "Failed to start script.moviequiz", xbmc.LOGNOTICE )
             _rebuild_playlist( plist )
             import xbmcscript_player as script
             script.Main()
@@ -304,7 +282,7 @@ class Script():
                 build_music_playlist()
             # set the proper mpaa rating user preference
             mpaa = ( trivia_settings[ "trivia_rating" ], equivalent_mpaa, )[ trivia_settings[ "trivia_limit_query" ] ]
-            xbmc.log( "[ script.cinema.experience ] - Slide MPAA Rating: %s" % equivalent_mpaa, level=xbmc.LOGNOTICE )
+            utils.log( "Slide MPAA Rating: %s" % equivalent_mpaa, xbmc.LOGNOTICE )
             # import trivia module and execute the gui
             slide_playlist = _fetch_slides( equivalent_mpaa )
             self.trivia_intro()
@@ -313,14 +291,13 @@ class Script():
                 xbmc.sleep(500) # wait .5 seconds 
                 self._wait_until_end()
             #xbmc.sleep(500) # wait .5 seconds 
-            # stop player, with out this there is a chance that one of the queued movies will start to play in the background.
             xbmc.Player().stop()
             __builtin__.plist = plist
             __builtin__.slide_playlist = slide_playlist
             __builtin__.movie_mpaa = mpaa
             __builtin__.movie_genre = genre
             from xbmcscript_trivia import Trivia
-            xbmc.log( "[ script.cinema.experience ] - Starting Trivia script", level=xbmc.LOGNOTICE )
+            utils.log( "Starting Trivia script", xbmc.LOGNOTICE )
             Launch_automation().launch_automation( triggers[2] ) # Trivia Start
             ui = Trivia( "script-CExperience-trivia.xml", __addon__.getAddonInfo('path'), "Default", "720p" )
             ui.doModal()
@@ -338,4 +315,4 @@ class Script():
             script.Main()
             xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             xbmc.sleep(500) # wait .5 seconds
-            
+            #xbmc.Player().play( playlist )
