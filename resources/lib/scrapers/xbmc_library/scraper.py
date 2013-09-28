@@ -82,30 +82,31 @@ class Main:
                     else:
                         trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "0", "6", "12", "12A", "PG", "15", "16", "18", "R18", "MA", "U", ) ]
                     # add trailer to our final list
-                    if trailer['trailer'].startswith( 'plugin://' ) and not self.settings['trailer_skip_youtube']:
-                        continue
-                    else:
-                        trailer_info = ( xbmc.getCacheThumbName( trailer['trailer'] ), # id
-                                         trailer['label'], # title
-                                         trailer['trailer'], # trailer
-                                         trailer['thumbnail'], # thumb
-                                         trailer['plot'], # plot
-                                         '', # runtime
-                                         trailer_rating, # mpaa
-                                         '', # release date
-                                         '', # studio
-                                         utils.list_to_string( trailer['genre'] ), # genre
-                                         'Trailer', # writer
-                                         '', # director 32613
-                                        )
-                        self.trailers += [ trailer_info ]
-                        # add id to watched file TODO: maybe don't add if not user preference
-                        self.watched += [ xbmc.getCacheThumbName( trailer['trailer'] ) ]
-                        # increment counter
-                        count += 1
-                        # if we have enough exit
-                        if count == self.settings[ "trailer_count" ]:
-                           break
+                    if trailer[ 'trailer' ]:
+                        if trailer['trailer'].startswith( 'plugin://' ) and self.settings['trailer_skip_youtube']:
+                            continue
+                        else:
+                            trailer_info = ( xbmc.getCacheThumbName( trailer['trailer'] ), # id
+                                             trailer['label'], # title
+                                             trailer['trailer'], # trailer
+                                             trailer['thumbnail'], # thumb
+                                             trailer['plot'], # plot
+                                             '', # runtime
+                                             trailer_rating, # mpaa
+                                             '', # release date
+                                             '', # studio
+                                             utils.list_to_string( trailer['genre'] ), # genre
+                                             'Trailer', # writer
+                                             '', # director 32613
+                                            )
+                            self.trailers += [ trailer_info ]
+                            # add id to watched file TODO: maybe don't add if not user preference
+                            self.watched += [ xbmc.getCacheThumbName( trailer['trailer'] ) ]
+                            # increment counter
+                            count += 1
+                            # if we have enough exit
+                            if count == self.settings[ "trailer_count" ]:
+                               break
             else:
                 utils.log( "No Movie Trailers found", xbmc.LOGNOTICE )
             self._save_watched()
