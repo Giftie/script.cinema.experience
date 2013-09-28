@@ -345,7 +345,9 @@ if __name__ == "__main__" :
         #xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32545 ), time_delay, image) )
         utils.log( "messy_exit: %s" % exit, xbmc.LOGNOTICE )
         if exit:
-            pass
+            prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
+            __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
+            xbmcgui.Window(10025).setProperty( "CinemaExperienceRunning", "False" )
         else:
             _clear_playlists()
             prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
