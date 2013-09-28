@@ -73,6 +73,7 @@ class Main:
                         else:
                             trailer_rating = trailer_rating.split( " " )[ 1 - ( len( trailer_rating.split( " " ) ) == 1 ) ]
                         trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+                    #FSK
                     elif trailer_rating.startswith("FSK"):
                         if trailer_rating.startswith( "FSK:" ):
                             trailer_rating = trailer_rating.split( ":" )[ 1 - ( len( trailer_rating.split( ":" ) ) == 1 ) ]
