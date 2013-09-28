@@ -3,13 +3,12 @@
 import os, sys, re
 from random import shuffle, random
 
-__script__ = "Cinema Experience"
-__scriptID__ = "script.cinema.experience"
-
-slide_settings           = sys.modules["__main__"].trivia_settings
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
+slide_settings           = sys.modules[ "__main__" ].trivia_settings
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 import xbmcgui,xbmc, xbmcaddon, xbmcvfs

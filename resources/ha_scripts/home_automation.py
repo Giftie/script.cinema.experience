@@ -6,8 +6,13 @@ import socket, sys, urllib2
 from threading import Thread
 from urllib import urlencode
 
-triggers       = sys.modules[ "__main__" ].triggers
-ha_settings    = sys.modules[ "__main__" ].ha_settings
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
+triggers                 = sys.modules[ "__main__" ].triggers
+ha_settings              = sys.modules[ "__main__" ].ha_settings
+BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+import utils
 
 class Automate:
     def __init__( self ):
@@ -23,17 +28,7 @@ class Automate:
         query["apikey"] = apikey
         response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
         response_data = response.read()
-    
-    def broadcastUDP( self, data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's former HTTP API output port is 8278
-        IPADDR = ipaddress
-        PORTNUM = port
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
-        if hasattr(socket,'SO_BROADCAST'):
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        s.connect((IPADDR, PORTNUM))
-        s.send(data)
-        s.close()
-    
+      
     def activate_ha( self, trigger = None, prev_trigger = None, mode="thread" ):
         if ha_settings[ "ha_enable" ]:
             if ha_settings[ "ha_multi_trigger" ] and prev_trigger == trigger:
@@ -55,11 +50,11 @@ class Automate:
                 
         """
         if not trigger:
-            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - No Trigger Sent, Returning", xbmc.LOGNOTICE )
+            utils.log( " - [ home_automation.py ] - No Trigger Sent, Returning", xbmc.LOGNOTICE )
             return
-        xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - activate_on( %s ) Triggered" % trigger, xbmc.LOGNOTICE )
+        utils.log( " - [ home_automation.py ] - activate_on( %s ) Triggered" % trigger, xbmc.LOGNOTICE )
         if trigger in triggers:
-            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Trigger %s" % trigger, xbmc.LOGNOTICE )
+            utils.log( " - [ home_automation.py ] - Trigger %s" % trigger, xbmc.LOGNOTICE )
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
             # place code below this line
@@ -137,4 +132,4 @@ class Automate:
             pass
             # place code below this line
         else:
-            xbmc.log( "[script.cinema.experience] - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
+            utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )

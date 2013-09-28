@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-__scriptID__ = "script.cinema.experience"
-__modname__ = "XBMC Library scraper"
 """
 XBMC Movie Library Trailer Scraper
 """
@@ -16,6 +13,8 @@ else:
 
 import xbmc, xbmcvfs
 
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
@@ -44,7 +43,6 @@ class Main:
         self.trailers = []
         self.watched_path = os.path.join( BASE_CURRENT_SOURCE_PATH, self.settings[ "trailer_scraper" ] + "_watched.txt" )
         
-
     def fetch_trailers( self ):        
         # get watched list
         self._get_watched()

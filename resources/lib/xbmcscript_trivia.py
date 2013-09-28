@@ -8,13 +8,18 @@ import os, sys, traceback, threading, re, time
 from random import shuffle, random
 import xbmc, xbmcgui, xbmcaddon, xbmcvfs
 
-trivia_settings          = sys.modules["__main__"].trivia_settings
-trailer_settings         = sys.modules["__main__"].trailer_settings
-feature_settings         = sys.modules["__main__"].feature_settings
-video_settings           = sys.modules["__main__"].video_settings
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
+triggers                 = sys.modules[ "__main__" ].triggers
+trivia_settings          = sys.modules[ "__main__" ].trivia_settings
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+video_settings           = sys.modules[ "__main__" ].video_settings
+feature_settings         = sys.modules[ "__main__" ].feature_settings
+ha_settings              = sys.modules[ "__main__" ].ha_settings
+extra_settings           = sys.modules[ "__main__" ].extra_settings
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 from music import parse_playlist

@@ -16,12 +16,12 @@ video_settings           = sys.modules[ "__main__" ].video_settings
 feature_settings         = sys.modules[ "__main__" ].feature_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
-__addon__ = xbmcaddon.Addon( __scriptID__ )
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+__addon__                = xbmcaddon.Addon( __scriptID__ )
 # language method
-__language__ = __addon__.getLocalizedString
+__language__             = __addon__.getLocalizedString
 
 number_of_features = feature_settings[ "number_of_features" ] + 1
 playback = ""
@@ -142,17 +142,7 @@ class Script():
                 utils.log( "Stopping Script", xbmc.LOGNOTICE )
                 messy_exit = False
         return messy_exit
-    
-    def broadcastUDP( self, data, port = 8278 ): # XBMC's former HTTP API output port is 8278
-        IPADDR = '255.255.255.255'
-        PORTNUM = port
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
-        if hasattr(socket,'SO_BROADCAST'):
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        s.connect((IPADDR, PORTNUM))
-        s.send(data)
-        s.close()
-    
+        
     def load_trigger_list( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
         trigger_list = utils.load_saved_list( base_path, "Trigger List" )
@@ -169,13 +159,13 @@ class Script():
                 movie_titles = movie_titles + movie_title + "<li>"
             movie_titles = movie_titles.rstrip("<li>")
             if extra_settings[ "voxcommando" ]:
-                self.broadcastUDP( "<b>CElaunch." + str( playlistsize ) + "<li>" + movie_titles + "</b>", port = 33000 )
+                utils.broadcastUDP( "<b>CElaunch." + str( playlistsize ) + "<li>" + movie_titles + "</b>", port = 33000 )
         else:
             # get the queued video info
             movie_title = playlist[ 0 ].getdescription()
             utils.log( "Feature - %s" % movie_title, xbmc.LOGNOTICE )
             if extra_settings[ "voxcommando" ]:
-                self.broadcastUDP( "<b>CElaunch<li>" + movie_title + "</b>", port = 33000 )
+                utils.broadcastUDP( "<b>CElaunch<li>" + movie_title + "</b>", port = 33000 )
 
     # No longer works in Frodo to be removed
     def _sqlquery( self, sqlquery ):

@@ -8,6 +8,7 @@ BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 home_automation_folder   = sys.modules[ "__main__" ].home_automation_folder
 home_automation_module   = sys.modules[ "__main__" ].home_automation_module
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+
 import utils
 
 if not xbmcvfs.exists( home_automation_module ):

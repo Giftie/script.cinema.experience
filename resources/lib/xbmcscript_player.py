@@ -9,26 +9,28 @@ __scriptID__ = "script.cinema.experience"
 """
 ############################################################
 # main imports
-import sys
-import os
-import xbmcgui, xbmc, xbmcaddon, xbmcvfs
-import traceback, threading, re
+import sys, os, traceback, threading, re
 from urllib import quote_plus
 from random import shuffle, random
 
-trivia_settings          = sys.modules["__main__"].trivia_settings
-trailer_settings         = sys.modules["__main__"].trailer_settings
-feature_settings         = sys.modules["__main__"].feature_settings
-video_settings           = sys.modules["__main__"].video_settings
-triggers                 = sys.modules["__main__"].triggers
-audio_formats            = sys.modules["__main__"].audio_formats
-BASE_CACHE_PATH          = sys.modules["__main__"].BASE_CACHE_PATH
-BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
-BASE_CURRENT_SOURCE_PATH = sys.modules["__main__"].BASE_CURRENT_SOURCE_PATH
-sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-import utils
+import xbmcgui, xbmc, xbmcaddon, xbmcvfs
 
-_A_ = xbmcaddon.Addon( __scriptID__ )
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
+triggers                 = sys.modules[ "__main__" ].triggers
+trivia_settings          = sys.modules[ "__main__" ].trivia_settings
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+video_settings           = sys.modules[ "__main__" ].video_settings
+feature_settings         = sys.modules[ "__main__" ].feature_settings
+ha_settings              = sys.modules[ "__main__" ].ha_settings
+extra_settings           = sys.modules[ "__main__" ].extra_settings
+BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+__addon__                = xbmcaddon.Addon( __scriptID__ )
+# language method
+__language__             = __addon__.getLocalizedString
 
 from ce_playlist import _get_special_items, _get_trailers, _set_trailer_info, _get_queued_video_info
 import utils
@@ -44,7 +46,7 @@ class Main:
         self._start()
         self._save_trigger_list()
         # Set play mode back to the original setting
-        _A_.setSetting( id='trailer_play_mode', value='%d' % int( self._play_mode ) )        
+        __addon__.setSetting( id='trailer_play_mode', value='%d' % int( self._play_mode ) )        
 
     def _save_trigger_list( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trigger_list.txt" )
@@ -71,11 +73,11 @@ class Main:
                 else:
                     # Change trailer play mode to stream if no download 
                     utils.log( "Empty File: downloaded_trailers.txt" )
-                    _A_.setSetting( id='trailer_play_mode', value='%d' % 0 )
+                    __addon__.setSetting( id='trailer_play_mode', value='%d' % 0 )
             else:
                 # Change trailer play mode to stream if no download 
                 utils.log( "File Does Not Exists: downloaded_trailers.txt" )
-                _A_.setSetting( id='trailer_play_mode', value='%d' % 0 )
+                __addon__.setSetting( id='trailer_play_mode', value='%d' % 0 )
         else:
             pass
                     

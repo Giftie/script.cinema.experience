@@ -3,15 +3,12 @@ import traceback, os, re, sys
 from urllib import quote_plus
 from random import shuffle, random
 
-__script__ = "Cinema Experience"
-__scriptID__ = "script.cinema.experience"
-__modname__ = "ce_playlist.py"
+import xbmc, xbmcaddon, xbmcgui, xbmcvfs
 
-import xbmc, xbmcaddon, xbmcgui
-
-log_message = "[ " + __scriptID__ + " ] - [ " + __modname__ + " ]"
 log_sep = "-"*70
 
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
 trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 feature_settings         = sys.modules[ "__main__" ].feature_settings
@@ -25,7 +22,6 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from music import parse_playlist
 from json_utils import find_movie_details, retrieve_json_dict
 import utils
-import xbmcvfs
 from folder import absolute_listdir
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):

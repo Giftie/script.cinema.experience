@@ -117,3 +117,13 @@ def save_list( f_name, f_list, type ):
     except:
         log( "Error Loading Saved List, %s" % type, xbmc.LOGNOTICE )
         traceback.print_exc()
+        
+def broadcastUDP( self, data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's former HTTP API output port is 8278
+    IPADDR = ipaddress
+    PORTNUM = port
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
+    if hasattr(socket,'SO_BROADCAST'):
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    s.connect((IPADDR, PORTNUM))
+    s.send(data)
+    s.close()

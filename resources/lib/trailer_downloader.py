@@ -1,27 +1,14 @@
 # -*- coding: utf-8 -*-
-
-__script__ = "Cinema Experience"
-__scriptID__ = "script.cinema.experience"
-__modname__ = "trailer_downloader.py"
-
-import sys
-import os
-import xbmcgui
-import xbmc
-import xbmcaddon
-import traceback, threading
-import xbmcvfs
-
-_A_ = xbmcaddon.Addon( __scriptID__ )
-# language method
-_L_ = _A_.getLocalizedString
-trailer_settings   = sys.modules["__main__"].trailer_settings
-
+import sys, os, traceback, threading
+import xbmcgui, xbmc, xbmcaddon, xbmcvfs
 from urllib import quote_plus
 from random import shuffle, random
 
-BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ), os.path.basename( _A_.getAddonInfo('path') ) )
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( _A_.getAddonInfo('path'), 'resources' ) )
+__script__               = sys.modules[ "__main__" ].__script__
+__scriptID__             = sys.modules[ "__main__" ].__scriptID__
+trailer_settings         = sys.modules[ "__main__" ].trailer_settings
+BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
+BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 from download import download
 from ce_playlist import _get_trailers
