@@ -915,3 +915,23 @@ msgstr ""
 msgctxt "#32934"
 msgid "Trigger at start of the 3D Trailer(s)"
 msgstr ""
+
+msgctxt "#32935"
+msgid "3D Movie Outro"
+msgstr ""
+
+msgctxt "#32936"
+msgid "3D Movie Outro Video(s)"
+msgstr ""
+
+msgctxt "#32937"
+msgid "3D Movie Outro Video File"
+msgstr ""
+
+msgctxt "#32938"
+msgid "3D Movie Outro Video Folder"
+msgstr ""
+
+msgctxt "#32939"
+msgid "Trigger at start of the 3D Movie Intro(s)"
+msgstr ""

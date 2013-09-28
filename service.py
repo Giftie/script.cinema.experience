@@ -19,7 +19,8 @@ null = None
 
 triggers                    = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
                                 "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "Feature Presentation Intro", "Audio Format", 
-                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume", "3D Trailer", "3D Movie Intro" )
+                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End",
+                                "Pause", "Resume", "3D Trailer", "3D Movie Intro", "3D Movie Outro" )
 
 override_play           = eval( __setting__( "override_play" ) )
 
@@ -40,8 +41,9 @@ ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) 
                                    "ha_movie": eval( __setting__( "ha_movie" ) ),
                                "ha_fpv_outro": eval( __setting__( "ha_fpv_outro" ) ),
                                "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
-                            "ha_intermission": eval( __setting__( "ha_intermission" ) ),
+                            "ha_intermission": eval( __setting__( "ha_intermission" ) )
                                 "ha_3d_intro": eval( __setting__( "ha_3d_intro" ) ),
+                                "ha_3d_outro": eval( __setting__( "ha_3d_outro" ) ),
                               "ha_3d_trailer": eval( __setting__( "ha_3d_trailer" ) ),
                               "ha_script_end": eval( __setting__( "ha_script_end" ) ),
                                   "ha_paused": eval( __setting__( "ha_paused" ) ),
@@ -113,7 +115,7 @@ class Main():
     def update_settings( self ):
         log( "service.py - Settings loaded" )
         self.override_play           = eval( __setting__( "override_play" ) )
-        self.ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) ),
+        self.ha_settings             = {      "ha_enable": eval( __setting__( "ha_enable" ) ),
                                        "ha_multi_trigger": eval( __setting__( "ha_multi_trigger" ) ),
                                         "ha_script_start": eval( __setting__( "ha_script_start" ) ),
                                         "ha_trivia_intro": eval( __setting__( "ha_trivia_intro" ) ),
@@ -132,6 +134,7 @@ class Main():
                                            "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
                                         "ha_intermission": eval( __setting__( "ha_intermission" ) ),
                                             "ha_3d_intro": eval( __setting__( "ha_3d_intro" ) ),
+                                            "ha_3d_outro": eval( __setting__( "ha_3d_outro" ) ),
                                           "ha_3d_trailer": eval( __setting__( "ha_3d_trailer" ) ),
                                           "ha_script_end": eval( __setting__( "ha_script_end" ) ),
                                               "ha_paused": eval( __setting__( "ha_paused" ) ),

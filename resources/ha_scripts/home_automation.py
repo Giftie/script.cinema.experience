@@ -116,6 +116,9 @@ class Automate:
         elif trigger == "3D Movie Intro" and ha_setting[ "ha_3d_intro" ]:
             pass
             # place code below this line
+        elif trigger == "3D Movie Outro" and ha_setting[ "ha_3d_outro" ]:
+            pass
+            # place code below this line
         #3D Trailers
         elif trigger == "3D Trailer" and ha_setting [ "ha_3d_trailer" ]:
             pass
