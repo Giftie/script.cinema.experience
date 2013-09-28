@@ -110,7 +110,11 @@ video_settings             = { "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float
                                 "3d_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "3d_intro" ) ) ) ],
                            "3d_intro_type": ( "file", "folder" )[ int( float( __setting__( "3d_intro" ) ) ) > 1 ],
                            "3d_intro_file": xbmc.translatePath( __setting__( "3d_intro_file" ) ).decode('utf-8'),
-                         "3d_intro_folder": xbmc.translatePath( __setting__( "3d_intro_folder" ) ).decode('utf-8')
+                         "3d_intro_folder": xbmc.translatePath( __setting__( "3d_intro_folder" ) ).decode('utf-8'),
+                                "3d_outro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __setting__( "3d_outro" ) ) ) ],
+                           "3d_outro_type": ( "file", "folder" )[ int( float( __setting__( "3d_outro" ) ) ) > 1 ],
+                           "3d_outro_file": xbmc.translatePath( __setting__( "3d_outro_file" ) ).decode('utf-8'),
+                         "3d_outro_folder": xbmc.translatePath( __setting__( "3d_outro_folder" ) ).decode('utf-8')
                                }
 
 feature_settings             = { "enable_notification": eval( __setting__( "enable_notification" ) ),

@@ -93,7 +93,10 @@
         <setting id="3d_movie_tags" type="text" label="32925" enable="!eq(-1,0)" default="3D & HSBS & H-SBS & HOU & H-OU" />
         <setting id="3d_intro_file" type="video" visible="!eq(-2,1)" label="32928" default="" />
         <setting id="3d_intro_folder" type="folder" visible="!gt(-3,1)" source="video" label="32929" default="" />
-        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-4,0)" default="true" />
+        <setting id="3d_outro" type="enum" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32924" default="0" />
+        <setting id="3d_outro_file" type="video" visible="!eq(-5,1)" label="32928" default="" />
+        <setting id="3d_outro_folder" type="folder" visible="!gt(-6,1)" source="video" label="32929" default="" />
+        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-7,0)" default="true" />
         <setting id="3d_trailer_folder" type="folder" label="32931" visible="eq(-1,true)" default="" />
     </category>
     
@@ -133,8 +136,9 @@
         <setting id="ha_fpv_outro" type="bool" label="32915" visible="eq(-16,true)" default="false"/>
         <setting id="ha_mte_outro" type="bool" label="32916" visible="eq(-17,true)" default="false"/>
         <setting id="ha_3d_intro" type="bool" label="32933" visible="eq(-18,true)" default="false" />
-        <setting id="ha_3d_trailer" type="bool" label="32934" visible="eq(-19,true" default="false" />
-        <setting id="ha_script_end" type="bool" label="32917" visible="eq(-20,true)" default="false" />
+        <setting id="ha_3d_outro" type="bool" label="32935" visible="eq(-19,true)" default="false" />
+        <setting id="ha_3d_trailer" type="bool" label="32934" visible="eq(-20,true" default="false" />
+        <setting id="ha_script_end" type="bool" label="32917" visible="eq(-21,true)" default="false" />
         <setting type="sep" />
         <setting id="ha_paused" type="bool" label="32918" visible="eq(-22,true)" default="false" />
         <setting id="ha_resumed" type="bool" label="32919" visible="eq(-23,true)" default="false" />
