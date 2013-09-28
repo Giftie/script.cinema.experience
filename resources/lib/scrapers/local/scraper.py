@@ -53,6 +53,7 @@ class Main:
         # randomize the groups and create our play list
         utils.log( "Shuffling Trailers", xbmc.LOGNOTICE )
         shuffle( self.tmp_trailers )
+        count = 0
         # now create our final playlist
         for trailer in self.tmp_trailers:
             # user preference to skip watch trailers
