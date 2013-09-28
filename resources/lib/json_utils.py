@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import xbmc, xbmcaddon
-import traceback
+import traceback, sys, os
 
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
