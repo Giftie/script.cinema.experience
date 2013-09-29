@@ -366,7 +366,7 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "Genre: %s" % genre )
     utils.log( "MPAA: %s" % short_mpaa )
     utils.log( "Audio: %s" % audio )
-    xbmc.log( "%s - 3D Movie: %s" % ( "False", "True" )[ is_3d_movie ], level=xbmc.LOGDEBUG )
+    utils.log( "3D Movie: %s" % ( "False", "True" )[ is_3d_movie ] )
     if video_settings[ "audio_videos_folder" ]:
         utils.log( "Folder: %s" % ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) )
     utils.log( "%s" % log_sep )

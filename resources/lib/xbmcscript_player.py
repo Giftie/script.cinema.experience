@@ -87,7 +87,7 @@ class Main:
         trailer_list = load_saved_list( base_path, "Downloaded Trailers" )
         
     def _start( self ):
-        mpaa = audio = genre = movie = equivalent_mpaa = ""
+        mpaa = audio = genre = movie = equivalent_mpaa, is_3d_movie = ""
         try:
             # create the playlist
             self.playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
@@ -96,11 +96,11 @@ class Main:
             # add the intermission videos and audio files for the 2, third, etc movies
             if self.playlistsize > 1:
                 if feature_settings[ "intermission_video" ] > 0 or feature_settings[  "intermission_audio" ] or feature_settings[ "intermission_ratings" ]:
-                    mpaa, audio, genre, movie, equivalent_mpaa = self._add_intermission_videos()
+                    mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = self._add_intermission_videos()
             # otherwise just build for a single video
             else:
                 mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = 0 )
-            self._create_playlist( mpaa, audio, genre, movie, equivalent_mpaa )
+            self._create_playlist( mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie )
             # play the trivia slide show
         except:
             traceback.print_exc()
@@ -171,9 +171,9 @@ class Main:
             index_count += 1
         # return info from first movie in playlist
         mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( 0 )
-        return mpaa, audio, genre, movie, equivalent_mpaa
+        return mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie
 
-    def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa ):
+    def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie ):
         # TODO: try to get a local thumb for special videos?
         utils.log( "Building Cinema Experience Playlist", xbmc.LOGNOTICE )
         # Add Countdown video

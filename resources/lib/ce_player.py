@@ -89,7 +89,7 @@ class Script():
                 xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32544 ), time_delay, image) )
             _clear_playlists()
         else:
-            mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = 0 )
+            mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = 0 )
             plist = _store_playlist() # need to store movie playlist
             self._play_trivia( mpaa, genre, plist, equivalent_mpaa )
             mplaylist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
