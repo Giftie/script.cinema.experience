@@ -1,6 +1,14 @@
 3.0.7
 - fix       - add missing module import
 - add       - SABnzbd control
+- change    - convert all file access to use the xbmcvfs module.  Thanks 
+- fix       - fixed skipping trailers that use plug-ins to play
+- fix       - properly end script - clear all variables
+- change    - remove old trailer downloader module
+- change    - remove jsonrpc folder/file listing in favour of xbmcvfs.listdir()
+- change    - change all logging to use the utils.log() function
+- change    - change method of waiting for movie to play(override play button setting)
+- change    - general code clean up
 
 3.0.6
 - fix       - version bump to fix Skin folder name on XBMC Addon Git
