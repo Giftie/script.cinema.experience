@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- 
+import sys, os
 import xbmcgui, xbmc, xbmcaddon, xbmcvfs
 
 __script__               = sys.modules[ "__main__" ].__script__
@@ -10,7 +12,6 @@ BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 import utils
-
 
 true = True
 false = False
@@ -136,7 +137,7 @@ class settings():
                                          "intermission_audio": eval( __setting__( "intermission_audio" ) ),
                                        "intermission_ratings": eval( __setting__( "intermission_ratings" ) ),
                                                 "voxcommando": eval( __setting__( "voxcommando" ) ),
-                                              "override_play": eval( __setting__( "override_play" ) 
+                                              "override_play": eval( __setting__( "override_play" ) )
                                   }
 
     self.audio_formats          = {                    "dts": "DTS",
