@@ -20,6 +20,16 @@ BASE_RESOURCE_PATH       = xbmc.translatePath( os.path.join( __addon__.getAddonI
 home_automation_folder   = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" )
 home_automation_module   = os.path.join( home_automation_folder, "home_automation.py" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+from settings import *
+settings = settings()
+
+trivia_settings  = settings.trivia_settings
+trailer_settings = settings.trailer_settings
+ha_settings      = settings.ha_settings
+video_settings   = settings.video_settings
+extra_settings   = settings.extra_settings
+audio_formats    = settings.audio_formats
+triggers         = settings.triggers
 
 playback = ""
 header = "Cinema Experience"
@@ -34,15 +44,6 @@ from ce_playlist import _get_special_items, build_music_playlist, _rebuild_playl
 from slides import _fetch_slides
 import utils
 from launch_automation import Launch_automation
-from settings import *
-
-trivia_settings  = settings.trivia_settings
-trailer_settings = settings.trailer_settings
-ha_settings      = settings.ha_settings
-video_settings   = settings.video_settings
-extra_settings   = settings.extra_settings
-audio_formats    = settings.audio_formats
-triggers         = settings.triggers
 
 number_of_features = extra_settings[ "number_of_features" ] + 1
 
