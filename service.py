@@ -10,43 +10,20 @@ __scriptID__     = __addonid__
 
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( __addon__.getAddonInfo('path') ) )
-sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-import utils
-
 home_automation_folder   = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" )
 home_automation_module   = os.path.join( home_automation_folder, "home_automation.py" )
-true = True
-false = False
-null = None
+sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-triggers                    = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
-                                "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "Feature Presentation Intro", "Audio Format", 
-                                "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume" )
+import utils
+from settings import *
 
-override_play           = eval( __setting__( "override_play" ) )
-
-ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) ),
-                           "ha_multi_trigger": eval( __setting__( "ha_multi_trigger" ) ),
-                            "ha_script_start": eval( __setting__( "ha_script_start" ) ),
-                            "ha_trivia_intro": eval( __setting__( "ha_trivia_intro" ) ),
-                            "ha_trivia_start": eval( __setting__( "ha_trivia_start" ) ),
-                            "ha_trivia_outro": eval( __setting__( "ha_trivia_outro" ) ),
-                               "ha_mte_intro": eval( __setting__( "ha_mte_intro" ) ),
-                               "ha_cav_intro": eval( __setting__( "ha_cav_intro" ) ),
-                           "ha_trailer_start": eval( __setting__( "ha_trailer_start" ) ),
-                               "ha_cav_outro": eval( __setting__( "ha_cav_outro" ) ),
-                               "ha_fpv_intro": eval( __setting__( "ha_fpv_intro" ) ),
-                             "ha_mpaa_rating": eval( __setting__( "ha_mpaa_rating" ) ),
-                         "ha_countdown_video": eval( __setting__( "ha_countdown_video" ) ),
-                            "ha_audio_format": eval( __setting__( "ha_audio_format" ) ),
-                                   "ha_movie": eval( __setting__( "ha_movie" ) ),
-                               "ha_fpv_outro": eval( __setting__( "ha_fpv_outro" ) ),
-                               "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
-                            "ha_intermission": eval( __setting__( "ha_intermission" ) ),
-                              "ha_script_end": eval( __setting__( "ha_script_end" ) ),
-                                  "ha_paused": eval( __setting__( "ha_paused" ) ),
-                                 "ha_resumed": eval( __setting__( "ha_resumed" ) )
-                          }
+feature_settings = settings.feature_settings
+trivia_settings  = settings.trivia_settings
+trailer_settings = settings.trailer_settings
+ha_settings      = settings.ha_settings
+video_settings   = settings.video_settings
+audio_formats    = settings.audio_formats
+triggers         = settings.triggers
 
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
 
@@ -74,28 +51,28 @@ class CE_Player( xbmc.Player ):
         self.enabled = kwargs['enabled']
     
     def onPlayBackStarted( self ):
-        xbmc.sleep( 1000 )
-        if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+        xbmc.sleep( 500 )
+        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Started' )
     
     def onPlayBackEnded( self ):
         # Will be called when xbmc stops playing a file
-        if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Ended" )
     
     def onPlayBackStopped( self ):
         # Will be called when user stops xbmc playing a file
-        if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Stopped" )
     
     def onPlayBackPaused( self ):
-        if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Paused' )
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
     
     def onPlayBackResumed( self ):
-        if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Resumed' )
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
@@ -112,44 +89,31 @@ class Main():
     
     def update_settings( self ):
         utils.log( "service.py - Settings loaded" )
-        self.override_play           = eval( __setting__( "override_play" ) )
-        self.ha_settings             = {       "ha_enable": eval( __setting__( "ha_enable" ) ),
-                                       "ha_multi_trigger": eval( __setting__( "ha_multi_trigger" ) ),
-                                        "ha_script_start": eval( __setting__( "ha_script_start" ) ),
-                                        "ha_trivia_intro": eval( __setting__( "ha_trivia_intro" ) ),
-                                        "ha_trivia_start": eval( __setting__( "ha_trivia_start" ) ),
-                                        "ha_trivia_outro": eval( __setting__( "ha_trivia_outro" ) ),
-                                           "ha_mte_intro": eval( __setting__( "ha_mte_intro" ) ),
-                                           "ha_cav_intro": eval( __setting__( "ha_cav_intro" ) ),
-                                       "ha_trailer_start": eval( __setting__( "ha_trailer_start" ) ),
-                                           "ha_cav_outro": eval( __setting__( "ha_cav_outro" ) ),
-                                           "ha_fpv_intro": eval( __setting__( "ha_fpv_intro" ) ),
-                                         "ha_mpaa_rating": eval( __setting__( "ha_mpaa_rating" ) ),
-                                     "ha_countdown_video": eval( __setting__( "ha_countdown_video" ) ),
-                                        "ha_audio_format": eval( __setting__( "ha_audio_format" ) ),
-                                               "ha_movie": eval( __setting__( "ha_movie" ) ),
-                                           "ha_fpv_outro": eval( __setting__( "ha_fpv_outro" ) ),
-                                           "ha_mte_outro": eval( __setting__( "ha_mte_outro" ) ),
-                                        "ha_intermission": eval( __setting__( "ha_intermission" ) ),
-                                          "ha_script_end": eval( __setting__( "ha_script_end" ) ),
-                                              "ha_paused": eval( __setting__( "ha_paused" ) ),
-                                             "ha_resumed": eval( __setting__( "ha_resumed" ) )
-                                      }
-        override_play = self.override_play
-        ha_settings = self.ha_settings
+        settings.start()
+        trivia_settings  = settings.trivia_settings
+        trailer_settings = settings.trailer_settings
+        ha_settings      = settings.ha_settings
+        video_settings   = settings.video_settings
+        extra_settings   = settings.extra_settings
+        audio_formats    = settings.audio_formats
+        triggers         = settings.triggers
         
     def _daemon( self ):
+        xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
         while ( not xbmc.abortRequested ):
+            CE_Running = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True"
+            CE_Triggered = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceTriggered" ) == "True"
             if not xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
                 xbmc.sleep( 250 )
             else:
-                if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and override_play and not xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+                if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and extra_settings[ "override_play" ] and not CE_Running or CE_Triggered:
                     #log( 'Something added to playlist.  Cinema Experince Running? %s' % xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) )
                     while not int( xbmcgui.getCurrentWindowId() ) == 12005:
                         xbmc.sleep( 100 )
                         #log( 'Waiting for full screen video' )
                     xbmc.Player().stop()
                     xbmc.executebuiltin( "RunScript(script.cinema.experience,fromplay)" )
+                    xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "True" )
                     xbmc.sleep( 3000 )
                 else:
                     xbmc.sleep( 250 )

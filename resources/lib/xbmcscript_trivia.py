@@ -14,7 +14,6 @@ triggers                 = sys.modules[ "__main__" ].triggers
 trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
-feature_settings         = sys.modules[ "__main__" ].feature_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH

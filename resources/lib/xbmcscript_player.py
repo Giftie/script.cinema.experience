@@ -21,7 +21,6 @@ triggers                 = sys.modules[ "__main__" ].triggers
 trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
-feature_settings         = sys.modules[ "__main__" ].feature_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
 audio_formats            = sys.modules[ "__main__" ].audio_formats
@@ -41,7 +40,7 @@ class Main:
         self.trigger_list = []
         self.downloaded_trailers = []
         self._play_mode = trailer_settings[ "trailer_play_mode" ]
-        self.number_of_features = feature_settings[ "number_of_features" ] + 1
+        self.number_of_features = extra_settings[ "number_of_features" ] + 1
         self.playlistsize = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         self._build_trigger_list()
         self._start()
@@ -95,7 +94,7 @@ class Main:
             # if multiple features is greater than 1(not a single feature)
             # add the intermission videos and audio files for the 2, third, etc movies
             if self.playlistsize > 1:
-                if feature_settings[ "intermission_video" ] > 0 or feature_settings[  "intermission_audio" ] or feature_settings[ "intermission_ratings" ]:
+                if extra_settings[ "intermission_video" ] > 0 or extra_settings[  "intermission_audio" ] or extra_settings[ "intermission_ratings" ]:
                     mpaa, audio, genre, movie, equivalent_mpaa = self._add_intermission_videos()
             # otherwise just build for a single video
             else:
@@ -113,14 +112,14 @@ class Main:
             mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = index_count )
             #count = index_count
             # add intermission video
-            if feature_settings[ "intermission_video" ] > 0:
-                utils.log( "Inserting intermission Video(s): %s" % feature_settings[ "intermission_video" ], xbmc.LOGNOTICE )
+            if extra_settings[ "intermission_video" ] > 0:
+                utils.log( "Inserting intermission Video(s): %s" % extra_settings[ "intermission_video" ], xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=feature_settings[ "intermission_video" ],
-                                           path=( feature_settings[ "intermission_video_file" ], feature_settings[ "intermission_video_folder" ], )[ feature_settings[ "intermission_video_type" ] == "folder" ],
+                                          items=extra_settings[ "intermission_video" ],
+                                           path=( extra_settings[ "intermission_video_file" ], extra_settings[ "intermission_video_folder" ], )[ extra_settings[ "intermission_video_type" ] == "folder" ],
                                           genre="Intermission",
                                          writer="Intermission",
                                           index=index_count
@@ -128,12 +127,12 @@ class Main:
                 for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
                     # Insert Intermission Label into Trigger List
                     self.trigger_list.insert( index_count, "Intermission" ) 
-                if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and feature_settings[ "intermission_video" ] > 1:
-                    index_count += feature_settings[ "intermission_video" ] - 1
-                elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and feature_settings[ "intermission_video" ] == 1:
-                    index_count += feature_settings[ "intermission_video" ]
+                if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and extra_settings[ "intermission_video" ] > 1:
+                    index_count += extra_settings[ "intermission_video" ] - 1
+                elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and extra_settings[ "intermission_video" ] == 1:
+                    index_count += extra_settings[ "intermission_video" ]
             # get rating video
-            if video_settings[ "enable_ratings" ] and feature_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
+            if video_settings[ "enable_ratings" ] and extra_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
                 utils.log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -151,7 +150,7 @@ class Main:
                 if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size:
                     index_count += 1
             # get Dolby/DTS videos
-            if video_settings[ "enable_audio" ]  and feature_settings[ "intermission_audio" ] and video_settings[ "audio_videos_folder" ]:
+            if video_settings[ "enable_audio" ]  and extra_settings[ "intermission_audio" ] and video_settings[ "audio_videos_folder" ]:
                 utils.log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()

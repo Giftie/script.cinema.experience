@@ -13,7 +13,6 @@ triggers                 = sys.modules[ "__main__" ].triggers
 trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
-feature_settings         = sys.modules[ "__main__" ].feature_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
@@ -23,10 +22,9 @@ __addon__                = xbmcaddon.Addon( __scriptID__ )
 # language method
 __language__             = __addon__.getLocalizedString
 
-number_of_features = feature_settings[ "number_of_features" ] + 1
+number_of_features = extra_settings[ "number_of_features" ] + 1
 playback = ""
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
-headings = ( __language__(32600), __language__(32601), __language__(32602), __language__(32603), __language__(32604), __language__(32605), __language__(32606), __language__(32607), __language__(32608), __language__(32609), __language__(32610), __language__(32611), __language__(32612) )
 header = "Cinema Experience"
 time_delay = 200
 image = xbmc.translatePath( os.path.join( __addon__.getAddonInfo("path"), "icon.png") ).decode('utf-8')
@@ -59,7 +57,7 @@ class Script():
             # wait until Video Library shows
             while not xbmc.getCondVisibility( "Container.Content(movies)" ):
                 pass
-            if feature_settings[ "enable_notification" ]:
+            if extra_settings[ "enable_notification" ]:
                 xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32546 ), 300000, image) )
             # wait until playlist is full to the required number of features
             utils.log( "Waiting for queue to be filled with %s Feature films" % number_of_features, xbmc.LOGNOTICE )
@@ -69,7 +67,7 @@ class Script():
                     utils.log( "User queued %s of %s Feature films" % (playlist.size(), number_of_features), xbmc.LOGNOTICE )
                     header1 = header + " - Feature " + "%d" % playlist.size()
                     message = __language__( 32543 ) + playlist[playlist.size() -1].getdescription()
-                    if feature_settings[ "enable_notification" ]:
+                    if extra_settings[ "enable_notification" ]:
                         xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header1, message, time_delay, image) )
                     count = playlist.size()
                     xbmc.sleep(time_delay*2)
@@ -80,12 +78,12 @@ class Script():
             if not early_exit:
                 header1 = header + " - Feature " + "%d" % playlist.size()
                 message = __language__( 32543 ) + playlist[playlist.size() -1].getdescription()
-                if feature_settings[ "enable_notification" ]:
+                if extra_settings[ "enable_notification" ]:
                     xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header1, message, time_delay, image) )
                 early_exit = False
         # If for some reason the limit does not get reached and the window changed, cancel script
         if playlist.size() < number_of_features and library_view != "oldway":
-            if feature_settings[ "enable_notification" ]:
+            if extra_settings[ "enable_notification" ]:
                 xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32544 ), time_delay, image) )
             _clear_playlists()
         else:
@@ -255,7 +253,7 @@ class Script():
                 self.trivia_intro()        
                 if playlist.size() > 0:
                     self._wait_until_end()
-                xbmc.sleep(500) # wait .5 seconds 
+                xbmc.sleep( 500 ) # wait .5 seconds 
                 xbmc.Player().stop()
                 path = _MA_.getAddonInfo('path')
                 question_type = 1
@@ -288,7 +286,7 @@ class Script():
             self.trivia_intro()
             if playlist.size() > 0:
                 Launch_automation().launch_automation( triggers[1] ) # Trivia Intro
-                xbmc.sleep(500) # wait .5 seconds 
+                xbmc.sleep( 500 ) # wait .5 seconds 
                 self._wait_until_end()
             #xbmc.sleep(500) # wait .5 seconds 
             xbmc.Player().stop()
@@ -314,5 +312,5 @@ class Script():
             import xbmcscript_player as script
             script.Main()
             xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
-            xbmc.sleep(500) # wait .5 seconds
+            xbmc.sleep( 500 ) # wait .5 seconds
             #xbmc.Player().play( playlist )
