@@ -1,23 +1,22 @@
 import xbmc, xbmcaddon, xbmcgui, xbmcvfs
 import os, sys
 
-__addon__        = xbmcaddon.Addon()
-__addonversion__ = __addon__.getAddonInfo('version')
-__addonid__      = __addon__.getAddonInfo('id')
-__addonname__    = __addon__.getAddonInfo('name')
-__setting__      = __addon__.getSetting
-__scriptID__     = __addonid__
-
-BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
+__addon__                = xbmcaddon.Addon()
+__version__              = __addon__.getAddonInfo('version')
+__scriptID__             = __addon__.getAddonInfo('id')
+__script__               = __addon__.getAddonInfo('name')
+__addonname__            = __script__
+BASE_CACHE_PATH          = os.path.join( xbmc.translatePath( "special://profile" ).decode('utf-8'), "Thumbnails", "Video" )
 BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/addon_data/" ).decode('utf-8'), os.path.basename( __addon__.getAddonInfo('path') ) )
+BASE_RESOURCE_PATH       = xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode('utf-8'), 'resources' ) )
 home_automation_folder   = os.path.join( BASE_CURRENT_SOURCE_PATH, "ha_scripts" )
 home_automation_module   = os.path.join( home_automation_folder, "home_automation.py" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
 import utils
 from settings import *
+settings = settings()
 
-feature_settings = settings.feature_settings
 trivia_settings  = settings.trivia_settings
 trailer_settings = settings.trailer_settings
 ha_settings      = settings.ha_settings
@@ -97,6 +96,8 @@ class Main():
         extra_settings   = settings.extra_settings
         audio_formats    = settings.audio_formats
         triggers         = settings.triggers
+        utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, "service.py" )
+    
         
     def _daemon( self ):
         xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
@@ -119,9 +120,9 @@ class Main():
                     xbmc.sleep( 250 )
                 
 if (__name__ == "__main__"):
-    utils.log( 'Cinema Experience service script version %s started' % __addonversion__ )
+    utils.log( 'Cinema Experience service script version %s started' % __version__ )
     Main()
     del CE_Player
     del CE_Monitor
     del Main
-    utils.log( 'Cinema Experience service script version %s stopped' % __addonversion__ )
+    utils.log( 'Cinema Experience service script version %s stopped' % __version__ )
