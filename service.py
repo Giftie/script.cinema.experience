@@ -22,6 +22,7 @@ trailer_settings = settings.trailer_settings
 ha_settings      = settings.ha_settings
 video_settings   = settings.video_settings
 audio_formats    = settings.audio_formats
+extra_settings   = settings.extra_settings
 triggers         = settings.triggers
 
 #Check to see if module is moved to /userdata/addon_data/script.cinema.experience
@@ -76,53 +77,46 @@ class CE_Player( xbmc.Player ):
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
     
-class Main():
-    def __init__(self):
-        self._init_vars()
-        self.update_settings
-        self._daemon()
+        pass
         
-    def _init_vars(self):
-        self.Player = CE_Player( enabled = True )
-        self.Monitor = CE_Monitor( enabled = True, update_settings = self.update_settings )
-    
-    def update_settings( self ):
-        utils.log( "service.py - Settings loaded" )
-        settings.start()
-        trivia_settings  = settings.trivia_settings
-        trailer_settings = settings.trailer_settings
-        ha_settings      = settings.ha_settings
-        video_settings   = settings.video_settings
-        extra_settings   = settings.extra_settings
-        audio_formats    = settings.audio_formats
-        triggers         = settings.triggers
-        utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, "service.py" )
-    
-        
-    def _daemon( self ):
-        xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
-        while ( not xbmc.abortRequested ):
-            CE_Running = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True"
-            CE_Triggered = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceTriggered" ) == "True"
-            if not xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
-                xbmc.sleep( 250 )
+def _daemon( ):
+    settings.start()
+    xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
+    while ( not xbmc.abortRequested ):
+        CE_Running = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True"
+        CE_Triggered = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceTriggered" ) == "True"
+        if not xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
+            xbmc.sleep( 250 )
+        else:
+            if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and settings.extra_settings[ "override_play" ] and not ( CE_Running or CE_Triggered ):
+                #log( 'Something added to playlist.  Cinema Experince Running? %s' % xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) )
+                while not int( xbmcgui.getCurrentWindowId() ) == 12005:
+                    xbmc.sleep( 100 )
+                    #log( 'Waiting for full screen video' )
+                xbmc.Player().stop()
+                xbmc.executebuiltin( "RunScript(script.cinema.experience,fromplay)" )
+                xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "True" )
+                xbmc.sleep( 3000 )
             else:
-                if int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) > 0 and extra_settings[ "override_play" ] and not CE_Running or CE_Triggered:
-                    #log( 'Something added to playlist.  Cinema Experince Running? %s' % xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) )
-                    while not int( xbmcgui.getCurrentWindowId() ) == 12005:
-                        xbmc.sleep( 100 )
-                        #log( 'Waiting for full screen video' )
-                    xbmc.Player().stop()
-                    xbmc.executebuiltin( "RunScript(script.cinema.experience,fromplay)" )
-                    xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "True" )
-                    xbmc.sleep( 3000 )
-                else:
-                    xbmc.sleep( 250 )
+                xbmc.sleep( 250 )
+
+def update_settings():
+    utils.log( "service.py - Settings loaded" )
+    settings.start()
+    trivia_settings  = settings.trivia_settings
+    trailer_settings = settings.trailer_settings
+    ha_settings      = settings.ha_settings
+    video_settings   = settings.video_settings
+    extra_settings   = settings.extra_settings
+    audio_formats    = settings.audio_formats
+    triggers         = settings.triggers
+    utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, "service.py" )
                 
 if (__name__ == "__main__"):
     utils.log( 'Cinema Experience service script version %s started' % __version__ )
-    Main()
-    del CE_Player
-    del CE_Monitor
-    del Main
+    Player = CE_Player( enabled = True )
+    Monitor = CE_Monitor( enabled = True, update_settings = update_settings )
+    _daemon()
+    del Monitor
+    del Player
     utils.log( 'Cinema Experience service script version %s stopped' % __version__ )
