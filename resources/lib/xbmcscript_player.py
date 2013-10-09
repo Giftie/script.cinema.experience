@@ -140,8 +140,8 @@ class Main:
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
                                            path=video_settings[ "rating_videos_folder" ] + mpaa + ".avi",
-                                          genre="MPAA Rating",
-                                         writer="MPAA Rating",
+                                          genre="Movie Rating",
+                                         writer="Movie Rating",
                                          index = index_count
                                    )
                 for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
