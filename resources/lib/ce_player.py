@@ -2,6 +2,10 @@ import xbmcgui, xbmc, xbmcaddon, xbmcvfs
 import os, re, sys, socket, traceback, time, __builtin__
 from urllib import quote_plus
 from threading import Thread
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
 
 true = True
 false = False
@@ -165,22 +169,16 @@ class Script():
             if extra_settings[ "voxcommando" ]:
                 utils.broadcastUDP( "<b>CElaunch<li>" + movie_title + "</b>", port = 33000 )
 
-    # No longer works in Frodo to be removed
-    def _sqlquery( self, sqlquery ):
-        movie_list = []
-        movies = []
-        xbmc.executehttpapi( "SetResponseFormat()" )
-        xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
-        sqlquery = "SELECT movieview.c00 FROM movieview JOIN genrelinkmovie ON genrelinkmovie.idMovie=movieview.idMovie JOIN genre ON genrelinkmovie.idGenre=genre.idGenre WHERE strGenre='Action' ORDER BY RANDOM() LIMIT 4"
-        utils.log( "[ script.cinema.experience ]  - SQL: %s" % sqlquery )
-        try:
-            sqlresult = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sqlquery ), )
-            utils.log( "sqlresult: %s" % sqlresult )
-            movies = sqlresult.split("</field>")
-            movie_list = movies[ 0:len( movies ) -1 ]
-        except:
-            utils.log( "Error searching database", xbmc.LOGNOTICE )
-        return movie_list
+    def _jsonrpc_query( self, jsonquery ):
+        movie_ids = []        
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        data = simplejson.loads( jsonresponse )
+        if data.has_key('result'):
+            if data['result'].has_key('movies'):
+                movie_list = data['result']['movies']
+                for movie in movie_list:
+                    movie_ids.append( movie[ "movieid" ] )
+        return movie_ids
 
     def trivia_intro( self ):
         utils.log( "## Intro ##", xbmc.LOGNOTICE )
