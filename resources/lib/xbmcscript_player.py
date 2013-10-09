@@ -280,6 +280,7 @@ class Main:
         _get_special_items(    playlist=self.playlist,
                                   items=video_settings[ "cav_intro" ] * ( len( trailers ) > 0 ),
                                    path=( video_settings[ "cav_intro_file" ], video_settings[ "cav_intro_folder" ], )[ video_settings[ "cav_intro_type" ] == "folder" ],
+                              thumbnail="DefaultVideo.png",
                                   genre="Coming Attractions Intro",
                                  writer="Coming Attractions Intro",
                                   index=0

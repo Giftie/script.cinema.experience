@@ -21,7 +21,6 @@ BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-from music import parse_playlist
 from ce_playlist import build_music_playlist, _rebuild_playlist
 import utils
 
