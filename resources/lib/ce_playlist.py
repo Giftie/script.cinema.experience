@@ -394,7 +394,7 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "Title: %s" % movie_title )
     utils.log( "Path: %s" % path )
     utils.log( "Genre: %s" % genre )
-    utils.log( "MPAA: %s" % short_mpaa )
+    utils.log( "Rating: %s" % short_mpaa )
     utils.log( "Audio: %s" % audio )
     if video_settings[ "audio_videos_folder" ]:
         utils.log( "Folder: %s" % ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) )
