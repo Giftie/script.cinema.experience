@@ -6,7 +6,6 @@ Local trailer scraper
 
 import os, sys, time, re, urllib
 from random import shuffle, random
-from xml.sax.saxutils import unescape
 
 import xbmc, xbmcvfs
 
@@ -24,8 +23,10 @@ import utils
 class Main:
     utils.log( "Local Folder Trailer Scraper Started", xbmc.LOGNOTICE )
     
+    mpaa_ratings = [ 'G', 'PG', 'PG-13', 'R', 'NC-17', 'NR', 'Unrated', 'Not yet rated' ]
+    
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
-        self.mpaa = equivalent_mpaa
+        self.mpaa = self.mpaa_ratings.index( equivalent_mpaa )
         self.genre = genre.replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and ADV" ).replace( "Adventure", "ACT and Adventure" ).replace( "ACT",  "Action" ).replace( "ADV",  "Adventure" ).split( " / " )
         self.settings = settings
         self.movie = movie
@@ -63,12 +64,15 @@ class Main:
             trailer_info = _set_trailer_info( trailer )
             trailer_genre = trailer_info[ 9 ].split(" / ")
             trailer_rating = trailer_info[ 6 ].replace("Rated ", "")
-            if self.settings[ "trailer_limit_genre" ] and ( not list(set(trailer_genre) & set(self.genre) ) ):
-                utils.log( "Genre Not Matched - Skipping Trailer" )
-                continue
-            if self.settings[ "trailer_limit_mpaa" ] and ( not trailer_rating or not trailer_rating == self.mpaa ):
-                utils.log( "MPAA Not Matched - Skipping Trailer" )
-                continue
+            if self.settings[ "trailer_limit_genre" ]:
+                if len( set( trailer_genre ).intersection( self.genre ) ) < 1:
+                    utils.log("Genre Not Matched - Skipping Trailer: %s != %s" % (trailer_genre, self.genre) )
+                    continue
+            if self.settings[ "trailer_limit_mpaa" ]:
+                trailer_mpaa = self.mpaa_ratings.index( trailer_rating )
+                if trailer_mpaa > self.mpaa:
+                    utils.log("MPAA too high - Skipping Trailer: %s > %s" % ( trailer_rating, self.mpaa_ratings[ self.mpaa ] ) )
+                    continue 
             self.trailers += [ trailer_info ]
             # add id to watched file TODO: maybe don't add if not user preference
             self.watched += [ xbmc.getCacheThumbName( trailer ) ]
