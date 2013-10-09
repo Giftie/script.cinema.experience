@@ -92,36 +92,8 @@ def _clear_watched_items( clear_type ):
     # inform user of result
     ok = xbmcgui.Dialog().ok( __language__( 32000 ), __language__( message ) )
 
-def _build_playlist( movies, mode = "movie_titles" ):
-    if mode == "movie_titles":
-        utils.log( "Movie Title Mode", xbmc.LOGNOTICE )
-        for movie in movies:
-            utils.log( "Movie Title: %s" % movie, xbmc.LOGNOTICE )
-            xbmc.executehttpapi( "SetResponseFormat()" )
-            xbmc.executehttpapi( "SetResponseFormat(OpenField,)" )
-            # select Movie path from movieview Limit 1
-            sql = "SELECT movieview.idMovie, movieview.c00, movieview.strPath, movieview.strFileName, movieview.c08, movieview.c14 FROM movieview WHERE c00 LIKE '%s' LIMIT 1" % ( movie.replace( "'", "''", ), )
-            utils.log( "SQL: %s" % ( sql, ) )
-            # query database for info dummy is needed as there are two </field> formatters
-            try:
-                movie_id, movie_title, movie_path, movie_filename, thumb, genre, dummy = xbmc.executehttpapi( "QueryVideoDatabase(%s)" % quote_plus( sql ), ).split( "</field>" )
-                movie_id = int( movie_id )
-            except:
-                traceback.print_exc()
-                utils.log( "Unable to match movie", level=xbmc.LOGERROR )
-                movie_id = 0
-                movie_title = movie_path = movie_filename = thumb = genre = dummy = ""
-            movie_full_path = os.path.join(movie_path, movie_filename).replace("\\\\" , "\\")
-            utils.log( "Movie Title: %s" % movie_title, xbmc.LOGNOTICE )
-            utils.log( "Movie Path: %s" % movie_path, xbmc.LOGNOTICE )
-            utils.log( "Movie Filename: %s" % movie_filename, xbmc.LOGNOTICE )
-            utils.log( "Full Movie Path: %s" % movie_full_path, xbmc.LOGNOTICE )
-            if not movie_id == 0:
-                json_command = '{"jsonrpc": "2.0", "method": "Playlist.Add", "params": {"playlistid": 1, "item": {"movieid": %d} }, "id": 1}' % int( movie_id )
-                json_response = xbmc.executeJSONRPC(json_command)
-                utils.log( "JSONRPC Response: \n%s" % json_response )
-                xbmc.sleep( 50 )
-    elif mode == "movie_ids":
+def _build_playlist( movies, mode = "movie_ids" ):
+    if mode == "movie_ids":
         utils.log( "Movie ID Mode", xbmc.LOGNOTICE )
         for movie_id in movies:
             utils.log( "Movie ID: %s" % movie_id, xbmc.LOGNOTICE )
@@ -141,7 +113,7 @@ if __name__ == "__main__" :
     try:
         try:
             if sys.argv[ 1 ]:
-                utils.log( "Script Started With: %s" % sys.argv[ 1 ], xbmc.LOGNOTICE )
+                utils.log( 'Script Started With: %s' % sys.argv[ 1 ], xbmc.LOGNOTICE )
                 try:
                     _command = ""
                     titles = ""
@@ -176,17 +148,20 @@ if __name__ == "__main__" :
                                 exit = Script().start_script( "oldway" )
                             else:
                                 exit = False
-                        elif _command.startswith( "sqlquery" ):    # SQL Query
-                            _clear_playlists()
-                            sqlquery = re.split(";", _command, maxsplit=1)[1]
-                            movie_titles = _sqlquery( sqlquery )
-                            if not movie_titles == "":
-                                _build_playlist( movie_titles )
-                                exit = Script().start_script( "oldway" )
-                            else:
-                                exit = False
                         elif _command.startswith( "open_settings" ):    # Open Settings
                             __addon__.openSettings()
+                            exit = False
+                    elif sys.argv[ 1 ].startswith( "jsonquery=" ):    # JSON RPC Query
+                        _clear_playlists()
+                        jsonquery = utils.unescape( re.split("=", sys.argv[ 1 ], maxsplit=1)[1] )
+                        print jsonquery
+                        jsonquery = ( jsonquery.replace( "<li>", ":" ) ).replace( "<lic>", "," )
+                        print jsonquery
+                        movie_ids = Script()._jsonrpc_query( jsonquery )
+                        if movie_ids:
+                            _build_playlist( movie_ids )
+                            exit = Script().start_script( "oldway" )
+                        else:
                             exit = False
                     elif sys.argv[ 1 ].startswith( "movieid=" ):
                         _clear_playlists()
