@@ -311,23 +311,27 @@ def get_equivalent_rating( rating ):
         else:
             rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
         rating = ( rating, "NR", )[ rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+    #FSK
     elif rating.startswith("FSK"):
         if rating.startswith( "FSK:" ):
             rating = rating.split( ":" )[ 1 - ( len( rating.split( ":" ) ) == 1 ) ]
         else:
             rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
+    #DEJUS
+    elif rating in ( "Livre", "10 Anos", "12 Anos", "14 Anos", "16 Anos", "18 Anos" ):
+        rating = rating   # adding this just in case there is some with different labels in database
     else:
         rating = ( rating, "NR", )[ rating not in ( "0", "6", "12", "12A", "PG", "15", "16", "18", "R18", "MA", "U", ) ]
     if rating not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", "NR" ):
-        if rating in ("12", "12A",):
+        if rating in ("12", "12A", "12 Anos" ):
             equivalent_mpaa = "PG-13"
-        elif rating in ( "15", "16" ):
+        elif rating in ( "15", "16", "14 Anos", "16 Anos" ):
             equivalent_mpaa = "R"
-        elif rating in ( "0", "U" ):
+        elif rating in ( "0", "U", "Livre" ):
             equivalent_mpaa = "G"
-        elif rating in ( "6", ):
+        elif rating in ( "6", "10 Anos" ):
             equivalent_mpaa = "PG"
-        elif rating in ("18", "R18", "MA",):
+        elif rating in ("18", "R18", "MA", "18 Anos" ):
             equivalent_mpaa = "NC-17"
     else:
         equivalent_mpaa = rating
