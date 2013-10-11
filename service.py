@@ -1,5 +1,5 @@
 import xbmc, xbmcaddon, xbmcgui, xbmcvfs
-import os, sys
+import os, sys, traceback
 
 __addon__                = xbmcaddon.Addon()
 __version__              = __addon__.getAddonInfo('version')
@@ -16,6 +16,7 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 import utils
 from settings import *
 settings = settings()
+original_settings = settings.read_settings_xml()
 
 trivia_settings  = settings.trivia_settings
 trailer_settings = settings.trailer_settings
@@ -39,11 +40,18 @@ from launch_automation import Launch_automation
 class CE_Monitor( xbmc.Monitor ):
     def __init__(self, *args, **kwargs):
         xbmc.Monitor.__init__(self)
+        self.original_settings = settings.read_settings_xml()
         self.enabled = kwargs['enabled']
         self.update_settings = kwargs['update_settings']
-    
+        
     def onSettingsChanged( self ):
-        self.update_settings()
+        try:
+            xbmc.sleep( 10000 )
+            if not self.original_settings == settings.read_settings_xml():
+                self.new_settings = self.update_settings( self.original_settings )
+                self.original_settings = self.new_settings
+        except:
+            traceback.print_exc()
         
 class CE_Player( xbmc.Player ):
     def __init__(self, *args, **kwargs):
@@ -100,17 +108,22 @@ def _daemon( ):
             else:
                 xbmc.sleep( 250 )
 
-def update_settings():
+def update_settings( original_settings ):
     utils.log( "service.py - Settings loaded" )
-    settings.start()
-    trivia_settings  = settings.trivia_settings
-    trailer_settings = settings.trailer_settings
-    ha_settings      = settings.ha_settings
-    video_settings   = settings.video_settings
-    extra_settings   = settings.extra_settings
-    audio_formats    = settings.audio_formats
-    triggers         = settings.triggers
-    utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, "service.py" )
+    new_settings = settings.read_settings_xml()
+    if not original_settings == new_settings:
+        settings.store_settings()
+        original_settings = new_settings
+        settings.settings_to_log()
+        settings.start()
+        trivia_settings  = settings.trivia_settings
+        trailer_settings = settings.trailer_settings
+        ha_settings      = settings.ha_settings
+        video_settings   = settings.video_settings
+        extra_settings   = settings.extra_settings
+        audio_formats    = settings.audio_formats
+        triggers         = settings.triggers
+    return original_settings
                 
 if (__name__ == "__main__"):
     utils.log( 'Cinema Experience service script version %s started' % __version__ )

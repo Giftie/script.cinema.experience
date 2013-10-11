@@ -106,7 +106,7 @@ if __name__ == "__main__" :
     #xbmc.sleep( 2000 )
     footprints()
     prev_trigger = ""
-    utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
+    settings.settings_to_log()
     # check to see if an argv has been passed to script
     xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceRunning", "True" )
     from ce_player import Script
