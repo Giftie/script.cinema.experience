@@ -10,7 +10,7 @@
 - change    - change method of waiting for movie to play(override play button setting)
 - change    - general code clean up
 - add       - handle .pls playlist files for music and video
-- change    - new method of reloading settings after settings have been opened/close 
+- change    - new method of reloading settings after settings have been changed 
 - add       - Brazilian Movie Rating support
 - change    - Apple Trailers now pull trailers from Current
 
