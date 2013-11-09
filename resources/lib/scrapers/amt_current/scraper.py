@@ -63,10 +63,13 @@ class _Parser:
                 # filter old releases date
                 # TODO: add preference
                 # Datetime bug workaround: http://forum.xbmc.org/showthread.php?tid=112916
-                releasedate = datetime(*(time.strptime( movieinfo.findtext( 'info/releasedate' ), '%Y-%m-%d' )[0:6]))
-                if releasedate <= datetime.now():
-                    root.remove( movieinfo )
-                    continue
+                # test to see if release date is present, if it is, test to see if it is a future release, otherwise assume that it is a future release.
+                if movieinfo.findtext( 'info/releasedate' ):
+                    releasedate = datetime(*(time.strptime( movieinfo.findtext( 'info/releasedate' ), '%Y-%m-%d' )[0:6]))
+                    if releasedate <= datetime.now():
+                        root.remove( movieinfo )
+                        continue
+                    
 
                 # filter watched
                 if ( self.settings[ 'trailer_unwatched_only' ] and movieinfo.get( 'id' ) in scraper.watched ):
