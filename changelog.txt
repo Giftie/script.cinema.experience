@@ -1,7 +1,7 @@
 3.0.7
 - fix       - add missing module import
 - add       - SABnzbd control to home automation module
-- change    - convert all file access to use the xbmcvfs module.  Thanks 
+- change    - convert all file access to use the xbmcvfs module.  Thanks h0tw1r3
 - fix       - fixed skipping trailers that use plug-ins to play
 - fix       - properly end script - clear all variables
 - change    - remove old trailer downloader module
