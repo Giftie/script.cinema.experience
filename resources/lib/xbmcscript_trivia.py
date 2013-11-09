@@ -132,11 +132,11 @@ class Trivia( xbmcgui.WindowXML ):
     def _load_watched_trivia_file( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
         self.watched = utils.load_saved_list( base_path, "Watched Trivia" )
-        print self.watched
+        #print self.watched
         
     def _save_watched_trivia_file( self ):
         base_path = os.path.join( BASE_CURRENT_SOURCE_PATH, "trivia_watched.txt" )
-        print self.watched
+        #print self.watched
         utils.save_list( base_path, self.watched, "Watched Trivia" )
 
     def _reset_watched( self ):

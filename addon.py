@@ -154,9 +154,8 @@ if __name__ == "__main__" :
                     elif sys.argv[ 1 ].startswith( "jsonquery=" ):    # JSON RPC Query
                         _clear_playlists()
                         jsonquery = utils.unescape( re.split("=", sys.argv[ 1 ], maxsplit=1)[1] )
-                        print jsonquery
                         jsonquery = ( jsonquery.replace( "<li>", ":" ) ).replace( "<lic>", "," )
-                        print jsonquery
+                        #print jsonquery
                         movie_ids = Script()._jsonrpc_query( jsonquery )
                         if movie_ids:
                             _build_playlist( movie_ids )
