@@ -935,3 +935,8 @@ msgstr ""
 msgctxt "#32939"
 msgid "Trigger at start of the 3D Movie Intro(s)"
 msgstr ""
+
+msgctxt "#32940"
+msgid "3D Movie Intro Video(s)"
+msgstr ""
+

@@ -91,12 +91,15 @@
         <setting type="lsep" label="32108" />
         <setting id="enable_3d_intro" type="enum" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32924" default="0" />
         <setting id="3d_movie_tags" type="text" label="32925" enable="!eq(-1,0)" default="3D & HSBS & H-SBS & HOU & H-OU" />
-        <setting id="3d_intro_file" type="video" visible="!eq(-2,1)" label="32928" default="" />
-        <setting id="3d_intro_folder" type="folder" visible="!gt(-3,1)" source="video" label="32929" default="" />
-        <setting id="3d_outro" type="enum" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32936" default="0" />
-        <setting id="3d_outro_file" type="video" visible="!eq(-5,1)" label="32937" default="" />
-        <setting id="3d_outro_folder" type="folder" visible="!gt(-6,1)" source="video" label="32938" default="" />
-        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-7,0)" default="true" />
+        <setting id="3d_intro" type="enum" visible="!eq(-2,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32940" default="0" />
+        <setting id="3d_intro_file" type="video" visible="!eq(-3,1) + eq(-1,1)" label="32928" default="" />
+        <setting id="3d_intro_folder" type="folder" visible="!gt(-4,1) + eq(-2,2)" source="video" label="32929" default="" />
+        <setting id="3d_outro" type="enum" visible="!eq(-5,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32936" default="0" />
+        <setting id="3d_outro_file" type="video" visible="!eq(-6,1) + eq(-1,1)" label="32937" default="" />
+        <setting id="3d_outro_folder" type="folder" visible="!gt(-7,1) + eq(-2,2)" source="video" label="32938" default="" />
+        <setting id="3d_audio_videos_folder" type="folder" visible="!gt(-8,1)" source="video" label="32360" default="" />
+        <setting id="3d_ratings_videos_folder" type="folder" visible=="!gt(-9,1)" source="video" label="32300" default="" />"
+        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-10,0)" default="true" />
         <setting id="3d_trailer_folder" type="folder" label="32931" visible="eq(-1,true)" default="" />
     </category>
     

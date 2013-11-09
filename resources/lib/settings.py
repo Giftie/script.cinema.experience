@@ -140,6 +140,20 @@ class settings():
                                                     "voxcommando": eval( __addon__.getSetting( "voxcommando" ) ),
                                                   "override_play": eval( __addon__.getSetting( "override_play" ) )
                                       }
+        
+        self._3d_settings           = {        "enable_3d_intro" : eval( __addon__.getSetting( "enable_3d_intro" ) ),
+                                                 "3d_movie_tags" : ( __addon__.getSetting( "3d_movie_tags" ) ).split( "&" ),
+                                                      "3d_intro" : ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_intro" ) ) ) ],
+                                                 "3d_intro_type" : ( "file", "folder" )[ int( __addon__.getSetting( "3d_intro" ) ) > 1 ],
+                                                 "3d_intro_file" : xbmc.translatePath( __addon__.getSetting( "3d_intro_file" ) ).decode('utf-8'),
+                                               "3d_intro_folder" : xbmc.translatePath( __addon__.getSetting( "3d_intro_folder" ) ).decode('utf-8'),
+                                                      "3d_outro" :  0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_outro" ) ) ) ],
+                                                 "3d_outro_type" : ( "file", "folder" )[ int( __addon__.getSetting( "3d_outro" ) ) > 1 ],
+                                                 "3d_outro_file" : xbmc.translatePath( __addon__.getSetting( "3d_outro_file" ) ).decode('utf-8'),
+                                               "3d_outro_folder" : xbmc.translatePath( __addon__.getSetting( "3d_outro_folder" ) ).decode('utf-8'),
+                                                   "3d_trailers" : eval( __addon__.getSetting( "3d_trailers" ) ),"3d_trailers"
+                                             "3d_trailer_folder" : xbmc.translatePath( __addon__.getSetting( "3d_trailer_folder" ) ).decode('utf-8')
+                                      }
 
         self.audio_formats          = {                     "dts": "DTS",
                                                             "dca": "DTS",
