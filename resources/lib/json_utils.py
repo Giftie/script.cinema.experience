@@ -5,11 +5,6 @@ import traceback, sys, os
 
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
-trivia_settings          = sys.modules[ "__main__" ].trivia_settings
-trailer_settings         = sys.modules[ "__main__" ].trailer_settings
-feature_settings         = sys.modules[ "__main__" ].feature_settings
-video_settings           = sys.modules[ "__main__" ].video_settings
-audio_formats            = sys.modules[ "__main__" ].audio_formats
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH

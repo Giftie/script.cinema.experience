@@ -11,7 +11,6 @@ __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
 trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
-feature_settings         = sys.modules[ "__main__" ].feature_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
 audio_formats            = sys.modules[ "__main__" ].audio_formats
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
@@ -19,9 +18,8 @@ BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 
-from music import parse_playlist
 from json_utils import find_movie_details, retrieve_json_dict
-import utils
+import utils, music
 from folder import absolute_listdir
 
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
@@ -156,6 +154,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
                         director="", index=-1, media_type="video"
                       ):
     utils.log( "_get_special_items() Started" )
+    video_list = []
     # return if not user preference
     if not items:
         utils.log( "No Items added to playlist" )
@@ -164,46 +163,78 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
     if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not xbmcvfs.exists( path ):
         utils.log( "_get_special_items() - File Does not Exist" )
         return
-    # set default paths list
-    tmp_paths = [ path ]
-    # if path is a folder fetch # videos/pictures
-    if path.endswith( "/" ) or path.endswith( "\\" ):
-        utils.log( "_get_special_items() - Path: %s" % path )
-        # initialize our lists
-        tmp_paths = absolute_listdir( path, media_type = "video", recursive = True )
-        shuffle( tmp_paths )
-    # enumerate thru and add our videos/pictures
-    for count in range( items ):
+    # parse .pls file
+    if path.endswith(".pls"):
+        video_list = music.parse_pls( path, xbmc.getSupportedMedia( media_type )  )
+        if not video_list:
+            utils.log( "Playlist empty or has unsupported media files" )
+            return
         try:
-            # set our path
-            path = tmp_paths[ count ]
-            utils.log( "Checking Path: %s" % path )
-            # format a title (we don't want the ugly extension)
-            title = title or os.path.splitext( os.path.basename( path ) )[ 0 ]
-            # create the listitem and fill the infolabels
-            listitem = _get_listitem( title=title,
-                                        url=path,
-                                  thumbnail=thumbnail,
-                                       plot=plot,
-                                    runtime=runtime,
-                                       mpaa=mpaa,
-                               release_date=release_date,
-                                     studio=studio or "Cinema Experience",
-                                      genre=genre or "Movie Trailer",
-                                     writer=writer,
-                                   director=director
-                                    )
-            # add our video/picture to the playlist or list
-            if isinstance( playlist, list ):
-                playlist += [ ( path, listitem, ) ]
-            else:
-                playlist.add( path, listitem, index=index )
+            for item in video_list[::-1]:
+                utils.log( "Checking Path: %s" % item )
+                # format a title (we don't want the ugly extension)
+                video_title = title or os.path.splitext( os.path.basename( item ) )[ 0 ]
+                # create the listitem and fill the infolabels
+                listitem = _get_listitem( title=video_title,
+                                            url=item,
+                                      thumbnail=thumbnail,
+                                           plot=plot,
+                                        runtime=runtime,
+                                           mpaa=mpaa,
+                                   release_date=release_date,
+                                         studio=studio or "Cinema Experience",
+                                          genre=genre or "Movie Trailer",
+                                         writer=writer,
+                                       director=director
+                                        )
+                # add our video/picture to the playlist or list
+                if isinstance( playlist, list ):
+                    playlist += [ ( item, listitem, ) ]
+                else:
+                    playlist.add( item, listitem, index=index )
         except:
-            if items > count:
-                utils.log( "Looking for %d files, but only found %d" % ( items, count), xbmc.LOGNOTICE )
-                break
-            else:
-                traceback.print_exc()
+            traceback.print_exc()
+    else:
+        # set default paths list
+        tmp_paths = [ path ]
+        # if path is a folder fetch # videos/pictures
+        if path.endswith( "/" ) or path.endswith( "\\" ):
+            utils.log( "_get_special_items() - Path: %s" % path )
+            # initialize our lists
+            tmp_paths = absolute_listdir( path, media_type = media_type, recursive = True )
+            shuffle( tmp_paths )
+        # enumerate thru and add our videos/pictures
+        for count in range( items ):
+            try:
+                # set our path
+                path = tmp_paths[ count ]
+                utils.log( "Checking Path: %s" % path )
+                # format a title (we don't want the ugly extension)
+                title = title or os.path.splitext( os.path.basename( path ) )[ 0 ]
+                # create the listitem and fill the infolabels
+                listitem = _get_listitem( title=title,
+                                            url=path,
+                                      thumbnail=thumbnail,
+                                           plot=plot,
+                                        runtime=runtime,
+                                           mpaa=mpaa,
+                                   release_date=release_date,
+                                         studio=studio or "Cinema Experience",
+                                          genre=genre or "Movie Trailer",
+                                         writer=writer,
+                                       director=director
+                                        )
+                # add our video/picture to the playlist or list
+                if isinstance( playlist, list ):
+                    playlist += [ ( path, listitem, ) ]
+                else:
+                    playlist.add( path, listitem, index=index )
+            except:
+                if items > count:
+                    utils.log( "Looking for %d files, but only found %d" % ( items, count), xbmc.LOGNOTICE )
+                    break
+                else:
+                    traceback.print_exc()
 
 def _get_listitem( title="", url="", thumbnail="", plot="", runtime="", mpaa="", release_date="0 0 0", studio="Cinema Experience", genre="", writer="", director=""):
     utils.log( "_get_listitem() Started" )
@@ -227,7 +258,7 @@ def _get_listitem( title="", url="", thumbnail="", plot="", runtime="", mpaa="",
     listitem.setInfo( type="Video", infoLabels={ "Title": title, "Plot": plot, "PlotOutline": plot, "RunTime": runtime, "MPAA": mpaa, "Year": year, "Studio": studio, "Genre": genre, "Writer": writer, "Director": director } )
     # return result
     return listitem
-
+    
 def _get_thumbnail( url ):
     utils.log( "_get_thumbnail() Started" )
     utils.log( "Thumbnail Url: %s" % url )
@@ -250,13 +281,12 @@ def build_music_playlist():
     track_location = []
     # check to see if playlist or music file is selected
     if trivia_settings[ "trivia_music" ] == 1:
-        if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
+        if trivia_settings[ "trivia_music_file" ].endswith(".m3u") or trivia_settings[ "trivia_music_file" ].endswith(".pls"):
             utils.log( "Music Playlist: %s" % trivia_settings[ "trivia_music_file" ] )
-            playlist_file = xbmcvfs.File( trivia_settings[ "trivia_music_file" ], 'rb')
-            saved_playlist = playlist_file.read().splitlines()
-            playlist_file.close()
-            utils.log( "Finished Reading Music Playlist" )
-            track_info, track_location = parse_playlist( saved_playlist, xbmc.getSupportedMedia('music') )
+            if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
+                track_info, track_location = music.parse_m3u( saved_playlist, xbmc.getSupportedMedia('music') )
+            elif trivia_settings[ "trivia_music_file" ].endswith(".pls"):
+                track_location = music.parse_pls( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
         elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):
             for track in range(100):
                 track_location.append( trivia_settings[ "trivia_music_file" ] )
@@ -284,23 +314,27 @@ def get_equivalent_rating( rating ):
         else:
             rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
         rating = ( rating, "NR", )[ rating not in ( "12", "12A", "PG", "15", "18", "R18", "MA", "U", ) ]
+    #FSK
     elif rating.startswith("FSK"):
         if rating.startswith( "FSK:" ):
             rating = rating.split( ":" )[ 1 - ( len( rating.split( ":" ) ) == 1 ) ]
         else:
             rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
+    #DEJUS
+    elif rating in ( "Livre", "10 Anos", "12 Anos", "14 Anos", "16 Anos", "18 Anos" ):
+        rating = rating   # adding this just in case there is some with different labels in database
     else:
         rating = ( rating, "NR", )[ rating not in ( "0", "6", "12", "12A", "PG", "15", "16", "18", "R18", "MA", "U", ) ]
     if rating not in ( "G", "PG", "PG-13", "R", "NC-17", "Unrated", "NR" ):
-        if rating in ("12", "12A",):
+        if rating in ("12", "12A", "12 Anos" ):
             equivalent_mpaa = "PG-13"
-        elif rating in ( "15", "16" ):
+        elif rating in ( "15", "16", "14 Anos", "16 Anos" ):
             equivalent_mpaa = "R"
-        elif rating in ( "0", "U" ):
+        elif rating in ( "0", "U", "Livre" ):
             equivalent_mpaa = "G"
-        elif rating in ( "6", ):
+        elif rating in ( "6", "10 Anos" ):
             equivalent_mpaa = "PG"
-        elif rating in ("18", "R18", "MA",):
+        elif rating in ("18", "R18", "MA", "18 Anos" ):
             equivalent_mpaa = "NC-17"
     else:
         equivalent_mpaa = rating
@@ -364,7 +398,7 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "Title: %s" % movie_title )
     utils.log( "Path: %s" % path )
     utils.log( "Genre: %s" % genre )
-    utils.log( "MPAA: %s" % short_mpaa )
+    utils.log( "Rating: %s" % short_mpaa )
     utils.log( "Audio: %s" % audio )
     utils.log( "3D Movie: %s" % ( "False", "True" )[ is_3d_movie ] )
     if video_settings[ "audio_videos_folder" ]:

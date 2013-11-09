@@ -79,6 +79,9 @@ class Main:
                             trailer_rating = trailer_rating.split( ":" )[ 1 - ( len( trailer_rating.split( ":" ) ) == 1 ) ]
                         else:
                             trailer_rating = trailer_rating.split( " " )[ 1 - ( len( trailer_rating.split( " " ) ) == 1 ) ]
+                    #DEJUS
+                    elif trailer_rating in ( "Livre", "10 Anos", "12 Anos", "14 Anos", "16 Anos", "18 Anos" ):
+                        trailer_rating = trailer_rating   # adding this just in case there is some with different labels in database
                     else:
                         trailer_rating = ( trailer_rating, "NR", )[ trailer_rating not in ( "0", "6", "12", "12A", "PG", "15", "16", "18", "R18", "MA", "U", ) ]
                     # add trailer to our final list
