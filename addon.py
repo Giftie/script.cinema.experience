@@ -198,7 +198,6 @@ if __name__ == "__main__" :
             xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
         else:
             _clear_playlists()
-            prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
             __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
             xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceRunning", "False" )
             xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
