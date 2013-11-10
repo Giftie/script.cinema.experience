@@ -109,6 +109,9 @@
         <setting id="3d_trailer_limit_genre" type="bool" visible="!eq(-16,1) + eq(-4,true)" label="32141" default="true" />
         <setting id="3d_trailer_rating" type="labelenum"  visible="!eq(-17,1) + eq(-5,true)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
         <setting id="3d_trailer_unwatched_only" type="bool" visible="!eq(-18,1) + eq(-6,true)" label="32190" default="false" />
+        <setting id="3d_intermission_video" type="enum" visible="!eq(-19,1) lvalues="32321|32322|32323|32324|32325|32326|32327" label="32418" default="0" />
+        <setting id="3d_intermission_video_file" type="video" visible="!eq(-20,1) + eq(-1,1)" label="32419" default="" />
+        <setting id="3d_intermission_video_folder" type="folder" visible="!eq(-21,1) + gt(-2,1)" source="video" label="32420" default="" />
     </category>
     
 <!-- Feature Presentations -->

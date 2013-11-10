@@ -161,7 +161,11 @@ class settings():
                                           "3d_trailer_limit_mpaa": eval( __addon__.getSetting( "3d_trailer_limit_mpaa" ) ),
                                          "3d_trailer_limit_genre": eval( __addon__.getSetting( "3d_trailer_limit_genre" ) ),
                                               "3d_trailer_rating": __addon__.getSetting( "3d_trailer_rating" ),
-                                      "3d_trailer_unwatched_only":  eval( __addon__.getSetting( "3d_trailer_unwatched_only" ) )
+                                      "3d_trailer_unwatched_only":  eval( __addon__.getSetting( "3d_trailer_unwatched_only" ) ),
+                                             "3d_intermission_video": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_intermission_video" ) ) ) ],
+                                        "3d_intermission_video_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_intermission_video" ) ) > 1 ],
+                                        "3d_intermission_video_file": xbmc.translatePath( __addon__.getSetting( "3d_intermission_video_file" ) ).decode('utf-8'),
+                                      "3d_intermission_video_folder": xbmc.translatePath( __addon__.getSetting( "3d_intermission_video_folder" ) ).decode('utf-8')
                                       }
 
         self.audio_formats          = {                     "dts": "DTS",

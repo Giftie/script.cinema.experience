@@ -109,18 +109,36 @@ class Main:
         utils.log( "Adding intermission Video(s)", xbmc.LOGNOTICE )
         count = 0
         index_count = 1
+        if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ]:
+            audio_video_folder        = _3d_settings[ "3d_audio_videos_folder" ]
+        elif video_settings[ "enable_audio" ]:
+            audio_video_folder        = video_settings[ "audio_videos_folder" ]
+        if _3d_settings[ "3d_ratings_videos_folder" ] and video_settings[ "enable_ratings" ]:
+            ratings_video_folder      = _3d_settings[ "3d_ratings_videos_folder" ]
+        elif video_settings[ "enable_ratings" ]:
+            ratings_video_folder      = video_settings[ "3d_intro_file" ]
+        if _3d_settings[ "3d_intermission_video" ]:
+            intermission_video_file   = _3d_settings[ "3d_intermission_video_file" ]
+            intermission_video_folder = _3d_settings[ "3d_intermission_video_folder" ]
+            intermission_video        = _3d_settings[ "3d_intermission_video" ]
+            intermission_video_type   = _3d_settings[ "3d_intermission_video_type" ]
+        else:
+            intermission_video_file   = extra_settings[ "intermission_video_file" ]
+            intermission_video_folder = extra_settings[ "intermission_video_folder" ]
+            intermission_video        = extra_settings[ "intermission_video" ]
+            intermission_video_type   = extra_settings[ "intermission_video_type" ]
         for feature in range( 1, self.playlistsize ):
             mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = index_count )
             #count = index_count
             # add intermission video
             if extra_settings[ "intermission_video" ] > 0:
-                utils.log( "Inserting intermission Video(s): %s" % extra_settings[ "intermission_video" ], xbmc.LOGNOTICE )
+                utils.log( "Inserting intermission Video(s): %s" % intermission_video, xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=extra_settings[ "intermission_video" ],
-                                           path=( extra_settings[ "intermission_video_file" ], extra_settings[ "intermission_video_folder" ], )[ extra_settings[ "intermission_video_type" ] == "folder" ],
+                                          items=intermission_video,
+                                           path=( intermission_video_file, intermission_video_folder, )[ intermission_video_type == "folder" ],
                                           genre="Intermission",
                                          writer="Intermission",
                                           index=index_count
@@ -128,19 +146,19 @@ class Main:
                 for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
                     # Insert Intermission Label into Trigger List
                     self.trigger_list.insert( index_count, "Intermission" ) 
-                if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and extra_settings[ "intermission_video" ] > 1:
+                if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and intermission_video > 1:
                     index_count += extra_settings[ "intermission_video" ] - 1
-                elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and extra_settings[ "intermission_video" ] == 1:
+                elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and intermission_video == 1:
                     index_count += extra_settings[ "intermission_video" ]
             # get rating video
-            if video_settings[ "enable_ratings" ] and extra_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
+            if video_settings[ "enable_ratings" ] and extra_settings[ "intermission_ratings" ] and rating_videos_folder != "":
                 utils.log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
-                                           path=video_settings[ "rating_videos_folder" ] + mpaa + ".avi",
+                                          items=1 * ( rating_videos_folder != "" ),
+                                           path=rating_videos_folder + mpaa + ".avi",
                                           genre="Movie Rating",
                                          writer="Movie Rating",
                                          index = index_count
@@ -151,14 +169,14 @@ class Main:
                 if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size:
                     index_count += 1
             # get Dolby/DTS videos
-            if video_settings[ "enable_audio" ]  and extra_settings[ "intermission_audio" ] and video_settings[ "audio_videos_folder" ]:
+            if video_settings[ "enable_audio" ]  and extra_settings[ "intermission_audio" ] and audio_videos_folder:
                 utils.log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
-                                          path = video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
+                                          items=1 * ( audio_videos_folder != "" ),
+                                          path = audio_videos_folder + audio_formats.get( audio, "Other" ) + audio_videos_folder[ -1 ],
                                           genre="Audio Format",
                                          writer="Audio Format",
                                          index = index_count

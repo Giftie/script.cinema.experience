@@ -29,7 +29,7 @@ class Automate:
         response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
         response_data = response.read()
       
-    def activate_ha( self, trigger = None, prev_trigger = None, mode="thread" ):
+    def activate_ha( self, trigger = None, prev_trigger = None, mode="normal" ):
         if ha_settings[ "ha_enable" ]:
             if ha_settings[ "ha_multi_trigger" ] and prev_trigger == trigger:
                 pass
@@ -38,6 +38,7 @@ class Automate:
             else:
                 thread = Thread( name='ha_trigger', target=self.activate_on, args=( trigger, ) )
                 thread.start()
+            prev_trigger = trigger
         return prev_trigger
 
     def activate_on( self, trigger = None ):
@@ -91,6 +92,10 @@ class Automate:
         elif trigger == "Feature Presentation Intro" and ha_settings[ "ha_fpv_intro" ]: 
             # place code below this line
             pass
+        #3D Trailers
+        elif trigger == "3D Movie Trailer" and ha_setting [ "ha_3d_trailer" ]:
+            # place code below this line
+            pass
         # MPAA Rating
         elif trigger == "MPAA Rating" and ha_settings[ "ha_mpaa_rating" ]: 
             # place code below this line
@@ -112,24 +117,13 @@ class Automate:
             # place code below this line
             pass
         # Movie Theatre Intro
-        elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]:
+        elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]: 
             # place code below this line
             pass
         # Intermission
-        elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]:
+        elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]: 
             # place code below this line
             pass
-        # 3D Movie Intro
-        elif trigger == "3D Movie Intro" and ha_setting[ "ha_3d_intro" ]:
-            pass
-            # place code below this line
-        elif trigger == "3D Movie Outro" and ha_setting[ "ha_3d_outro" ]:
-            pass
-            # place code below this line
-        #3D Trailers
-        elif trigger == "3D Trailer" and ha_setting [ "ha_3d_trailer" ]:
-            pass
-            # place code below this line
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
             # place code below this line
