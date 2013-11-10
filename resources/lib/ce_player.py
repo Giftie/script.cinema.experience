@@ -19,6 +19,7 @@ trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
+_3d_settings             = sys.modules[ "__main__" ]._3d_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH

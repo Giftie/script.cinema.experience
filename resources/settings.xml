@@ -97,10 +97,18 @@
         <setting id="3d_outro" type="enum" visible="!eq(-5,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32936" default="0" />
         <setting id="3d_outro_file" type="video" visible="!eq(-6,1) + eq(-1,1)" label="32937" default="" />
         <setting id="3d_outro_folder" type="folder" visible="!gt(-7,1) + eq(-2,2)" source="video" label="32938" default="" />
-        <setting id="3d_audio_videos_folder" type="folder" visible="!gt(-8,1)" source="video" label="32360" default="" />
-        <setting id="3d_ratings_videos_folder" type="folder" visible=="!gt(-9,1)" source="video" label="32300" default="" />"
-        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-10,0)" default="true" />
-        <setting id="3d_trailer_folder" type="folder" label="32931" visible="eq(-1,true)" default="" />
+        <setting id="3d_countdown_video" type="enum" visible="!gt(-8,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32392" default="0" />
+        <setting id="3d_countdown_video_file" type="video" visible="!gt(-9,1) + eq(-1,1)" label="32390" default="" />
+        <setting id="3d_countdown_video_folder" type="folder" visible="!gt(-10,1) + gt(-2,1)" source="video" label="32391" default="" />
+        <setting id="3d_audio_videos_folder" type="folder" visible="!gt(-11,1)" source="video" label="32360" default="" />
+        <setting id="3d_ratings_videos_folder" type="folder" visible=="!gt(-12,1)" source="video" label="32300" default="" />"
+        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-13,1)" default="true" />
+        <setting id="3d_trailer_count" type="enum" visible="eq(-1,true)" lvalues="32101|32102|32103|32104|32105|32106|32107" label="32100" default="0" />
+        <setting id="3d_trailer_folder" type="folder" label="32931" visible="!eq(-14,1) + eq(-2,true)" default="" />
+        <setting id="3d_trailer_limit_mpaa" type="bool" visible="!eq(-15,1) + eq(-3,true)" label="32140" default="true" />
+        <setting id="3d_trailer_limit_genre" type="bool" visible="!eq(-16,1) + eq(-4,true)" label="32141" default="true" />
+        <setting id="3d_trailer_rating" type="labelenum"  visible="!eq(-17,1) + eq(-5,true)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
+        <setting id="3d_trailer_unwatched_only" type="bool" visible="!eq(-18,1) + eq(-6,true)" label="32190" default="false" />
     </category>
     
 <!-- Feature Presentations -->
