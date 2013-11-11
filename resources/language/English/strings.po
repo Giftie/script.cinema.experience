@@ -877,7 +877,7 @@ msgid "Enable 3D Movie Integration"
 msgstr ""
 
 msgctxt "#32925"
-msgid "    3D Movie File name tags(separate with '&')"
+msgid "    3D Movie File name tags - separate with '|'(pipe)"
 msgstr ""
 
 msgctxt "#32926"

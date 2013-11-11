@@ -142,7 +142,7 @@ class settings():
                                       }
         
         self._3d_settings           = {         "enable_3d_intro": eval( __addon__.getSetting( "enable_3d_intro" ) ),
-                                                  "3d_movie_tags": ( __addon__.getSetting( "3d_movie_tags" ) ).replace( " & ", "|" ),
+                                                  "3d_movie_tags": __addon__.getSetting( "3d_movie_tags" ),
                                                        "3d_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_intro" ) ) ) ],
                                                   "3d_intro_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_intro" ) ) > 1 ],
                                                   "3d_intro_file": xbmc.translatePath( __addon__.getSetting( "3d_intro_file" ) ).decode('utf-8'),
@@ -179,7 +179,7 @@ class settings():
                                                          "truehd": "Dolby TrueHD"
                                        }
         self.triggers               = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
-                                    "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "Feature Presentation Intro", "Audio Format", 
+                                    "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "3D Movie Trailer", "Feature Presentation Intro", "Audio Format", 
                                     "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume" )
 
     def read_settings_xml( self ):
