@@ -410,7 +410,7 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "3D Movie: %s" % ( "False", "True" )[ is_3d_movie ] )
     if video_settings[ "audio_videos_folder" ]:
         if is_3d_movie and _3d_settings[ "3d_audio_videos_folder" ]:
-            utils.log( "Folder: %s" % ( _3d_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + _3d_settings[ "audio_videos_folder" ][ -1 ], ) )
+            utils.log( "Folder: %s" % ( _3d_settings[ "3d_audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + _3d_settings[ "3d_audio_videos_folder" ][ -1 ], ) )
         else:
             utils.log( "Folder: %s" % ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) )
     utils.log( "%s" % log_sep )
