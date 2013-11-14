@@ -87,7 +87,7 @@ class Main:
         trailer_list = load_saved_list( base_path, "Downloaded Trailers" )
         
     def _start( self ):
-        mpaa = audio = genre = movie = equivalent_mpaa, is_3d_movie = ""
+        mpaa = audio = genre = movie = equivalent_mpaa = is_3d_movie = ""
         try:
             # create the playlist
             self.playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
@@ -110,13 +110,13 @@ class Main:
         count = 0
         index_count = 1
         if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ]:
-            audio_video_folder        = _3d_settings[ "3d_audio_videos_folder" ]
+            audio_videos_folder        = _3d_settings[ "3d_audio_videos_folder" ]
         elif video_settings[ "enable_audio" ]:
-            audio_video_folder        = video_settings[ "audio_videos_folder" ]
+            audio_videos_folder        = video_settings[ "audio_videos_folder" ]
         if _3d_settings[ "3d_ratings_videos_folder" ] and video_settings[ "enable_ratings" ]:
-            ratings_video_folder      = _3d_settings[ "3d_ratings_videos_folder" ]
+            rating_videos_folder      = _3d_settings[ "3d_rating_videos_folder" ]
         elif video_settings[ "enable_ratings" ]:
-            ratings_video_folder      = video_settings[ "3d_intro_file" ]
+            rating_videos_folder      = video_settings[ "rating_videos_folder" ]
         if _3d_settings[ "3d_intermission_video" ]:
             intermission_video_file   = _3d_settings[ "3d_intermission_video_file" ]
             intermission_video_folder = _3d_settings[ "3d_intermission_video_folder" ]
@@ -197,13 +197,13 @@ class Main:
         # setup for 3d videos
         if is_3d_movie and _3d_settings[ "enable_3d_intro" ]:
             if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ]:
-                audio_video_folder     = _3d_settings[ "3d_audio_videos_folder" ]
+                audio_videos_folder     = _3d_settings[ "3d_audio_videos_folder" ]
             elif video_settings[ "enable_audio" ]:
-                audio_video_folder     = video_settings[ "audio_videos_folder" ]
-            if _3d_settings[ "3d_ratings_videos_folder" ] and video_settings[ "enable_ratings" ]:
-                ratings_video_folder   = _3d_settings[ "3d_ratings_videos_folder" ]
+                audio_videos_folder     = video_settings[ "audio_videos_folder" ]
+            if _3d_settings[ "3d_rating_videos_folder" ] and video_settings[ "enable_ratings" ]:
+                rating_videos_folder   = _3d_settings[ "3d_rating_videos_folder" ]
             elif video_settings[ "enable_ratings" ]:
-                ratings_video_folder   = video_settings[ "3d_intro_file" ]
+                rating_videos_folder   = video_settings[ "rating_videos_folder" ]
             if _3d_settings[ "3d_intro" ]:
                 fpv_intro_file         = _3d_settings[ "3d_intro_file" ]
                 fpv_intro_folder       = _3d_settings[ "3d_intro_folder" ]
@@ -235,8 +235,8 @@ class Main:
                 countdown_video_file   = video_settings[ "countdown_video_file" ]
                 countdown_video_folder = video_settings[ "countdown_video_folder" ]
         else:
-            audio_video_folder         = video_settings[ "audio_videos_folder" ]
-            ratings_video_folder       = video_settings[ "rating_videos_folder" ]
+            audio_videos_folder         = video_settings[ "audio_videos_folder" ]
+            rating_videos_folder       = video_settings[ "rating_videos_folder" ]
             fpv_intro                  = video_settings[ "fpv_intro" ]
             fpv_intro_type             = video_settings[ "fpv_intro_type" ]
             fpv_intro_file             = video_settings[ "fpv_intro_file" ]
@@ -263,16 +263,16 @@ class Main:
             # Insert Countdown Label into Trigger List
             self.trigger_list.insert( 0, "Countdown" )
         # get 3D Trailers
-        if _3d_settings[ "3d_trailer_count" ]:
+        if _3d_settings[ "3d_trailers" ]:
             utils.log( "Retriving 3D Trailers: %s Trailers" % _3d_settings[ "3d_trailer_count" ], xbmc.LOGNOTICE )
-            _3d_trailers = _get_trailers(  items=trailer_settings[ "_3d_trailer_count" ],
+            _3d_trailers = _get_trailers(  items=_3d_settings[ "3d_trailer_count" ],
                                  equivalent_mpaa=equivalent_mpaa,
                                             mpaa=mpaa,
                                            genre=genre,
                                            movie=movie,
                                             mode="3D"
                                         )
-            for _3d_trailer in trailers:
+            for trailer in _3d_trailers:
                 # get trailers
                 _get_special_items(    playlist=self.playlist,
                                            items=1,
@@ -290,15 +290,15 @@ class Main:
                                            index=0
                                   )
             for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
-                # Insert Trailer Label into Trigger List
+                # Insert 3D Trailer Label into Trigger List
                 self.trigger_list.insert( 0, "3D Movie Trailer" )
         # get Dolby/DTS videos
         if video_settings[ "enable_audio" ] and audio_videos_folder:
             utils.log( "Adding Audio Format Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
-                                      items=1 * ( audio_video_folder != "" ),
-                                       path=audio_video_folder + audio_formats.get( audio, "Other" ) + audio_video_folder[ -1 ],
+                                      items=1 * ( audio_videos_folder != "" ),
+                                       path=audio_videos_folder + audio_formats.get( audio, "Other" ) + audio_videos_folder[ -1 ],
                                       genre="Audio Format",
                                      writer="Audio Format",
                                       index=0
@@ -311,8 +311,8 @@ class Main:
             utils.log( "Adding Ratings Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
-                                      items=1 * ( ratings_video_folder != "" ),
-                                       path=ratings_video_folder + mpaa + ".avi",
+                                      items=1 * ( rating_videos_folder != "" ),
+                                       path=rating_videos_folder + mpaa + ".avi",
                                       genre="MPAA Rating",
                                      writer="MPAA Rating",
                                       index=0

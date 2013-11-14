@@ -101,29 +101,29 @@
 <!-- 3D Movie Settings -->
     <category label="32108">
         <setting type="lsep" label="32108" />
-        <setting id="enable_3d_intro" type="enum" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32924" default="0" />
-        <setting id="3d_movie_tags" type="text" label="32925" enable="!eq(-1,0)" default="3DSBS|3D.SBS|HSBS|H.SBS|H-SBS| SBS |FULL-SBS|FULL.SBS|FULLSBS|FSBS|HALF-SBS|3DTAB|3D.TAB|HTAB|H.TAB|3DOU|3D.OU|3D.HOU| HOU | OU |HALF-TAB" />
-        <setting id="3d_intro" type="enum" visible="!eq(-2,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32940" default="0" />
-        <setting id="3d_intro_file" type="video" visible="!eq(-3,1) + eq(-1,1)" label="32928" default="" />
-        <setting id="3d_intro_folder" type="folder" visible="!gt(-4,1) + eq(-2,2)" source="video" label="32929" default="" />
-        <setting id="3d_outro" type="enum" visible="!eq(-5,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32936" default="0" />
-        <setting id="3d_outro_file" type="video" visible="!eq(-6,1) + eq(-1,1)" label="32937" default="" />
-        <setting id="3d_outro_folder" type="folder" visible="!gt(-7,1) + eq(-2,2)" source="video" label="32938" default="" />
-        <setting id="3d_countdown_video" type="enum" visible="!gt(-8,1)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32392" default="0" />
-        <setting id="3d_countdown_video_file" type="video" visible="!gt(-9,1) + eq(-1,1)" label="32390" default="" />
-        <setting id="3d_countdown_video_folder" type="folder" visible="!gt(-10,1) + gt(-2,1)" source="video" label="32391" default="" />
-        <setting id="3d_audio_videos_folder" type="folder" visible="!gt(-11,1)" source="video" label="32360" default="" />
-        <setting id="3d_ratings_videos_folder" type="folder" visible=="!gt(-12,1)" source="video" label="32300" default="" />"
-        <setting id="3d_trailers" type="bool" label="32930" enable="!eq(-13,1)" default="true" />
-        <setting id="3d_trailer_count" type="enum" visible="eq(-1,true)" lvalues="32101|32102|32103|32104|32105|32106|32107" label="32100" default="0" />
-        <setting id="3d_trailer_folder" type="folder" label="32931" visible="!eq(-14,1) + eq(-2,true)" default="" />
-        <setting id="3d_trailer_limit_mpaa" type="bool" visible="!eq(-15,1) + eq(-3,true)" label="32140" default="true" />
-        <setting id="3d_trailer_limit_genre" type="bool" visible="!eq(-16,1) + eq(-4,true)" label="32141" default="true" />
-        <setting id="3d_trailer_rating" type="labelenum"  visible="!eq(-17,1) + eq(-5,true)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
-        <setting id="3d_trailer_unwatched_only" type="bool" visible="!eq(-18,1) + eq(-6,true)" label="32190" default="false" />
-        <setting id="3d_intermission_video" type="enum" visible="!eq(-19,1) lvalues="32321|32322|32323|32324|32325|32326|32327" label="32418" default="0" />
-        <setting id="3d_intermission_video_file" type="video" visible="!eq(-20,1) + eq(-1,1)" label="32419" default="" />
-        <setting id="3d_intermission_video_folder" type="folder" visible="!eq(-21,1) + gt(-2,1)" source="video" label="32420" default="" />
+        <setting id="enable_3d_intro" type="bool" label="32924" default="false" />
+        <setting id="3d_movie_tags" type="text" label="32925" visible="eq(-1,true)" enable="!eq(-1,0)" default="3DSBS|3D.SBS|HSBS|H.SBS|H-SBS| SBS |FULL-SBS|FULL.SBS|FULLSBS|FSBS|HALF-SBS|3DTAB|3D.TAB|HTAB|H.TAB|3DOU|3D.OU|3D.HOU| HOU | OU |HALF-TAB" />
+        <setting id="3d_intro" type="enum" visible="eq(-2,true)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32940" default="0" />
+        <setting id="3d_intro_file" type="video" visible="eq(-3,true) + eq(-1,1)" label="32928" default="" />
+        <setting id="3d_intro_folder" type="folder" visible="eq(-4,true) + eq(-2,2)" source="video" label="32929" default="" />
+        <setting id="3d_outro" type="enum" visible="eq(-5,true)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32936" default="0" />
+        <setting id="3d_outro_file" type="video" visible="eq(-6,true) + eq(-1,1)" label="32937" default="" />
+        <setting id="3d_outro_folder" type="folder" visible="eq(-7,true) + eq(-2,2)" source="video" label="32938" default="" />
+        <setting id="3d_countdown_video" type="enum" visible="eq(-8,true)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32392" default="0" />
+        <setting id="3d_countdown_video_file" type="video" visible="eq(-9,true) + eq(-1,1)" label="32390" default="" />
+        <setting id="3d_countdown_video_folder" type="folder" visible="eq(-10,true) + gt(-2,1)" source="video" label="32391" default="" />
+        <setting id="3d_audio_videos_folder" type="folder" visible="eq(-11,true)" source="video" label="32360" default="" />
+        <setting id="3d_ratings_videos_folder" type="folder" visible="eq(-12,true)" source="video" label="32300" default="" />
+        <setting id="3d_trailers" type="bool" label="32930" visible="eq(-13,true)" default="true" />
+        <setting id="3d_trailer_count" type="enum" visible="eq(-14,true) + eq(-1,true)" lvalues="32101|32102|32103|32104|32105|32106|32107" label="32100" default="0" />
+        <setting id="3d_trailer_folder" type="folder" label="32931" visible="eq(-15,true) + eq(-2,true)" default="" />
+        <setting id="3d_trailer_limit_mpaa" type="bool" visible="eq(-16,true) + eq(-3,true)" label="32140" default="true" />
+        <setting id="3d_trailer_limit_genre" type="bool" visible="eq(-17,true) + eq(-4,true)" label="32141" default="true" />
+        <setting id="3d_trailer_rating" type="labelenum"  visible="eq(-18,true) + eq(-5,true)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
+        <setting id="3d_trailer_unwatched_only" type="bool" visible="eq(-19,true) + eq(-6,true)" label="32190" default="false" />
+        <setting id="3d_intermission_video" type="enum" visible="eq(-20,true)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32418" default="0" />
+        <setting id="3d_intermission_video_file" type="video" visible="eq(-21,true) + eq(-1,1)" label="32419" default="" />
+        <setting id="3d_intermission_video_folder" type="folder" visible="eq(-22,true) + gt(-2,1)" source="video" label="32420" default="" />
     </category>
     
 <!-- Home Automation Settings -->
