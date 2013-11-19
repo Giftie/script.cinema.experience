@@ -1,4 +1,4 @@
-3.0.7
+3.0.7/4.0.7
 - fix       - add missing module import
 - add       - SABnzbd control to home automation module
 - change    - convert all file access to use the xbmcvfs module.  Thanks h0tw1r3
@@ -13,6 +13,10 @@
 - change    - new method of reloading settings after settings have been changed 
 - add       - Brazilian Movie Rating support
 - change    - Apple Trailers now pull trailers from Current
+- add       - Gotham - Add back Refresh control
+- add       - Gotham - Add back screensaver control
+- change    - Gotham - Change pause/resume method sensing
+- add       - 3D Intro/Outro/Trailers
 
 3.0.6
 - fix       - version bump to fix Skin folder name on XBMC Addon Git
