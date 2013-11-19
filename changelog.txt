@@ -17,6 +17,7 @@
 - add       - Gotham - Add back screensaver control
 - change    - Gotham - Change pause/resume method sensing
 - add       - 3D Intro/Outro/Trailers
+- change    - removed ancient httpapi code that still lingered
 
 3.0.6
 - fix       - version bump to fix Skin folder name on XBMC Addon Git
