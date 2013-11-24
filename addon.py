@@ -28,6 +28,7 @@ ha_settings      = settings.ha_settings
 video_settings   = settings.video_settings
 extra_settings   = settings.extra_settings
 audio_formats    = settings.audio_formats
+_3d_settings     = settings._3d_settings
 triggers         = settings.triggers
 
 playback = ""

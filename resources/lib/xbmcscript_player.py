@@ -23,6 +23,7 @@ trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
 ha_settings              = sys.modules[ "__main__" ].ha_settings
 extra_settings           = sys.modules[ "__main__" ].extra_settings
+_3d_settings             = sys.modules[ "__main__" ]._3d_settings
 audio_formats            = sys.modules[ "__main__" ].audio_formats
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
@@ -86,7 +87,7 @@ class Main:
         trailer_list = load_saved_list( base_path, "Downloaded Trailers" )
         
     def _start( self ):
-        mpaa = audio = genre = movie = equivalent_mpaa = ""
+        mpaa = audio = genre = movie = equivalent_mpaa = is_3d_movie = ""
         try:
             # create the playlist
             self.playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
@@ -95,11 +96,11 @@ class Main:
             # add the intermission videos and audio files for the 2, third, etc movies
             if self.playlistsize > 1:
                 if extra_settings[ "intermission_video" ] > 0 or extra_settings[  "intermission_audio" ] or extra_settings[ "intermission_ratings" ]:
-                    mpaa, audio, genre, movie, equivalent_mpaa = self._add_intermission_videos()
+                    mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = self._add_intermission_videos()
             # otherwise just build for a single video
             else:
-                mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = 0 )
-            self._create_playlist( mpaa, audio, genre, movie, equivalent_mpaa )
+                mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = 0 )
+            self._create_playlist( mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie )
             # play the trivia slide show
         except:
             traceback.print_exc()
@@ -108,18 +109,36 @@ class Main:
         utils.log( "Adding intermission Video(s)", xbmc.LOGNOTICE )
         count = 0
         index_count = 1
+        if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ]:
+            audio_videos_folder        = _3d_settings[ "3d_audio_videos_folder" ]
+        elif video_settings[ "enable_audio" ]:
+            audio_videos_folder        = video_settings[ "audio_videos_folder" ]
+        if _3d_settings[ "3d_ratings_videos_folder" ] and video_settings[ "enable_ratings" ]:
+            rating_videos_folder      = _3d_settings[ "3d_rating_videos_folder" ]
+        elif video_settings[ "enable_ratings" ]:
+            rating_videos_folder      = video_settings[ "rating_videos_folder" ]
+        if _3d_settings[ "3d_intermission_video" ]:
+            intermission_video_file   = _3d_settings[ "3d_intermission_video_file" ]
+            intermission_video_folder = _3d_settings[ "3d_intermission_video_folder" ]
+            intermission_video        = _3d_settings[ "3d_intermission_video" ]
+            intermission_video_type   = _3d_settings[ "3d_intermission_video_type" ]
+        else:
+            intermission_video_file   = extra_settings[ "intermission_video_file" ]
+            intermission_video_folder = extra_settings[ "intermission_video_folder" ]
+            intermission_video        = extra_settings[ "intermission_video" ]
+            intermission_video_type   = extra_settings[ "intermission_video_type" ]
         for feature in range( 1, self.playlistsize ):
-            mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( feature = index_count )
+            mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = index_count )
             #count = index_count
             # add intermission video
             if extra_settings[ "intermission_video" ] > 0:
-                utils.log( "Inserting intermission Video(s): %s" % extra_settings[ "intermission_video" ], xbmc.LOGNOTICE )
+                utils.log( "Inserting intermission Video(s): %s" % intermission_video, xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=extra_settings[ "intermission_video" ],
-                                           path=( extra_settings[ "intermission_video_file" ], extra_settings[ "intermission_video_folder" ], )[ extra_settings[ "intermission_video_type" ] == "folder" ],
+                                          items=intermission_video,
+                                           path=( intermission_video_file, intermission_video_folder, )[ intermission_video_type == "folder" ],
                                           genre="Intermission",
                                          writer="Intermission",
                                           index=index_count
@@ -127,19 +146,19 @@ class Main:
                 for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
                     # Insert Intermission Label into Trigger List
                     self.trigger_list.insert( index_count, "Intermission" ) 
-                if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and extra_settings[ "intermission_video" ] > 1:
+                if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and intermission_video > 1:
                     index_count += extra_settings[ "intermission_video" ] - 1
-                elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and extra_settings[ "intermission_video" ] == 1:
+                elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and intermission_video == 1:
                     index_count += extra_settings[ "intermission_video" ]
             # get rating video
-            if video_settings[ "enable_ratings" ] and extra_settings[ "intermission_ratings" ] and video_settings[ "rating_videos_folder" ] != "":
+            if video_settings[ "enable_ratings" ] and extra_settings[ "intermission_ratings" ] and rating_videos_folder != "":
                 utils.log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
-                                           path=video_settings[ "rating_videos_folder" ] + mpaa + ".avi",
+                                          items=1 * ( rating_videos_folder != "" ),
+                                           path=rating_videos_folder + mpaa + ".avi",
                                           genre="Movie Rating",
                                          writer="Movie Rating",
                                          index = index_count
@@ -150,14 +169,14 @@ class Main:
                 if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size:
                     index_count += 1
             # get Dolby/DTS videos
-            if video_settings[ "enable_audio" ]  and extra_settings[ "intermission_audio" ] and video_settings[ "audio_videos_folder" ]:
+            if video_settings[ "enable_audio" ]  and extra_settings[ "intermission_audio" ] and audio_videos_folder:
                 utils.log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
-                                          items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
-                                          path = video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
+                                          items=1 * ( audio_videos_folder != "" ),
+                                          path = audio_videos_folder + audio_formats.get( audio, "Other" ) + audio_videos_folder[ -1 ],
                                           genre="Audio Format",
                                          writer="Audio Format",
                                          index = index_count
@@ -169,19 +188,104 @@ class Main:
                     index_count += 1
             index_count += 1
         # return info from first movie in playlist
-        mpaa, audio, genre, movie, equivalent_mpaa = _get_queued_video_info( 0 )
-        return mpaa, audio, genre, movie, equivalent_mpaa
+        mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( 0 )
+        return mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie
 
-    def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa ):
+    def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie ):
         # TODO: try to get a local thumb for special videos?
         utils.log( "Building Cinema Experience Playlist", xbmc.LOGNOTICE )
+        # setup for 3d videos
+        if is_3d_movie and _3d_settings[ "enable_3d_intro" ]:
+            if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ]:
+                audio_videos_folder     = _3d_settings[ "3d_audio_videos_folder" ]
+            elif video_settings[ "enable_audio" ]:
+                audio_videos_folder     = video_settings[ "audio_videos_folder" ]
+            if _3d_settings[ "3d_rating_videos_folder" ] and video_settings[ "enable_ratings" ]:
+                rating_videos_folder   = _3d_settings[ "3d_rating_videos_folder" ]
+            elif video_settings[ "enable_ratings" ]:
+                rating_videos_folder   = video_settings[ "rating_videos_folder" ]
+            if _3d_settings[ "3d_intro" ]:
+                fpv_intro_file         = _3d_settings[ "3d_intro_file" ]
+                fpv_intro_folder       = _3d_settings[ "3d_intro_folder" ]
+                fpv_intro              = _3d_settings[ "3d_intro" ]
+                fpv_intro_type         = _3d_settings[ "3d_intro_type" ]
+            else:
+                fpv_intro_file         = video_settings[ "fpv_intro_file" ]
+                fpv_intro_folder       = video_settings[ "fpv_intro_folder" ]
+                fpv_intro              = video_settings[ "fpv_intro" ]
+                fpv_intro_type         = video_settings[ "fpv_intro_type" ]
+            if _3d_settings[ "3d_outro" ]:
+                fpv_outro_file         = _3d_settings[ "3d_outro_file" ]
+                fpv_outro_folder       = _3d_settings[ "3d_outro_folder" ]
+                fpv_outro              = _3d_settings[ "3d_outro" ]
+                fpv_outro_type         = _3d_settings[ "3d_outro_type" ]
+            else:
+                fpv_outro_file         = video_settings[ "fpv_outro_file" ]
+                fpv_outro_folder       = video_settings[ "fpv_outro_folder" ]
+                fpv_outro              = video_settings[ "fpv_outro" ]
+                fpv_outro_type         = video_settings[ "fpv_outro_type" ]
+            if _3d_settings[ "3d_countdown_video" ]:
+                countdown_video        = _3d_settings[ "3d_countdown_video_type" ]
+                countdown_video_file   = _3d_settings[ "3d_countdown_video_file" ]
+                countdown_video_folder = _3d_settings[ "3d_countdown_video_folder" ]
+                countdown_video_type   = _3d_settings[ "3d_countdoun_video_type" ]
+            else:
+                countdown_video        = video_settings[ "countdown_video" ]
+                countdown_video_type   = video_settings[ "countdown_video_type" ]
+                countdown_video_file   = video_settings[ "countdown_video_file" ]
+                countdown_video_folder = video_settings[ "countdown_video_folder" ]
+        else:
+            audio_videos_folder         = video_settings[ "audio_videos_folder" ]
+            rating_videos_folder       = video_settings[ "rating_videos_folder" ]
+            fpv_intro                  = video_settings[ "fpv_intro" ]
+            fpv_intro_type             = video_settings[ "fpv_intro_type" ]
+            fpv_intro_file             = video_settings[ "fpv_intro_file" ]
+            fpv_intro_folder           = video_settings[ "fpv_intro_folder" ]
+            fpv_outro                  = video_settings[ "fpv_outro" ]
+            fpv_outro_type             = video_settings[ "fpv_outro_type" ]
+            fpv_outro_file             = video_settings[ "fpv_outro_file" ]
+            fpv_outro_folder           = video_settings[ "fpv_outro_folder" ]
+            countdown_video            = video_settings[ "countdown_video" ]
+            countdown_video_type       = video_settings[ "countdown_video_type" ]
+            countdown_video_file       = video_settings[ "countdown_video_file" ]
+            countdown_video_folder     = video_settings[ "countdown_video_folder" ]
+        # get 3D Trailers
+        if _3d_settings[ "3d_trailers" ]:
+            utils.log( "Retriving 3D Trailers: %s Trailers" % _3d_settings[ "3d_trailer_count" ], xbmc.LOGNOTICE )
+            _3d_trailers = _get_trailers(  items=_3d_settings[ "3d_trailer_count" ],
+                                 equivalent_mpaa=equivalent_mpaa,
+                                            mpaa=mpaa,
+                                           genre=genre,
+                                           movie=movie,
+                                            mode="3D"
+                                        )
+            for trailer in _3d_trailers:
+                # get trailers
+                _get_special_items(    playlist=self.playlist,
+                                           items=1,
+                                            path=trailer[ 2 ],
+                                           genre=trailer[ 9 ] or "3D Movie Trailer",
+                                           title=trailer[ 1 ],
+                                       thumbnail=trailer[ 3 ],
+                                            plot=trailer[ 4 ],
+                                         runtime=trailer[ 5 ],
+                                            mpaa=trailer[ 6 ],
+                                    release_date=trailer[ 7 ],
+                                          studio=trailer[ 8 ] or "3D Movie Trailer",
+                                          writer= "3D Movie Trailer",
+                                        director=trailer[ 11 ],
+                                           index=0
+                                  )
+            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+                # Insert 3D Trailer Label into Trigger List
+                self.trigger_list.insert( 0, "3D Movie Trailer" )
         # get Dolby/DTS videos
-        if video_settings[ "enable_audio" ] and video_settings[ "audio_videos_folder" ]:
+        if video_settings[ "enable_audio" ] and audio_videos_folder:
             utils.log( "Adding Audio Format Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
-                                      items=1 * ( video_settings[ "audio_videos_folder" ] != "" ),
-                                       path=video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ],
+                                      items=1 * ( audio_videos_folder != "" ),
+                                       path=audio_videos_folder + audio_formats.get( audio, "Other" ) + audio_videos_folder[ -1 ],
                                       genre="Audio Format",
                                      writer="Audio Format",
                                       index=0
@@ -194,8 +298,8 @@ class Main:
             utils.log( "Adding Ratings Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
-                                      items=1 * ( video_settings[ "rating_videos_folder" ] != "" ),
-                                       path=video_settings[ "rating_videos_folder" ] + mpaa + ".avi",
+                                      items=1 * ( rating_videos_folder != "" ),
+                                       path=rating_videos_folder + mpaa + ".avi",
                                       genre="MPAA Rating",
                                      writer="MPAA Rating",
                                       index=0
@@ -204,11 +308,11 @@ class Main:
                 # Insert Rating Label into Trigger List
                 self.trigger_list.insert( 0, "MPAA Rating" )
         # get feature presentation intro videos
-        utils.log( "Adding Feature Presentation Intro Videos: %s Videos" % video_settings[ "fpv_intro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Feature Presentation Intro Videos: %s Videos" % fpv_intro, xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
-                                  items=video_settings[ "fpv_intro" ],
-                                   path=( video_settings[ "fpv_intro_file" ], video_settings[ "fpv_intro_folder" ], )[ video_settings[ "fpv_intro_type" ] == "folder" ],
+                                  items=fpv_intro,
+                                   path=( fpv_intro_file, fpv_intro_folder, )[ fpv_intro_type == "folder" ],
                                   genre="Feature Presentation Intro",
                                  writer="Feature Presentation Intro",
                                   index=0
@@ -217,11 +321,11 @@ class Main:
             # Insert Feature Presentation Label into Trigger List
             self.trigger_list.insert( 0, "Feature Presentation Intro" )
         # Add Countdown video
-        utils.log( "Adding Countdown Videos: %s Video(s)" % video_settings[ "countdown_video" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Countdown Videos: %s Video(s)" % countdown_video, xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
-                                  items=video_settings[ "countdown_video" ],
-                                   path=( video_settings[ "countdown_video_file" ], video_settings[ "countdown_video_folder" ], )[ video_settings[ "countdown_video_type" ] == "folder" ],
+                                  items=countdown_video,
+                                   path=( countdown_video_file, countdown_video_folder, )[ countdown_video_type == "folder" ],
                                   genre="Countdown",
                                  writer="Countdown",
                                   index=0
@@ -317,11 +421,11 @@ class Main:
                 # Insert Trivia Outro Label into Trigger List
                 self.trigger_list.insert( 0, "Trivia Outro" )
         # get feature presentation outro videos
-        utils.log( "Adding Feature Presentation Outro Videos: %s Videos" % video_settings[ "fpv_outro" ], xbmc.LOGNOTICE )
+        utils.log( "Adding Feature Presentation Outro Videos: %s Videos" % fpv_outro, xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
         _get_special_items(    playlist=self.playlist,
-                                  items=video_settings[ "fpv_outro" ],
-                                   path=( video_settings[ "fpv_outro_file" ], video_settings[ "fpv_outro_folder" ], )[ video_settings[ "fpv_outro_type" ] == "folder" ],
+                                  items=fpv_outro,
+                                   path=( fpv_outro_file, fpv_outro_folder, )[ fpv_outro_type == "folder" ],
                                   genre="Feature Presentation Outro",
                                  writer="Feature Presentation Outro",
                           )

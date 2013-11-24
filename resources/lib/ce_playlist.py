@@ -13,6 +13,7 @@ trivia_settings          = sys.modules[ "__main__" ].trivia_settings
 trailer_settings         = sys.modules[ "__main__" ].trailer_settings
 video_settings           = sys.modules[ "__main__" ].video_settings
 audio_formats            = sys.modules[ "__main__" ].audio_formats
+_3d_settings             = sys.modules[ "__main__" ]._3d_settings
 BASE_CACHE_PATH          = sys.modules[ "__main__" ].BASE_CACHE_PATH
 BASE_RESOURCE_PATH       = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 BASE_CURRENT_SOURCE_PATH = sys.modules[ "__main__" ].BASE_CURRENT_SOURCE_PATH
@@ -31,6 +32,14 @@ def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download"
     if settings[ "trailer_play_mode" ] == 1 and mode == "playlist" and settings[ "trailer_scraper" ] in ( "amt_database", "amt_current" ):
         settings[ "trailer_scraper" ] = "local"
         settings[ "trailer_folder" ] = settings[ "trailer_download_folder" ]
+    if mode == "3D":
+        settings[ "trailer_scraper" ] = "local"
+        settings[ "trailer_folder" ] = _3d_settings[ "3d_trailer_folder" ]
+        settings[ "trailer_count" ] = _3d_settings[ "3d_trailer_count" ]
+        settings[ "trailer_limit_mpaa" ] = _3d_settings[ "3d_trailer_limit_mpaa" ]
+        settings[ "trailer_limit_genre" ] = _3d_settings[ "3d_trailer_limit_genre" ]
+        settings[ "trailer_trailer_rating" ] = _3d_settings[ "3d_trailer_rating" ]
+        settings[ "trailer_unwatched_only" ] = _3d_settings[ "3d_trailer_unwatched_only" ]
     # get the correct scraper
     sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib", "scrapers" ) )
     exec "from %s import scraper as scraper" % ( settings[ "trailer_scraper" ], )
@@ -40,6 +49,7 @@ def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download"
     # return results
     return trailers
     
+
 def _getnfo( path ):
     
     '''
@@ -388,6 +398,7 @@ def _get_queued_video_info( feature = 0 ):
     except:
         traceback.print_exc()
         movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa = ""
+    is_3d_movie = test_for_3d( path )
     # spew queued video info to log
     utils.log( "Queued Movie Information" )
     utils.log( "%s" % log_sep )
@@ -396,11 +407,22 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "Genre: %s" % genre )
     utils.log( "Rating: %s" % short_mpaa )
     utils.log( "Audio: %s" % audio )
+    utils.log( "3D Movie: %s" % ( "False", "True" )[ is_3d_movie ] )
     if video_settings[ "audio_videos_folder" ]:
-        utils.log( "Folder: %s" % ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) )
+        if is_3d_movie and _3d_settings[ "3d_audio_videos_folder" ]:
+            utils.log( "Folder: %s" % ( _3d_settings[ "3d_audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + _3d_settings[ "3d_audio_videos_folder" ][ -1 ], ) )
+        else:
+            utils.log( "Folder: %s" % ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) )
     utils.log( "%s" % log_sep )
     # return results
-    return short_mpaa, audio, genre, path, equivalent_mpaa
+    return short_mpaa, audio, genre, path, equivalent_mpaa, is_3d_movie
+
+def test_for_3d( path ):
+    is_3d_movie = re.findall( _3d_settings[ "3d_movie_tags" ], path )
+    if is_3d_movie:
+        return True
+    else:
+        return False
 
 def _clear_playlists( mode="both" ):
     # clear playlists
