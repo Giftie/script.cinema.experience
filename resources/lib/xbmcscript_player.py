@@ -216,15 +216,6 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Feature Presentation Label into Trigger List
             self.trigger_list.insert( 0, "Feature Presentation Intro" )
-        # get trailers
-        utils.log( "Retriving Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
-        trailers = _get_trailers(  items=trailer_settings[ "trailer_count" ],
-                         equivalent_mpaa=equivalent_mpaa,
-                                    mpaa=mpaa,
-                                   genre=genre,
-                                   movie=movie,
-                                    mode="playlist"
-                                )
         # Add Countdown video
         utils.log( "Adding Countdown Videos: %s Video(s)" % video_settings[ "countdown_video" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -238,6 +229,15 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Countdown Label into Trigger List
             self.trigger_list.insert( 0, "Countdown" )
+        # get trailers
+        utils.log( "Retriving Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
+        trailers = _get_trailers(  items=trailer_settings[ "trailer_count" ],
+                         equivalent_mpaa=equivalent_mpaa,
+                                    mpaa=mpaa,
+                                   genre=genre,
+                                   movie=movie,
+                                    mode="playlist"
+                                )
         # get coming attractions outro videos
         utils.log( "Adding Coming Attraction Outro Video: %s Videos" % video_settings[ "cav_outro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
