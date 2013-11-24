@@ -175,19 +175,6 @@ class Main:
     def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa ):
         # TODO: try to get a local thumb for special videos?
         utils.log( "Building Cinema Experience Playlist", xbmc.LOGNOTICE )
-        # Add Countdown video
-        utils.log( "Adding Countdown Videos: %s Video(s)" % video_settings[ "countdown_video" ], xbmc.LOGNOTICE )
-        p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-        _get_special_items(    playlist=self.playlist,
-                                  items=video_settings[ "countdown_video" ],
-                                   path=( video_settings[ "countdown_video_file" ], video_settings[ "countdown_video_folder" ], )[ video_settings[ "countdown_video_type" ] == "folder" ],
-                                  genre="Countdown",
-                                 writer="Countdown",
-                                  index=0
-                           )
-        for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
-            # Insert Countdown Label into Trigger List
-            self.trigger_list.insert( 0, "Countdown" )
         # get Dolby/DTS videos
         if video_settings[ "enable_audio" ] and video_settings[ "audio_videos_folder" ]:
             utils.log( "Adding Audio Format Video", xbmc.LOGNOTICE )
@@ -238,6 +225,19 @@ class Main:
                                    movie=movie,
                                     mode="playlist"
                                 )
+        # Add Countdown video
+        utils.log( "Adding Countdown Videos: %s Video(s)" % video_settings[ "countdown_video" ], xbmc.LOGNOTICE )
+        p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
+        _get_special_items(    playlist=self.playlist,
+                                  items=video_settings[ "countdown_video" ],
+                                   path=( video_settings[ "countdown_video_file" ], video_settings[ "countdown_video_folder" ], )[ video_settings[ "countdown_video_type" ] == "folder" ],
+                                  genre="Countdown",
+                                 writer="Countdown",
+                                  index=0
+                           )
+        for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+            # Insert Countdown Label into Trigger List
+            self.trigger_list.insert( 0, "Countdown" )
         # get coming attractions outro videos
         utils.log( "Adding Coming Attraction Outro Video: %s Videos" % video_settings[ "cav_outro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
