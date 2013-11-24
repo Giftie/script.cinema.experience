@@ -249,19 +249,6 @@ class Main:
             countdown_video_type       = video_settings[ "countdown_video_type" ]
             countdown_video_file       = video_settings[ "countdown_video_file" ]
             countdown_video_folder     = video_settings[ "countdown_video_folder" ]
-        # Add Countdown video
-        utils.log( "Adding Countdown Videos: %s Video(s)" % countdown_video, xbmc.LOGNOTICE )
-        p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-        _get_special_items(    playlist=self.playlist,
-                                  items=countdown_video,
-                                   path=( countdown_video_file, countdown_video_folder, )[ countdown_video_type == "folder" ],
-                                  genre="Countdown",
-                                 writer="Countdown",
-                                  index=0
-                           )
-        for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
-            # Insert Countdown Label into Trigger List
-            self.trigger_list.insert( 0, "Countdown" )
         # get 3D Trailers
         if _3d_settings[ "3d_trailers" ]:
             utils.log( "Retriving 3D Trailers: %s Trailers" % _3d_settings[ "3d_trailer_count" ], xbmc.LOGNOTICE )
@@ -333,6 +320,19 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Feature Presentation Label into Trigger List
             self.trigger_list.insert( 0, "Feature Presentation Intro" )
+        # Add Countdown video
+        utils.log( "Adding Countdown Videos: %s Video(s)" % countdown_video, xbmc.LOGNOTICE )
+        p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
+        _get_special_items(    playlist=self.playlist,
+                                  items=countdown_video,
+                                   path=( countdown_video_file, countdown_video_folder, )[ countdown_video_type == "folder" ],
+                                  genre="Countdown",
+                                 writer="Countdown",
+                                  index=0
+                           )
+        for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+            # Insert Countdown Label into Trigger List
+            self.trigger_list.insert( 0, "Countdown" )
         # get trailers
         utils.log( "Retriving Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
         trailers = _get_trailers(  items=trailer_settings[ "trailer_count" ],
