@@ -124,6 +124,9 @@ class settings():
                                                    "ha_fpv_outro": eval( __addon__.getSetting( "ha_fpv_outro" ) ),
                                                    "ha_mte_outro": eval( __addon__.getSetting( "ha_mte_outro" ) ),
                                                 "ha_intermission": eval( __addon__.getSetting( "ha_intermission" ) ),
+                                                    "ha_3d_intro": eval( __addon__.getSetting( "ha_3d_intro" ) ),
+                                                  "ha_3d_trailer": eval( __addon__.getSetting( "ha_3d_trailer" ) ),
+                                                    "ha_3d_outro": eval( __addon__.getSetting( "ha_3d_outro" ) ),
                                                   "ha_script_end": eval( __addon__.getSetting( "ha_script_end" ) ),
                                                       "ha_paused": eval( __addon__.getSetting( "ha_paused" ) ),
                                                      "ha_resumed": eval( __addon__.getSetting( "ha_resumed" ) )
@@ -147,6 +150,14 @@ class settings():
                                                   "3d_intro_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_intro" ) ) > 1 ],
                                                   "3d_intro_file": xbmc.translatePath( __addon__.getSetting( "3d_intro_file" ) ).decode('utf-8'),
                                                 "3d_intro_folder": xbmc.translatePath( __addon__.getSetting( "3d_intro_folder" ) ).decode('utf-8'),
+                                                   "3d_fpv_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_fpv_intro" ) ) ) ],
+                                              "3d_fpv_intro_type": ( "file", "folder" )[ int( float( __addon__.getSetting( "3d_fpv_intro" ) ) ) > 1 ],
+                                              "3d_fpv_intro_file": xbmc.translatePath( __addon__.getSetting( "3d_fpv_intro_file" ) ).decode('utf-8'),
+                                            "3d_fpv_intro_folder": xbmc.translatePath( __addon__.getSetting( "3d_fpv_intro_folder" ) ).decode('utf-8'),
+                                                   "3d_fpv_outro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_fpv_outro" ) ) ) ],
+                                              "3d_fpv_outro_type": ( "file", "folder" )[ int( float( __addon__.getSetting( "3d_fpv_outro" ) ) ) > 1 ],
+                                              "3d_fpv_outro_file": xbmc.translatePath( __addon__.getSetting( "3d_fpv_outro_file" ) ).decode('utf-8'),
+                                            "3d_fpv_outro_folder": xbmc.translatePath( __addon__.getSetting( "3d_fpv_outro_folder" ) ).decode('utf-8'),
                                                        "3d_outro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_outro" ) ) ) ],
                                                   "3d_outro_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_outro" ) ) > 1 ],
                                                   "3d_outro_file": xbmc.translatePath( __addon__.getSetting( "3d_outro_file" ) ).decode('utf-8'),
@@ -164,10 +175,10 @@ class settings():
                                          "3d_trailer_limit_genre": eval( __addon__.getSetting( "3d_trailer_limit_genre" ) ),
                                               "3d_trailer_rating": __addon__.getSetting( "3d_trailer_rating" ),
                                       "3d_trailer_unwatched_only":  eval( __addon__.getSetting( "3d_trailer_unwatched_only" ) ),
-                                             "3d_intermission_video": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_intermission_video" ) ) ) ],
-                                        "3d_intermission_video_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_intermission_video" ) ) > 1 ],
-                                        "3d_intermission_video_file": xbmc.translatePath( __addon__.getSetting( "3d_intermission_video_file" ) ).decode('utf-8'),
-                                      "3d_intermission_video_folder": xbmc.translatePath( __addon__.getSetting( "3d_intermission_video_folder" ) ).decode('utf-8')
+                                          "3d_intermission_video": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_intermission_video" ) ) ) ],
+                                     "3d_intermission_video_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_intermission_video" ) ) > 1 ],
+                                     "3d_intermission_video_file": xbmc.translatePath( __addon__.getSetting( "3d_intermission_video_file" ) ).decode('utf-8'),
+                                   "3d_intermission_video_folder": xbmc.translatePath( __addon__.getSetting( "3d_intermission_video_folder" ) ).decode('utf-8')
                                       }
 
         self.audio_formats          = {                     "dts": "DTS",

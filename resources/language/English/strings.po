@@ -933,7 +933,7 @@ msgid "3D Movie Outro Video Folder"
 msgstr ""
 
 msgctxt "#32939"
-msgid "Trigger at start of the 3D Movie Intro(s)"
+msgid "Trigger at start of the 3D Outro(s)"
 msgstr ""
 
 msgctxt "#32940"

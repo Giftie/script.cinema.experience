@@ -204,21 +204,21 @@ class Main:
                 rating_videos_folder   = _3d_settings[ "3d_rating_videos_folder" ]
             elif video_settings[ "enable_ratings" ]:
                 rating_videos_folder   = video_settings[ "rating_videos_folder" ]
-            if _3d_settings[ "3d_intro" ]:
-                fpv_intro_file         = _3d_settings[ "3d_intro_file" ]
-                fpv_intro_folder       = _3d_settings[ "3d_intro_folder" ]
-                fpv_intro              = _3d_settings[ "3d_intro" ]
-                fpv_intro_type         = _3d_settings[ "3d_intro_type" ]
+            if _3d_settings[ "3d_fpv_intro" ]:
+                fpv_intro_file         = _3d_settings[ "3d_fpv_intro_file" ]
+                fpv_intro_folder       = _3d_settings[ "3d_fpv_intro_folder" ]
+                fpv_intro              = _3d_settings[ "3d_fpv_intro" ]
+                fpv_intro_type         = _3d_settings[ "3d_fpv_intro_type" ]
             else:
                 fpv_intro_file         = video_settings[ "fpv_intro_file" ]
                 fpv_intro_folder       = video_settings[ "fpv_intro_folder" ]
                 fpv_intro              = video_settings[ "fpv_intro" ]
                 fpv_intro_type         = video_settings[ "fpv_intro_type" ]
             if _3d_settings[ "3d_outro" ]:
-                fpv_outro_file         = _3d_settings[ "3d_outro_file" ]
-                fpv_outro_folder       = _3d_settings[ "3d_outro_folder" ]
-                fpv_outro              = _3d_settings[ "3d_outro" ]
-                fpv_outro_type         = _3d_settings[ "3d_outro_type" ]
+                fpv_outro_file         = _3d_settings[ "3d_fpv_outro_file" ]
+                fpv_outro_folder       = _3d_settings[ "3d_fpv_outro_folder" ]
+                fpv_outro              = _3d_settings[ "3d_fpv_outro" ]
+                fpv_outro_type         = _3d_settings[ "3d_fpv_outro_type" ]
             else:
                 fpv_outro_file         = video_settings[ "fpv_outro_file" ]
                 fpv_outro_folder       = video_settings[ "fpv_outro_folder" ]
@@ -333,6 +333,20 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Countdown Label into Trigger List
             self.trigger_list.insert( 0, "Countdown" )
+        # 3D Intro Video
+        if _3d_settings[ "3d_intro" ]:
+            utils.log( "Adding 3D Intro Video: %s Videos" % _3d_settings[ "3d_intro" ], xbmc.LOGNOTICE )
+            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
+            _get_special_items(    playlist=self.playlist,
+                                      items=_3d_settings[ "3d_intro" ],
+                                       path=( _3d_settings[ "3d_intro_file" ], _3d_settings[ "3d_intro_folder" ], )[ _3d_settings[ "3d_intro_type" ] == "folder" ],
+                                      genre="3D Intro",
+                                     writer="3D Intro",
+                                      index=0
+                               )
+            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+                # Insert 3D Intro Label into Trigger List
+                self.trigger_list.insert( 0, "3D Intro" )
         # get trailers
         utils.log( "Retriving Trailers: %s Trailers" % trailer_settings[ "trailer_count" ], xbmc.LOGNOTICE )
         trailers = _get_trailers(  items=trailer_settings[ "trailer_count" ],
@@ -432,6 +446,19 @@ class Main:
         for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
             # Insert Feature Presentation Outro Label into Trigger List
             self.trigger_list.append( "Feature Presentation Outro" )
+        # 3D Outro Video
+        if _3d_settings[ "3d_outro" ]:
+            utils.log( "Adding 3D Outro Video: %s Videos" % _3d_settings[ "3d_outro" ], xbmc.LOGNOTICE )
+            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
+            _get_special_items(    playlist=self.playlist,
+                                      items=_3d_settings[ "3d_outro" ],
+                                       path=( _3d_settings[ "3d_outro_file" ], _3d_settings[ "3d_outro_folder" ], )[ _3d_settings[ "3d_outro_type" ] == "folder" ],
+                                      genre="3D Outro",
+                                     writer="3D Outro",
+                               )
+            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+                # Insert 3D Outro Label into Trigger List
+                self.trigger_list.append( "3D Outro" )
         # get movie theater experience outro videos
         utils.log( "Adding Movie Theatre Outro Videos: %s Videos" % video_settings[ "mte_outro" ], xbmc.LOGNOTICE )
         p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
