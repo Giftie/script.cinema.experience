@@ -877,7 +877,7 @@ msgid "Enable 3D Movie Integration"
 msgstr ""
 
 msgctxt "#32925"
-msgid "    3D Movie File name tags - separate with '|'(pipe)"
+msgid "3D Movie filename tags"
 msgstr ""
 
 msgctxt "#32926"
@@ -940,3 +940,26 @@ msgctxt "#32940"
 msgid "3D Movie Intro Video(s)"
 msgstr ""
 
+msgctxt "#32941"
+msgid "3D Videos Intros/Outros"
+msgstr ""
+
+msgctxt "#32942"
+msgid "3D Replacement Videos - Play 3D equivalent Videos"
+msgstr ""
+
+msgctxt "#32943"
+msgid "With the above enabled, if a 3D Movie is played,"
+msgstr ""
+
+msgctxt "#32944"
+msgid "the following videos will play (based on your selections)"
+msgstr ""
+
+msgctxt "#32945"
+msgid "(based on your selections)"
+msgstr ""
+
+msgctxt "#32946"
+msgid "Separate tags with '|'(pipe) and include spaces if required"
+msgstr ""
