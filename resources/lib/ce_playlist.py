@@ -26,7 +26,8 @@ from folder import absolute_listdir
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
     utils.log( "[ce_playlist.py] - _get_trailers started" )
     # return if not user preference
-    settings = trailer_settings
+    settings = []
+    settings = trailer_settings.copy()
     if not items:
         return []
     if settings[ "trailer_play_mode" ] == 1 and mode == "playlist" and settings[ "trailer_scraper" ] in ( "amt_database", "amt_current" ):
