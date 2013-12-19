@@ -260,6 +260,7 @@ class Main:
         # get 3D Trailers
         if is_3d_movie and _3d_settings[ "3d_trailers" ]:
             utils.log( "Retriving 3D Trailers: %s Trailers" % _3d_settings[ "3d_trailer_count" ], xbmc.LOGNOTICE )
+            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _3d_trailers = _get_trailers(  items=_3d_settings[ "3d_trailer_count" ],
                                  equivalent_mpaa=equivalent_mpaa,
                                             mpaa=mpaa,
