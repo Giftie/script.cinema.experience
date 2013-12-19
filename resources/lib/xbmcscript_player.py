@@ -233,17 +233,17 @@ class Main:
                 fpv_outro              = video_settings[ "fpv_outro" ]
                 fpv_outro_type         = video_settings[ "fpv_outro_type" ]
             if _3d_settings[ "3d_countdown_video" ]:
-                countdown_video        = _3d_settings[ "3d_countdown_video_type" ]
+                countdown_video        = _3d_settings[ "3d_countdown_video" ]
+                countdown_video_type   = _3d_settings[ "3d_countdown_video_type" ]
                 countdown_video_file   = _3d_settings[ "3d_countdown_video_file" ]
                 countdown_video_folder = _3d_settings[ "3d_countdown_video_folder" ]
-                countdown_video_type   = _3d_settings[ "3d_countdoun_video_type" ]
             else:
                 countdown_video        = video_settings[ "countdown_video" ]
                 countdown_video_type   = video_settings[ "countdown_video_type" ]
                 countdown_video_file   = video_settings[ "countdown_video_file" ]
                 countdown_video_folder = video_settings[ "countdown_video_folder" ]
         else:
-            audio_videos_folder         = video_settings[ "audio_videos_folder" ]
+            audio_videos_folder        = video_settings[ "audio_videos_folder" ]
             rating_videos_folder       = video_settings[ "rating_videos_folder" ]
             fpv_intro                  = video_settings[ "fpv_intro" ]
             fpv_intro_type             = video_settings[ "fpv_intro_type" ]
