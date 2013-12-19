@@ -37,7 +37,7 @@ def absolute_listdir( path, media_type = "files", recursive = False, contains = 
         absolute_folders = absolute_folder_paths( folders, path )
         if recursive:
             for folder in absolute_folders:
-                absolute_files.extend( absolute_listdir( folder, recursive = recursive, contains = contains ) )
+                absolute_files.extend( absolute_listdir( folder, media_type = media_type, recursive = recursive, contains = contains ) )
     return absolute_files
 
 def absolute_folder_paths( folders, root_path ):
