@@ -257,37 +257,6 @@ class Main:
             countdown_video_type       = video_settings[ "countdown_video_type" ]
             countdown_video_file       = video_settings[ "countdown_video_file" ]
             countdown_video_folder     = video_settings[ "countdown_video_folder" ]
-        # get 3D Trailers
-        if is_3d_movie and _3d_settings[ "3d_trailers" ]:
-            utils.log( "Retriving 3D Trailers: %s Trailers" % _3d_settings[ "3d_trailer_count" ], xbmc.LOGNOTICE )
-            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
-            _3d_trailers = _get_trailers(  items=_3d_settings[ "3d_trailer_count" ],
-                                 equivalent_mpaa=equivalent_mpaa,
-                                            mpaa=mpaa,
-                                           genre=genre,
-                                           movie=movie,
-                                            mode="3D"
-                                        )
-            for trailer in _3d_trailers:
-                # get trailers
-                _get_special_items(    playlist=self.playlist,
-                                           items=1,
-                                            path=trailer[ 2 ],
-                                           genre=trailer[ 9 ] or "3D Movie Trailer",
-                                           title=trailer[ 1 ],
-                                       thumbnail=trailer[ 3 ],
-                                            plot=trailer[ 4 ],
-                                         runtime=trailer[ 5 ],
-                                            mpaa=trailer[ 6 ],
-                                    release_date=trailer[ 7 ],
-                                          studio=trailer[ 8 ] or "3D Movie Trailer",
-                                          writer= "3D Movie Trailer",
-                                        director=trailer[ 11 ],
-                                           index=0
-                                  )
-            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
-                # Insert 3D Trailer Label into Trigger List
-                self.trigger_list.insert( 0, "3D Movie Trailer" )
         # get Dolby/DTS videos
         if video_settings[ "enable_audio" ] and audio_videos_folder:
             utils.log( "Adding Audio Format Video", xbmc.LOGNOTICE )
@@ -345,6 +314,37 @@ class Main:
             for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
                 # Insert Countdown Label into Trigger List
                 self.trigger_list.insert( 0, "Countdown" )
+        # get 3D Trailers
+        if is_3d_movie and _3d_settings[ "3d_trailers" ]:
+            utils.log( "Retriving 3D Trailers: %s Trailers" % _3d_settings[ "3d_trailer_count" ], xbmc.LOGNOTICE )
+            p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
+            _3d_trailers = _get_trailers(  items=_3d_settings[ "3d_trailer_count" ],
+                                 equivalent_mpaa=equivalent_mpaa,
+                                            mpaa=mpaa,
+                                           genre=genre,
+                                           movie=movie,
+                                            mode="3D"
+                                        )
+            for trailer in _3d_trailers:
+                # get trailers
+                _get_special_items(    playlist=self.playlist,
+                                           items=1,
+                                            path=trailer[ 2 ],
+                                           genre=trailer[ 9 ] or "3D Movie Trailer",
+                                           title=trailer[ 1 ],
+                                       thumbnail=trailer[ 3 ],
+                                            plot=trailer[ 4 ],
+                                         runtime=trailer[ 5 ],
+                                            mpaa=trailer[ 6 ],
+                                    release_date=trailer[ 7 ],
+                                          studio=trailer[ 8 ] or "3D Movie Trailer",
+                                          writer= "3D Movie Trailer",
+                                        director=trailer[ 11 ],
+                                           index=0
+                                  )
+            for count in range( 0, ( xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() - p_size ) ):
+                # Insert 3D Trailer Label into Trigger List
+                self.trigger_list.insert( 0, "3D Movie Trailer" )
         # 3D Intro Video
         if is_3d_movie and _3d_settings[ "3d_intro" ]:
             utils.log( "Adding 3D Intro Video: %s Videos" % _3d_settings[ "3d_intro" ], xbmc.LOGNOTICE )
