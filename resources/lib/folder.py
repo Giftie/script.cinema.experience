@@ -30,7 +30,7 @@ def absolute_listdir( path, media_type = "files", recursive = False, contains = 
                     utils.log( "Problem with path, skipping" )
                     traceback.print_exc()
         else:
-            if os.path.splitext( f )[ 1 ] in xbmc.getSupportedMedia( media_type ):
+            if ( os.path.splitext( f )[ 1 ] ).lower() in ( xbmc.getSupportedMedia( media_type ) ).lower():
                 if not contains or ( contains and ( contains in f ) ):
                     absolute_files.append( os.path.join( path, f ) )
     if folders:
