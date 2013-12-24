@@ -121,6 +121,8 @@ def _get_slides_xml( path ):
     mpaa_match = re.search( '''rating="([^\"]*)"''', xml, re.DOTALL )
     if mpaa_match:
         mpaa = mpaa_match.group(1)
+        if mpaa.lower() == "n/a":
+            mpaa = ""
     theme_match = re.search( '''theme="([^\"]*)"''', xml, re.DOTALL )
     if theme_match:
         theme = theme_match.group(1)
