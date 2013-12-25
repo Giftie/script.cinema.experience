@@ -1,3 +1,7 @@
+3.0.8/4.0.8
+- change    - move position of 3D Trailer insert - follows more closely to an actual theatre
+- fix       - allow testing for trivia rating to be set to N/A
+
 3.0.7/4.0.7
 - fix       - add missing module import
 - add       - SABnzbd control to home automation module
