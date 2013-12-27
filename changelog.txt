@@ -1,6 +1,7 @@
 3.0.8/4.0.8
 - change    - move position of 3D Trailer insert - follows more closely to an actual theatre
 - fix       - allow testing for trivia rating to be set to N/A
+- add       - add other playlist types, now .pls, .asf, .ram and .m3u 
 
 3.0.7/4.0.7
 - fix       - add missing module import

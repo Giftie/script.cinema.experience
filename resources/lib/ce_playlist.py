@@ -23,6 +23,8 @@ from json_utils import find_movie_details, retrieve_json_dict
 import utils, music
 from folder import absolute_listdir
 
+parser = music.parse()
+
 def _get_trailers( items, equivalent_mpaa, mpaa, genre, movie, mode = "download" ):
     utils.log( "[ce_playlist.py] - _get_trailers started" )
     # return if not user preference
@@ -171,9 +173,17 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
     if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not xbmcvfs.exists( path ):
         utils.log( "_get_special_items() - File Does not Exist" )
         return
-    # parse .pls file
-    if path.endswith(".pls"):
-        video_list = music.parse_pls( path, xbmc.getSupportedMedia( media_type )  )
+    # parse playlist file
+    if ( os.path.splitext( path )[ 1 ] ).lower() in ( "m3u", "pls", "asf", "ram" ):
+        utils.log( "Video Playlist: %s" % path )
+        if ( os.path.splitext( path )[ 1 ] ).lower() == ".m3u":
+            video_list = parser.parse_m3u( path, xbmc.getSupportedMedia( media_type ) )
+        elif ( os.path.splitext( path )[ 1 ] ).lower() == ".pls":
+            video_list = parser.parse_pls( path, xbmc.getSupportedMedia( media_type ) )
+        elif ( os.path.splitext( path )[ 1 ] ).lower() == ".asf":
+            video_list = parser.parse_asf( path, xbmc.getSupportedMedia( media_type ) )
+        elif ( os.path.splitext( path )[ 1 ] ).lower() == ".ram":
+            video_list = parser.parse_ram( path, xbmc.getSupportedMedia( media_type ) )
         if not video_list:
             utils.log( "Playlist empty or has unsupported media files" )
             return
@@ -289,12 +299,16 @@ def build_music_playlist():
     track_location = []
     # check to see if playlist or music file is selected
     if trivia_settings[ "trivia_music" ] == 1:
-        if trivia_settings[ "trivia_music_file" ].endswith(".m3u") or trivia_settings[ "trivia_music_file" ].endswith(".pls"):
+        if ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[ 1 ] ).lower() in ( "m3u", "pls", "asf", "ram" ):
             utils.log( "Music Playlist: %s" % trivia_settings[ "trivia_music_file" ] )
             if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
-                track_info, track_location = music.parse_m3u( saved_playlist, xbmc.getSupportedMedia('music') )
+                track_location = parser.parse_m3u( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
             elif trivia_settings[ "trivia_music_file" ].endswith(".pls"):
-                track_location = music.parse_pls( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
+                track_location = parser.parse_pls( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
+            elif trivia_settings[ "trivia_music_file" ].endswith(".asf"):
+                track_location = parser.parse_asf( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
+            elif trivia_settings[ "trivia_music_file" ].endswith(".ram"):
+                track_location = parser.parse_ram( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
         elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):
             for track in range(100):
                 track_location.append( trivia_settings[ "trivia_music_file" ] )
