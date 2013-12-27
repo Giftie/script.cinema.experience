@@ -27,7 +27,22 @@ class Main:
     
     def __init__( self, equivalent_mpaa=None, mpaa=None, genre=None, settings=None, movie=None ):
         self.mpaa = self.mpaa_ratings.index( equivalent_mpaa )
-        self.genre = genre.replace( "Sci-Fi", "Science Fiction" ).replace( "Action", "Action and ADV" ).replace( "Adventure", "ACT and Adventure" ).replace( "ACT",  "Action" ).replace( "ADV",  "Adventure" ).split( " / " )
+        genre = genre.split( " / " )
+        self.genre = []
+        if isinstance( genre, list ):
+            self.genre = genre
+        else:
+            self.genre.append( genre )
+        for item in self.genre:
+            if item == "Action and Adventure":
+                self.genre.insert( self.genre.index( "Action and Adventure" ) + 1, "Adventure" )
+                self.genre[ self.genre.index( "Action and Adventure" ) ] = "Action"
+        genre_test = ["Sci-Fi", "Action", "Adventure", "Science Fiction" ]
+        genre_match = ["Science Fiction", "Action and Adventure", "Action and Adventure", "Sci-Fi" ]
+        indices = [ genre_test.index(i) for i in self.genre ]
+        if indices:
+            for i in indices:
+                self.genre.append( genre_match[i] )
         self.settings = settings
         self.movie = movie
         self.trailers = []
