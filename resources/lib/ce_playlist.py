@@ -328,6 +328,12 @@ def get_equivalent_rating( rating ):
             rating = rating.split( ":" )[ 1 - ( len( rating.split( ":" ) ) == 1 ) ]
         else:
             rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
+    #Germany [alternative FSK string]
+    elif rating.startswith("Germany"):
+        if rating.startswith( "Germany:" ):
+            rating = rating.split( ":" )[ 1 - ( len( rating.split( ":" ) ) == 1 ) ]
+        else:
+            rating = rating.split( " " )[ 1 - ( len( rating.split( " " ) ) == 1 ) ]
     #DEJUS
     elif rating in ( "Livre", "10 Anos", "12 Anos", "14 Anos", "16 Anos", "18 Anos" ):
         rating = rating   # adding this just in case there is some with different labels in database
