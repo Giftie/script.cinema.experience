@@ -96,7 +96,7 @@ class Main:
             # if we have enough exit
             if ( count == self.settings[ "trailer_count" ] ):
                 break
-        if ( len(self.trailers) == 0 and self.settings[ "trailer_unwatched_only" ] and len( self.watched ) > 0 ):
+        if ( len( self.trailers ) == 0 and self.settings[ "trailer_unwatched_only" ] and len( self.watched ) > 0 ):
             self._reset_watched()
             #attempt to load our playlist again
             self._shuffle_trailers()
