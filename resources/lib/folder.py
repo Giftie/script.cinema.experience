@@ -21,7 +21,7 @@ def absolute_listdir( path, media_type = "files", recursive = False, contains = 
         if media_type == "files":
             if not contains or ( contains and ( contains in f ) ):
                 try:
-                    absolute_files.append( os.path.join( path, f ) )
+                    absolute_files.append( os.path.join( path.decode( "utf-8" ), f.decode( "utf-8" ) ).replace("\\\\","\\") )
                 except UnicodeError:
                     utils.log( "Problem with path, skipping" )
                     utils.log( "Path: %s" % repr( path ) )
@@ -32,7 +32,7 @@ def absolute_listdir( path, media_type = "files", recursive = False, contains = 
         else:
             if ( os.path.splitext( f )[ 1 ] ).lower() in ( xbmc.getSupportedMedia( media_type ) ).lower():
                 if not contains or ( contains and ( contains in f ) ):
-                    absolute_files.append( os.path.join( path, f ) )
+                    absolute_files.append( os.path.join( path.decode( "utf-8" ), f.decode( "utf-8" ) ).replace("\\\\","\\") )
     if folders:
         absolute_folders = absolute_folder_paths( folders, path )
         if recursive:
@@ -46,7 +46,7 @@ def absolute_folder_paths( folders, root_path ):
     for folder in folders:
         folder = utils.smart_unicode( folder )
         try:
-            actual_folders.append( os.path.join( root_path, folder ).replace("\\\\","\\") )
+            actual_folders.append( os.path.join( root_path.decode( "utf-8" ), folder.decode( "utf-8" ) ).replace("\\\\","\\") )
         except UnicodeError:
             utils.log( "Problem with path, skipping" )
             utils.log( "Path: %s" % repr( root_path ) )
