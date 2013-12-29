@@ -29,7 +29,7 @@ class Automate:
         response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
         response_data = response.read()
       
-    def activate_ha( self, trigger = None, prev_trigger = None, mode="thread" ):
+    def activate_ha( self, trigger = None, prev_trigger = None, mode="normal" ):
         if ha_settings[ "ha_enable" ]:
             if ha_settings[ "ha_multi_trigger" ] and prev_trigger == trigger:
                 pass
@@ -38,6 +38,7 @@ class Automate:
             else:
                 thread = Thread( name='ha_trigger', target=self.activate_on, args=( trigger, ) )
                 thread.start()
+            prev_trigger = trigger
         return prev_trigger
 
     def activate_on( self, trigger = None ):
@@ -89,6 +90,18 @@ class Automate:
             pass
         # Feature Presentation Intro
         elif trigger == "Feature Presentation Intro" and ha_settings[ "ha_fpv_intro" ]: 
+            # place code below this line
+            pass
+        #3D Intro
+        elif trigger == "3D Intro" and ha_setting [ "ha_3d_intro" ]:
+            # place code below this line
+            pass
+        #3D Trailers
+        elif trigger == "3D Movie Trailer" and ha_setting [ "ha_3d_trailer" ]:
+            # place code below this line
+            pass
+        #3D Outro
+        elif trigger == "3D Outro" and ha_setting [ "ha_3d_outro" ]:
             # place code below this line
             pass
         # MPAA Rating
