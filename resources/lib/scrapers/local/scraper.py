@@ -40,7 +40,7 @@ class Main:
         genre_test = ["Sci-Fi", "Action", "Adventure", "Science Fiction" ]
         genre_match = ["Science Fiction", "Action and Adventure", "Action and Adventure", "Sci-Fi" ]
         # check to see if the movie genre has matching genres to those contained in genre_test, if there are, add equivalent genres
-        if len( set( genre_test ).intersection( self.genre ) ) < 1:
+        if len( set( genre_test ).intersection( self.genre ) ) > 0:
             indices = [ genre_test.index(i) for i in self.genre ]
             if indices:
                 for i in indices:
