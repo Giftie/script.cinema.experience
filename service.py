@@ -61,27 +61,27 @@ class CE_Player( xbmc.Player ):
     
     def onPlayBackStarted( self ):
         xbmc.sleep( 500 )
-        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Started' )
     
     def onPlayBackEnded( self ):
         # Will be called when xbmc stops playing a file
-        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Ended" )
     
     def onPlayBackStopped( self ):
         # Will be called when user stops xbmc playing a file
-        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Stopped" )
     
     def onPlayBackPaused( self ):
-        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Paused' )
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
     
     def onPlayBackResumed( self ):
-        if xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True":
+        if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Resumed' )
             if ha_settings[ "ha_enable" ]:
                 Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
@@ -90,10 +90,10 @@ class CE_Player( xbmc.Player ):
         
 def _daemon( ):
     settings.start()
-    xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
+    xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
     while ( not xbmc.abortRequested ):
-        CE_Running = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceRunning" ) == "True"
-        CE_Triggered = xbmcgui.Window( 10001 ).getProperty( "CinemaExperienceTriggered" ) == "True"
+        CE_Running = xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True"
+        CE_Triggered = xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceTriggered" ) == "True"
         if not xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
             xbmc.sleep( 250 )
         else:
@@ -104,7 +104,7 @@ def _daemon( ):
                     #log( 'Waiting for full screen video' )
                 xbmc.Player().stop()
                 xbmc.executebuiltin( "RunScript(script.cinema.experience,fromplay)" )
-                xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "True" )
+                xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "True" )
                 xbmc.sleep( 3000 )
             else:
                 xbmc.sleep( 250 )

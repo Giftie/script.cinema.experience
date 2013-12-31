@@ -109,7 +109,7 @@ if __name__ == "__main__" :
     prev_trigger = ""
     settings.settings_to_log()
     # check to see if an argv has been passed to script
-    xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceRunning", "True" )
+    xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "True" )
     from ce_player import Script
     try:
         try:
@@ -195,17 +195,17 @@ if __name__ == "__main__" :
         if exit:
             prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
             __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-            xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceRunning", "False" )
-            xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
+            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
+            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
         else:
             _clear_playlists()
             __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-            xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceRunning", "False" )
-            xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
+            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
+            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
     except:
         traceback.print_exc()
         # if script fails, changes settings back
         __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
         prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
-        xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceRunning", "False" )
-        xbmcgui.Window( 10001 ).setProperty( "CinemaExperienceTriggered", "False" )
+        xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
+        xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
