@@ -39,10 +39,12 @@ class Main:
                 self.genre[ self.genre.index( "Action and Adventure" ) ] = "Action"
         genre_test = ["Sci-Fi", "Action", "Adventure", "Science Fiction" ]
         genre_match = ["Science Fiction", "Action and Adventure", "Action and Adventure", "Sci-Fi" ]
-        indices = [ genre_test.index(i) for i in self.genre ]
-        if indices:
-            for i in indices:
-                self.genre.append( genre_match[i] )
+        # check to see if the movie genre has matching genres to those contained in genre_test, if there are, add equivalent genres
+        if len( set( genre_test ).intersection( self.genre ) ) < 1:
+            indices = [ genre_test.index(i) for i in self.genre ]
+            if indices:
+                for i in indices:
+                    self.genre.append( genre_match[i] )
         self.settings = settings
         self.movie = movie
         self.trailers = []
