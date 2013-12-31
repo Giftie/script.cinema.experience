@@ -4,7 +4,7 @@ Local trailer scraper
 """
 # TODO: add watched.xml to skip watched trailers
 
-import os, sys, time, re, urllib
+import os, sys, time, re, urllib, traceback
 from random import shuffle, random
 
 import xbmc, xbmcvfs
@@ -41,10 +41,14 @@ class Main:
         genre_match = ["Science Fiction", "Action and Adventure", "Action and Adventure", "Sci-Fi" ]
         # check to see if the movie genre has matching genres to those contained in genre_test, if there are, add equivalent genres
         if len( set( genre_test ).intersection( self.genre ) ) > 0:
-            indices = [ genre_test.index(i) for i in self.genre ]
-            if indices:
-                for i in indices:
-                    self.genre.append( genre_match[i] )
+            for item in self.genre:
+                try:
+                    self.genre.append( genre_match[ genre_test.index( item ) ] )
+                except ValueError:
+                    continue
+                except:
+                    traceback.print_exc()
+                    continue
         self.settings = settings
         self.movie = movie
         self.trailers = []
