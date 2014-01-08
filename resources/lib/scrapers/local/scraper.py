@@ -40,15 +40,17 @@ class Main:
         genre_test = ["Sci-Fi", "Action", "Adventure", "Science Fiction" ]
         genre_match = ["Science Fiction", "Action and Adventure", "Action and Adventure", "Sci-Fi" ]
         # check to see if the movie genre has matching genres to those contained in genre_test, if there are, add equivalent genres
+        genre_append = []
         if len( set( genre_test ).intersection( self.genre ) ) > 0:
             for item in self.genre:
                 try:
-                    self.genre.append( genre_match[ genre_test.index( item ) ] )
+                    genre_append.append( genre_match[ genre_test.index( item ) ] )
                 except ValueError:
-                    continue
+                    pass
                 except:
                     traceback.print_exc()
-                    continue
+                    pass
+        self.genre.extend( genre_append )
         self.settings = settings
         self.movie = movie
         self.trailers = []
