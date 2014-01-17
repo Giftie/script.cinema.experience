@@ -5,7 +5,7 @@ import os, re, sys, socket, traceback, time, __builtin__
 from urllib import quote_plus
 from threading import Thread
 
-__addon__                = xbmcaddon.Addon( 'script.cinema.expirence' )
+__addon__                = xbmcaddon.Addon( 'script.cinema.experience' )
 __version__              = __addon__.getAddonInfo('version')
 __scriptID__             = __addon__.getAddonInfo('id')
 __script__               = __addon__.getAddonInfo('name')

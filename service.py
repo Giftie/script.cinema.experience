@@ -1,7 +1,7 @@
 import xbmc, xbmcaddon, xbmcgui, xbmcvfs
 import os, sys, traceback
 
-__addon__                = xbmcaddon.Addon( 'script.cinema.expirence' )
+__addon__                = xbmcaddon.Addon( 'script.cinema.experience' )
 __version__              = __addon__.getAddonInfo('version')
 __scriptID__             = __addon__.getAddonInfo('id')
 __script__               = __addon__.getAddonInfo('name')
