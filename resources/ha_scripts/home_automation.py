@@ -19,6 +19,23 @@ class Automate:
         pass
     
     def sab_pause(self, mode):
+        """
+            This function provides a method to pause and resume SabNZBd downloading, very useful on a limited network or low powered system
+            
+            Usage:
+            
+                apikey - Your SabNZBd API key goes here
+                ip     - The IP of your SabNZBd Machine, if local, leave as is, if it does not work, put the actual address in
+                port   - Normally 5000 but change it to match you SabNZBd program
+                
+                Pause:
+                
+                    self.sab_pause( "pause" )
+                
+                Resume:
+                
+                    self.sab_pause( "resume" )
+        """
         apikey = ""
         ip = "127.0.0.1" # address 
         port = "5000"
