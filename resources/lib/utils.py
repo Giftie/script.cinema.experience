@@ -127,3 +127,22 @@ def broadcastUDP( data, port = 8278, ipaddress = '255.255.255.255' ): # XBMC's f
     s.connect((IPADDR, PORTNUM))
     s.send(data)
     s.close()
+    
+def create_folders( path ):
+    parent_folders     = [ "Video", "Slideshow", ]
+    video_subfolder_2D = [ "Trivia Intro", "Trivia Outro", "Movie Theatre Intro", "Coming Attractions Intro",
+                           "Coming Attractions Outro", "Countdown", "Audio Formats", "Feature Presentation Intro", "Feature Presentation Outro", 
+                           "Movie Theatre Outro", "Intermission", "Ratings", ]
+    video_subfolder_3D = [ "3D",  "3D Intro", "3D Outro", "Countdown", "Audio Formats", "Feature Presentation Intro", "Feature Presentation Outro", 
+                           "Movie Theatre Outro", "Intermission", "Ratings", ]
+    for folder in parent_folders:
+        folder_path = os.path.join( path, folder )
+        if not xbmc
+    for folder in subfolder_2D:
+        folder_path = os.path.join( path, "Video", "2D", folder )
+    for folder in subfolder_3D:
+        folder_path = os.path.join( path, "Video", "3D", folder )
+    for parent in ( "2D", "3D" ):
+        for k, v in sorted( audio_formats.items() ):
+            folder_path = os.path.join( path, "Video", parent, "Audio", v )
+            
