@@ -4,6 +4,10 @@ import xbmcgui, xbmc, xbmcaddon, xbmcvfs
 import os, re, sys, socket, traceback, time, __builtin__
 from urllib import quote_plus
 from threading import Thread
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
 
 __addon__                = xbmcaddon.Addon( 'script.cinema.experience' )
 __version__              = __addon__.getAddonInfo('version')
@@ -107,9 +111,33 @@ if __name__ == "__main__" :
     #xbmc.sleep( 2000 )
     footprints()
     prev_trigger = ""
-    settings.settings_to_log()
+    utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
     # check to see if an argv has been passed to script
     xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "True" )
+    jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.GetSettingValue",  "params": { "setting": "videoplayer.adjustrefreshrate" }, "id": 1}'''
+    jsonresponse = xbmc.executeJSONRPC( jsonquery )
+    data = simplejson.loads( jsonresponse )
+    if data.has_key('result'):
+        if data['result'].has_key('value'):
+            original_autorefresh = data['result']['value']
+    jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.GetSettingValue",  "params": { "setting": "screensaver.mode" }, "id": 1}'''
+    jsonresponse = xbmc.executeJSONRPC( jsonquery )
+    data = simplejson.loads( jsonresponse )
+    if data.has_key('result'):
+        if data['result'].has_key('value'):
+            original_screensaver = data['result']['value']
+    jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.GetSettingValue",  "params": { "setting": "videoplayer.adjustrefreshrate" }, "id": 1}'''
+    jsonresponse = xbmc.executeJSONRPC( jsonquery )
+    data = simplejson.loads( jsonresponse )
+    if data.has_key('result'):
+        if data['result'].has_key('value'):
+            original_autorefresh = data['result']['value']
+    jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.GetSettingValue",  "params": { "setting": "screensaver.mode" }, "id": 1}'''
+    jsonresponse = xbmc.executeJSONRPC( jsonquery )
+    data = simplejson.loads( jsonresponse )
+    if data.has_key('result'):
+        if data['result'].has_key('value'):
+            original_screensaver = data['result']['value']
     from ce_player import Script
     try:
         try:
@@ -129,10 +157,10 @@ if __name__ == "__main__" :
                         utils.log( "Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ), xbmc.LOGNOTICE )
                         # we need to sleep so the video gets queued properly
                         xbmc.sleep( 250 )
-                        exit = Script().start_script( "oldway" )
+                        exit = Script().start_script( "oldway", original_autorefresh = original_autorefresh )
                     elif sys.argv[ 1 ] == "fromplay":
                         xbmc.sleep( 250 )
-                        exit = Script().start_script( "oldway" )
+                        exit = Script().start_script( "oldway", original_autorefresh = original_autorefresh )
                     elif sys.argv[ 1 ].startswith( "command" ):   # Command Arguments
                         _sys_arg = sys.argv[ 1 ].replace("<li>",";")
                         _command = re.split(";", _sys_arg, maxsplit=1)[1]
@@ -146,7 +174,7 @@ if __name__ == "__main__" :
                             movie_titles = titles.split( ";" )
                             if not movie_titles == "":
                                 _build_playlist( movie_titles )
-                                exit = Script().start_script( "oldway" )
+                                exit = Script().start_script( "oldway", original_autorefresh = original_autorefresh )
                             else:
                                 exit = False
                         elif _command.startswith( "open_settings" ):    # Open Settings
@@ -160,7 +188,7 @@ if __name__ == "__main__" :
                         movie_ids = Script()._jsonrpc_query( jsonquery )
                         if movie_ids:
                             _build_playlist( movie_ids )
-                            exit = Script().start_script( "oldway" )
+                            exit = Script().start_script( "oldway", original_autorefresh = original_autorefresh )
                         else:
                             exit = False
                     elif sys.argv[ 1 ].startswith( "movieid=" ):
@@ -169,12 +197,12 @@ if __name__ == "__main__" :
                         movie_ids = movie_id.split( ";" )
                         if movie_ids:
                             _build_playlist( movie_ids, mode="movie_ids" )
-                            exit = Script().start_script( "oldway" )
+                            exit = Script().start_script( "oldway", original_autorefresh = original_autorefresh )
                         else:
                             exit = False
                     else:
                         _clear_playlists()
-                        exit = Script().start_script( sys.argv[ 1 ].lower() )
+                        exit = Script().start_script( sys.argv[ 1 ].lower(), original_autorefresh = original_autorefresh )
                 except:
                     traceback.print_exc()
         except:
@@ -186,26 +214,31 @@ if __name__ == "__main__" :
                 utils.log( "Action(Queue,%d)" % ( xbmcgui.getCurrentWindowId() - 10000, ), xbmc.LOGNOTICE )
                 # we need to sleep so the video gets queued properly
                 xbmc.sleep( 500 )
-                exit = Script().start_script( "oldway" )
+                exit = Script().start_script( "oldway", original_autorefresh = original_autorefresh )
             else:
                 __addon__.openSettings()
                 exit = True
         #xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32545 ), time_delay, image) )
         utils.log( "messy_exit: %s" % exit, xbmc.LOGNOTICE )
         if exit:
-            prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
-            __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
-            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
+            prev_trigger = Launch_automation().launch_automation( "Script End", None ) # Script End
         else:
             _clear_playlists()
-            __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
-            xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
+        __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
+        jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.SetSettingValue",  "params": { "setting": "videoplayer.adjustrefreshrate", "value": %d }, "id": 1}''' % original_autorefresh
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.SetSettingValue",  "params": { "setting": "screensaver.mode", "value": "%s" }, "id": 1}''' % original_screensaver
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
+        xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
     except:
         traceback.print_exc()
         # if script fails, changes settings back
         __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-        prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
+        jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.SetSettingValue",  "params": { "setting": "videoplayer.adjustrefreshrate", "value": %d }, "id": 1}''' % original_autorefresh
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.SetSettingValue",  "params": { "setting": "screensaver.mode", "value": "%s" }, "id": 1}''' % original_screensaver
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        prev_trigger = Launch_automation().launch_automation( "Script End", None ) # Script End
         xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
         xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )

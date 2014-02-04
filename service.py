@@ -1,5 +1,9 @@
 import xbmc, xbmcaddon, xbmcgui, xbmcvfs
 import os, sys, traceback
+if sys.version_info >=  (2, 7):
+    import json
+else:
+    import simplejson as json 
 
 __addon__                = xbmcaddon.Addon( 'script.cinema.experience' )
 __version__              = __addon__.getAddonInfo('version')
@@ -44,7 +48,8 @@ class CE_Monitor( xbmc.Monitor ):
         self.original_settings = settings.read_settings_xml()
         self.enabled = kwargs['enabled']
         self.update_settings = kwargs['update_settings']
-        
+        self.previous_method = ""
+    
     def onSettingsChanged( self ):
         try:
             xbmc.sleep( 10000 )
@@ -54,6 +59,24 @@ class CE_Monitor( xbmc.Monitor ):
         except:
             traceback.print_exc()
         
+    def onNotification( self, sender, method, data):
+        if sender == "xbmc":
+            if xbmcgui.Window(10025).getProperty( "CinemaExperienceRunning" ) == "True":
+                if method.startswith( "Player."):
+                    if method == "Player.OnPause":
+                        utils.log( 'Playback Paused' )
+                        if ha_settings[ "ha_enable" ]:
+                            Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
+                    elif method == "Player.OnPlay" and self.previous_method == "Player.OnPause":
+                        utils.log( 'Playback Resumed' )
+                        if ha_settings[ "ha_enable" ]:
+                            Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
+                    elif method == "Player.OnStop":
+                        utils.log( "Playback Stopped" )
+                    elif method == "Player.OnPlay":
+                        utils.log( 'Playback Started' )
+                    self.previous_method = method
+                    
 class CE_Player( xbmc.Player ):
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__( self )
@@ -77,14 +100,14 @@ class CE_Player( xbmc.Player ):
     def onPlayBackPaused( self ):
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Paused' )
-            if ha_settings[ "ha_enable" ]:
-                Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
+            #if ha_settings[ "ha_enable" ]:
+            #    Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
     
     def onPlayBackResumed( self ):
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Resumed' )
-            if ha_settings[ "ha_enable" ]:
-                Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
+            #if ha_settings[ "ha_enable" ]:
+            #    Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
     
         pass
         
