@@ -171,11 +171,9 @@
 <!-- Misc. Settings _-->
     <category label="32804">    
         <setting type="lsep" label="32804" />
-<!--        <setting id="autorefresh" type="bool" enable="false" label="32401" default="false" />
-        <setting id="autorefresh_movie" type="bool" enable="false" visible="eq(-1,true)" enable="eq(-1,true)" label="32402" default="false" />
--->
+        <setting id="autorefresh" type="bool" enable="true" label="32401" default="false" />
+        <setting id="autorefresh_movie" type="bool" visible="eq(-1,true)" enable="eq(-1,true)" label="32402" default="false" />
         <setting id="voxcommando" type="bool" label="32403" default="false" />
         <setting id="override_play" type="bool" label="32922" default="false" />
     </category>
--->
 </settings>

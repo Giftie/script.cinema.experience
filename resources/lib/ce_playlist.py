@@ -410,11 +410,20 @@ def _get_queued_video_info( feature = 0 ):
             audio = movie_detail['streamdetails']['audio'][0]['codec']
         except:
             audio = "other"
+        try:
+            stereomode = movie_detail['streamdetails']['video'][0]['stereomode']
+        except:
+            stereomode = ""
         equivalent_mpaa, short_mpaa = get_equivalent_rating( mpaa )
     except:
         traceback.print_exc()
-        movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa = ""
-    is_3d_movie = test_for_3d( path )
+        movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa, stereomode = ""
+    if not stereomode in ( "mono", "" ):
+        is_3d_movie = True
+    elif stereomode == "": # if database still has an empty stereomode, test filename
+        is_3d_movie = test_for_3d( path )
+    else:
+        is_3d_movie = False
     # spew queued video info to log
     utils.log( "Queued Movie Information" )
     utils.log( "%s" % log_sep )
@@ -423,6 +432,7 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "Genre: %s" % genre )
     utils.log( "Rating: %s" % short_mpaa )
     utils.log( "Audio: %s" % audio )
+    utils.log( "Stereo Mode: %s" % stereomode )
     utils.log( "3D Movie: %s" % ( "False", "True" )[ is_3d_movie ] )
     if video_settings[ "audio_videos_folder" ]:
         if is_3d_movie and _3d_settings[ "3d_audio_videos_folder" ]:

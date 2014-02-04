@@ -141,7 +141,9 @@ class settings():
                                              "intermission_audio": eval( __addon__.getSetting( "intermission_audio" ) ),
                                            "intermission_ratings": eval( __addon__.getSetting( "intermission_ratings" ) ),
                                                     "voxcommando": eval( __addon__.getSetting( "voxcommando" ) ),
-                                                  "override_play": eval( __addon__.getSetting( "override_play" ) )
+                                                  "override_play": eval( __addon__.getSetting( "override_play" ) ),
+                                                    "autorefresh": eval( __addon__.getSetting( "autorefresh" ) ),
+                                              "autorefresh_movie": eval( __addon__.getSetting( "autorefresh_movie" ) )
                                       }
         
         self._3d_settings           = {         "enable_3d_intro": eval( __addon__.getSetting( "enable_3d_intro" ) ),
@@ -194,9 +196,11 @@ class settings():
                                                        "a_truehd": "Dolby TrueHD",
                                                          "truehd": "Dolby TrueHD"
                                        }
+                                       
         self.triggers               = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
-                                    "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "3D Movie Trailer", "Feature Presentation Intro", "Audio Format", 
-                                    "MPAA Rating", "Movie", "Feature Presentation Outro", "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume" )
+                                    "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "3D Intro", "3D Movie Trailer", "3D Outro",
+                                    "Feature Presentation Intro", "Audio Format", "MPAA Rating", "Movie", "Feature Presentation Outro",
+                                    "Movie Theatre Outro", "Intermission", "Script End", "Pause", "Resume" )
 
     def read_settings_xml( self ):
         setting_values = {}
