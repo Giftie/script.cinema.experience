@@ -111,7 +111,7 @@ if __name__ == "__main__" :
     #xbmc.sleep( 2000 )
     footprints()
     prev_trigger = ""
-    utils.settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
+    settings.settings_to_log( BASE_CURRENT_SOURCE_PATH, script_header )
     # check to see if an argv has been passed to script
     xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "True" )
     jsonquery = '''{"jsonrpc": "2.0", "method": "Settings.GetSettingValue",  "params": { "setting": "videoplayer.adjustrefreshrate" }, "id": 1}'''
