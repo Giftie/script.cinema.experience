@@ -193,7 +193,7 @@ if __name__ == "__main__" :
         #xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % (header, __language__( 32545 ), time_delay, image) )
         utils.log( "messy_exit: %s" % exit, xbmc.LOGNOTICE )
         if exit:
-            prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
+            prev_trigger = Launch_automation().launch_automation( "Script End", None ) # Script End
             __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
             xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
             xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
@@ -206,6 +206,6 @@ if __name__ == "__main__" :
         traceback.print_exc()
         # if script fails, changes settings back
         __addon__.setSetting( id='number_of_features', value='%d' % (number_of_features - 1) )
-        prev_trigger = Launch_automation().launch_automation( triggers[16], None ) # Script End
+        prev_trigger = Launch_automation().launch_automation( "Script End", None ) # Script End
         xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceRunning", "False" )
         xbmcgui.Window( 10025 ).setProperty( "CinemaExperienceTriggered", "False" )
