@@ -2,7 +2,7 @@
 <addon id="script.cinema.experience"
      name="Cinema Experience"
   version="3.0.10"
-  provider-name="Giftie - nuka1195">
+  provider-name="Giftie">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="3.3.0"/>
