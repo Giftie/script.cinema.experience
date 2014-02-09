@@ -104,8 +104,8 @@
         <setting id="enable_3d_intro" type="bool" label="32924" default="false" />
         <setting type="lsep" visible="eq(-1,true)" label="32943" />
         <setting type="lsep" visible="eq(-2,true)" label="32944" />
-        <setting type="lsep" visible="eq(-3,true)" label="" />
-        <setting type="lsep" visible="eq(-4,true)" label="32941" />
+        <setting type="lsep" visible="eq(-3,true)" label="32941" />
+        <setting id="3d_override" type="bool" visible="eq(-4,true)" label="32947" default="true"/>
         <setting id="3d_intro" type="enum" visible="eq(-5,true)" lvalues="32321|32322|32323|32324|32325|32326|32327" label="32940" default="0" />
         <setting id="3d_intro_file" type="video" visible="eq(-6,true) + eq(-1,1)" label="32928" default="" />
         <setting id="3d_intro_folder" type="folder" visible="eq(-7,true) + eq(-2,2)" source="video" label="32929" default="" />

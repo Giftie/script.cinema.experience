@@ -1,8 +1,18 @@
+3.0.10/4.0.10
+- fix       - correct Import.
+
+3.0.9/4.0.9
+- add       - do not play 2D videos if 3D equivalent is not enabled and movie is 3D
+- fix       - found cause of bluenotes problem
+- update    - updated home_automation.py to match the development branch
+- Official pull
+
 3.0.8/4.0.8
 - change    - move position of 3D Trailer insert - follows more closely to an actual theatre
 - fix       - allow testing for trivia rating to be set to N/A
 - add       - add other playlist types, now .pls, .asf, .ram and .m3u 
 - fix       - fix skin property window
+- add       - add 'German:' testing for Ratings - thanks Larnixva
 
 3.0.7/4.0.7
 - fix       - add missing module import

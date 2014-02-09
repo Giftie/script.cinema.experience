@@ -206,18 +206,18 @@ class Main:
         if is_3d_movie and _3d_settings[ "enable_3d_intro" ]:
             if _3d_settings[ "3d_enable_audio" ] and video_settings[ "enable_audio" ]:
                 audio_videos_folder     = _3d_settings[ "3d_audio_videos_folder" ]
-            elif video_settings[ "enable_audio" ]:
+            elif not ( _3d_settings[ "3d_override" ] ) and video_settings[ "enable_audio" ]:
                 audio_videos_folder     = video_settings[ "audio_videos_folder" ]
             if _3d_settings[ "3d_enable_ratings" ] and video_settings[ "enable_ratings" ]:
                 rating_videos_folder   = _3d_settings[ "3d_rating_videos_folder" ]
-            elif video_settings[ "enable_ratings" ]:
+            elif not ( _3d_settings[ "3d_override" ] ) and video_settings[ "enable_ratings" ]:
                 rating_videos_folder   = video_settings[ "rating_videos_folder" ]
             if _3d_settings[ "3d_fpv_intro" ]:
                 fpv_intro_file         = _3d_settings[ "3d_fpv_intro_file" ]
                 fpv_intro_folder       = _3d_settings[ "3d_fpv_intro_folder" ]
                 fpv_intro              = _3d_settings[ "3d_fpv_intro" ]
                 fpv_intro_type         = _3d_settings[ "3d_fpv_intro_type" ]
-            else:
+            elif not ( _3d_settings[ "3d_override" ] ):
                 fpv_intro_file         = video_settings[ "fpv_intro_file" ]
                 fpv_intro_folder       = video_settings[ "fpv_intro_folder" ]
                 fpv_intro              = video_settings[ "fpv_intro" ]
@@ -227,7 +227,7 @@ class Main:
                 fpv_outro_folder       = _3d_settings[ "3d_fpv_outro_folder" ]
                 fpv_outro              = _3d_settings[ "3d_fpv_outro" ]
                 fpv_outro_type         = _3d_settings[ "3d_fpv_outro_type" ]
-            else:
+            elif not ( _3d_settings[ "3d_override" ] ):
                 fpv_outro_file         = video_settings[ "fpv_outro_file" ]
                 fpv_outro_folder       = video_settings[ "fpv_outro_folder" ]
                 fpv_outro              = video_settings[ "fpv_outro" ]
@@ -237,7 +237,7 @@ class Main:
                 countdown_video_type   = _3d_settings[ "3d_countdown_video_type" ]
                 countdown_video_file   = _3d_settings[ "3d_countdown_video_file" ]
                 countdown_video_folder = _3d_settings[ "3d_countdown_video_folder" ]
-            else:
+            elif not ( _3d_settings[ "3d_override" ] ):
                 countdown_video        = video_settings[ "countdown_video" ]
                 countdown_video_type   = video_settings[ "countdown_video_type" ]
                 countdown_video_file   = video_settings[ "countdown_video_file" ]

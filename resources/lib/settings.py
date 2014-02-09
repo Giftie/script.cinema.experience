@@ -146,6 +146,7 @@ class settings():
         
         self._3d_settings           = {         "enable_3d_intro": eval( __addon__.getSetting( "enable_3d_intro" ) ),
                                                   "3d_movie_tags": __addon__.getSetting( "3d_movie_tags" ),
+                                                    "3d_override": eval( __addon__.getSetting( "3d_override" ) ),
                                                        "3d_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "3d_intro" ) ) ) ],
                                                   "3d_intro_type": ( "file", "folder" )[ int( __addon__.getSetting( "3d_intro" ) ) > 1 ],
                                                   "3d_intro_file": xbmc.translatePath( __addon__.getSetting( "3d_intro_file" ) ).decode('utf-8'),
