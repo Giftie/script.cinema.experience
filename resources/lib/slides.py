@@ -51,12 +51,13 @@ def _get_slides( paths, movie_mpaa ):
         file_entries.sort()
         # get a slides.xml if it exists
         slidesxml_exists, mpaa, question_format, clue_format, answer_format, still_format = _get_slides_xml( path )
-        # check if rating is ok
-        utils.log( "Movie MPAA: %s" % movie_mpaa )
-        utils.log( "Slide MPAA: %s" % mpaa )
-        if ( slidesxml_exists and mpaa_ratings.get( movie_mpaa, -1 ) < mpaa_ratings.get( mpaa, -1 ) ):
-            utils.log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE )
-            continue
+        if slidexml_exists:
+            # check if rating is ok
+            utils.log( "Movie MPAA: %s" % movie_mpaa )
+            utils.log( "Slide MPAA: %s" % mpaa )
+            if ( slide_settings[ "trivia_limit_query" ] and mpaa_ratings.get( movie_mpaa, -1 ) < mpaa_ratings.get( mpaa, -1 ) ):
+                utils.log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE )
+                continue
         # initialize these to True so we add a new list item to start
         question = clue = answer = still = True
         # enumerate through our file_entries list and combine question, clue, answer
