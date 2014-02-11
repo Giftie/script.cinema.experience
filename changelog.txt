@@ -1,3 +1,7 @@
+3.0.11/4.0.11
+- add       - separate slide testing, add more logging
+- fix       - Allow Trivia Limit slides to function properly.
+
 3.0.10/4.0.10
 - fix       - correct Import.
 
