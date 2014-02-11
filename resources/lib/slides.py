@@ -66,41 +66,29 @@ def _get_slides( paths, movie_mpaa ):
             file_entry = os.path.join( path.decode( "utf-8" ), entry.decode( "utf-8" ) )
             if ( slidesxml_exists ):
                 # question
-                if question_format:
-                    if re.search( question_format, os.path.basename( file_entry ), re.IGNORECASE ):
-                        if ( question ):
-                            tmp_slides += [ [ "", "", "" ] ]
-                            clue = answer = still = False
-                        tmp_slides[ -1 ][ 0 ] = "__question__" + file_entry
-                    else:
-                        utils.log( "Slide: %s does not match Question Format: %s" % ( question_format, os.path.basename( file_entry ) ) )
+                if ( question_format and re.search( question_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                    if ( question ):
+                        tmp_slides += [ [ "", "", "" ] ]
+                        clue = answer = still = False
+                    tmp_slides[ -1 ][ 0 ] = "__question__" + file_entry
                     # clue
-                elif clue_format:
-                    if re.search( clue_format, os.path.basename( file_entry ), re.IGNORECASE ):
-                        if ( clue ):
-                            tmp_slides += [ [ "", "", "" ] ]
-                            question = answer = still = False
-                        tmp_slides[ -1 ][ 1 ] = "__clue__" + file_entry
-                    else:
-                        utils.log( "Slide: %s does not match Clue Format: %s" % ( clue_format, os.path.basename( file_entry ) ) )
+                elif ( clue_format and re.search( clue_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                    if ( clue ):
+                        tmp_slides += [ [ "", "", "" ] ]
+                        question = answer = still = False
+                    tmp_slides[ -1 ][ 1 ] = "__clue__" + file_entry
                 # answer
-                elif answer_format:
-                    if re.search( answer_format, os.path.basename( file_entry ), re.IGNORECASE ):
-                        if ( answer ):
-                            tmp_slides += [ [ "", "", "" ] ]
-                            question = clue = still = False
-                        tmp_slides[ -1 ][ 2 ] = "__answer__" + file_entry
-                    else:
-                        utils.log( "Slide: %s does not match Answer Format: %s" % ( answer_format, os.path.basename( file_entry ) ) )
+                elif ( answer_format and re.search( answer_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                    if ( answer ):
+                        tmp_slides += [ [ "", "", "" ] ]
+                        question = clue = still = False
+                    tmp_slides[ -1 ][ 2 ] = "__answer__" + file_entry
                     # still
-                elif still_format:
-                    if re.search( still_format, os.path.basename( file_entry ), re.IGNORECASE ):
-                        if ( still ):
-                            tmp_slides += [ [ "", "", "" ] ]
-                            clue = answer = question = False
-                        tmp_slides[ -1 ][ 0 ] = "__still__" + file_entry
-                    else:
-                        utils.log( "Slide: %s does not match Slide Format: %s" % ( slide_format, os.path.basename( file_entry ) ) )
+                elif ( still_format and re.search( still_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                    if ( still ):
+                        tmp_slides += [ [ "", "", "" ] ]
+                        clue = answer = question = False
+                    tmp_slides[ -1 ][ 0 ] = "__still__" + file_entry
             # add the file as a question TODO: maybe check for valid picture format?
             elif ( file_entry and os.path.splitext( file_entry )[ 1 ].lower() in xbmc.getSupportedMedia( "picture" ) ):
                 tmp_slides += [ [ "", "", "__still__" + file_entry ] ] 
