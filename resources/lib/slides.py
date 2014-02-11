@@ -51,7 +51,7 @@ def _get_slides( paths, movie_mpaa ):
         file_entries.sort()
         # get a slides.xml if it exists
         slidesxml_exists, mpaa, question_format, clue_format, answer_format, still_format = _get_slides_xml( path )
-        if slidexml_exists:
+        if slidesxml_exists:
             # check if rating is ok
             utils.log( "Movie MPAA: %s" % movie_mpaa )
             utils.log( "Slide MPAA: %s" % mpaa )
