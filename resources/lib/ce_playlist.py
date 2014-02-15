@@ -174,7 +174,7 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
         utils.log( "_get_special_items() - File Does not Exist" )
         return
     # parse playlist file
-    if ( os.path.splitext( path )[ 1 ] ).lower() in ( "m3u", "pls", "asf", "ram" ):
+    if ( os.path.splitext( path )[ 1 ] ).lower() in ( ".m3u", ".pls", ".asf", ".ram" ):
         utils.log( "Video Playlist: %s" % path )
         if ( os.path.splitext( path )[ 1 ] ).lower() == ".m3u":
             video_list = parser.parse_m3u( path, xbmc.getSupportedMedia( media_type ) )
@@ -299,7 +299,7 @@ def build_music_playlist():
     track_location = []
     # check to see if playlist or music file is selected
     if trivia_settings[ "trivia_music" ] == 1:
-        if ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[ 1 ] ).lower() in ( "m3u", "pls", "asf", "ram" ):
+        if ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[ 1 ] ).lower() in ( ".m3u", ".pls", ".asf", ".ram" ):
             utils.log( "Music Playlist: %s" % trivia_settings[ "trivia_music_file" ] )
             if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
                 track_location = parser.parse_m3u( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
@@ -309,7 +309,7 @@ def build_music_playlist():
                 track_location = parser.parse_asf( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
             elif trivia_settings[ "trivia_music_file" ].endswith(".ram"):
                 track_location = parser.parse_ram( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
-        elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):
+        elif ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] ).replace( ".", "" ) in xbmc.getSupportedMedia('music'):
             for track in range(100):
                 track_location.append( trivia_settings[ "trivia_music_file" ] )
     # otherwise
