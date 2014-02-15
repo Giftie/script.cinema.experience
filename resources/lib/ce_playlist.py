@@ -133,29 +133,19 @@ def _set_trailer_info( trailer ):
     
 def _get_trailer_thumbnail( path ):
     utils.log( "Getting Trailer Thumbnail" )
-    # check for a thumb based on trailername.tbn
-    thumbnail = os.path.splitext( path )[ 0 ] + ".tbn"
-    utils.log( "Looking for thumbnail: %s" % thumbnail )
+    thumbnail = ""
+    base_file = os.path.splitext( path )[ 0 ]
     # if thumb does not exist try stripping -trailer
-    if not xbmcvfs.exists( thumbnail ):
-        thumbnail = os.path.splitext( path )[ 0 ] + ".jpg"
+    file_search = [ base_file + ".tbn", base_file + ".jpg", base_file.replace( "-trailer", "" ) + ".tbn", base_file.replace( "-trailer", "" ) + ".jpg", "movie.tbn", "movie.jpg", "poster.jpg", "folder.jpg" ]
+    for item in file_search:
         utils.log( "Looking for thumbnail: %s" % thumbnail )
-        if not xbmcvfs.exists( thumbnail ):
-            thumbnail = "%s.tbn" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
-            utils.log( "Thumbnail not found, Trying: %s" % thumbnail )
-            if not xbmcvfs.exists( thumbnail ):
-                thumbnail = "%s.jpg" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
-                utils.log( "Looking for thumbnail: %s" % thumbnail )
-                if not xbmcvfs.exists( thumbnail ):
-                    thumbnail = os.path.join( os.path.dirname( path ), "movie.tbn" )
-                    utils.log( "Thumbnail not found, Trying: %s" % thumbnail )
-                    # if thumb does not exist return empty
-                    if not xbmcvfs.exists( thumbnail ):
-                        # set empty string
-                        thumbnail = ""
-                        utils.log( "Thumbnail not found" )
+        if xbmcvfs.exists( item ):
+            thumbnail = item
+            break
     if thumbnail:
         utils.log( "Thumbnail found: %s" % thumbnail )
+    else:
+        utils.log( "Thumbnail not found" )
     # return result
     return thumbnail
 
