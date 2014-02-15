@@ -133,29 +133,19 @@ def _set_trailer_info( trailer ):
     
 def _get_trailer_thumbnail( path ):
     utils.log( "Getting Trailer Thumbnail" )
-    # check for a thumb based on trailername.tbn
-    thumbnail = os.path.splitext( path )[ 0 ] + ".tbn"
-    utils.log( "Looking for thumbnail: %s" % thumbnail )
+    thumbnail = ""
+    base_file = os.path.splitext( path )[ 0 ]
     # if thumb does not exist try stripping -trailer
-    if not xbmcvfs.exists( thumbnail ):
-        thumbnail = os.path.splitext( path )[ 0 ] + ".jpg"
+    file_search = [ base_file + ".tbn", base_file + ".jpg", base_file.replace( "-trailer", "" ) + ".tbn", base_file.replace( "-trailer", "" ) + ".jpg", "movie.tbn", "movie.jpg", "poster.jpg", "folder.jpg" ]
+    for item in file_search:
         utils.log( "Looking for thumbnail: %s" % thumbnail )
-        if not xbmcvfs.exists( thumbnail ):
-            thumbnail = "%s.tbn" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
-            utils.log( "Thumbnail not found, Trying: %s" % thumbnail )
-            if not xbmcvfs.exists( thumbnail ):
-                thumbnail = "%s.jpg" % ( os.path.splitext( path )[ 0 ].replace( "-trailer", "" ), )
-                utils.log( "Looking for thumbnail: %s" % thumbnail )
-                if not xbmcvfs.exists( thumbnail ):
-                    thumbnail = os.path.join( os.path.dirname( path ), "movie.tbn" )
-                    utils.log( "Thumbnail not found, Trying: %s" % thumbnail )
-                    # if thumb does not exist return empty
-                    if not xbmcvfs.exists( thumbnail ):
-                        # set empty string
-                        thumbnail = ""
-                        utils.log( "Thumbnail not found" )
+        if xbmcvfs.exists( item ):
+            thumbnail = item
+            break
     if thumbnail:
         utils.log( "Thumbnail found: %s" % thumbnail )
+    else:
+        utils.log( "Thumbnail not found" )
     # return result
     return thumbnail
 
@@ -170,11 +160,16 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
         utils.log( "No Items added to playlist" )
         return
     # if path is a file check if file exists
+    if genre == "Movie Rating":
+        folders, files = xbmcvfs.listdir( path )
+        for f in files:
+            if ( os.path.splitext( os.path.basename( f ) )[ 0 ] ).lower() == mpaa.lower()
+                path = f
     if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not xbmcvfs.exists( path ):
         utils.log( "_get_special_items() - File Does not Exist" )
         return
     # parse playlist file
-    if ( os.path.splitext( path )[ 1 ] ).lower() in ( "m3u", "pls", "asf", "ram" ):
+    if ( os.path.splitext( path )[ 1 ] ).lower() in ( ".m3u", ".pls", ".asf", ".ram" ):
         utils.log( "Video Playlist: %s" % path )
         if ( os.path.splitext( path )[ 1 ] ).lower() == ".m3u":
             video_list = parser.parse_m3u( path, xbmc.getSupportedMedia( media_type ) )
@@ -299,7 +294,7 @@ def build_music_playlist():
     track_location = []
     # check to see if playlist or music file is selected
     if trivia_settings[ "trivia_music" ] == 1:
-        if ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[ 1 ] ).lower() in ( "m3u", "pls", "asf", "ram" ):
+        if ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[ 1 ] ).lower() in ( ".m3u", ".pls", ".asf", ".ram" ):
             utils.log( "Music Playlist: %s" % trivia_settings[ "trivia_music_file" ] )
             if trivia_settings[ "trivia_music_file" ].endswith(".m3u"):
                 track_location = parser.parse_m3u( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
@@ -309,7 +304,7 @@ def build_music_playlist():
                 track_location = parser.parse_asf( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
             elif trivia_settings[ "trivia_music_file" ].endswith(".ram"):
                 track_location = parser.parse_ram( trivia_settings[ "trivia_music_file" ], xbmc.getSupportedMedia('music') )
-        elif os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] in xbmc.getSupportedMedia('music'):
+        elif ( os.path.splitext( trivia_settings[ "trivia_music_file" ] )[1] ).replace( ".", "" ) in xbmc.getSupportedMedia('music'):
             for track in range(100):
                 track_location.append( trivia_settings[ "trivia_music_file" ] )
     # otherwise
