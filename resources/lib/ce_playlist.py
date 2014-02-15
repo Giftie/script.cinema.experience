@@ -160,6 +160,11 @@ def _get_special_items( playlist, items, path, genre, title="", thumbnail="", pl
         utils.log( "No Items added to playlist" )
         return
     # if path is a file check if file exists
+    if genre == "Movie Rating":
+        folders, files = xbmcvfs.listdir( path )
+        for f in files:
+            if ( os.path.splitext( os.path.basename( f ) )[ 0 ] ).lower() == mpaa.lower()
+                path = f
     if os.path.splitext( path )[ 1 ] and not path.startswith( "http://" ) and not xbmcvfs.exists( path ):
         utils.log( "_get_special_items() - File Does not Exist" )
         return
