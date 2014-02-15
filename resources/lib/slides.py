@@ -90,7 +90,7 @@ def _get_slides( paths, movie_mpaa ):
                         clue = answer = question = False
                     tmp_slides[ -1 ][ 0 ] = "__still__" + file_entry
             # add the file as a question TODO: maybe check for valid picture format?
-            elif ( file_entry and os.path.splitext( file_entry )[ 1 ].lower() in xbmc.getSupportedMedia( "picture" ) ):
+            elif ( file_entry and ( os.path.splitext( file_entry )[ 1 ].lower() ).replace( ".", "" ) in xbmc.getSupportedMedia( "picture" ) ):
                 tmp_slides += [ [ "", "", "__still__" + file_entry ] ] 
     # if there are folders call again (we want recursive)
     if ( folders ):
