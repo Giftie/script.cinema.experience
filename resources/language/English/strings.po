@@ -482,15 +482,15 @@ msgstr ""
 #empty strings from id 32381 to 32389
 
 msgctxt "#32390"
-msgid "Movie Coundown Video File"
+msgid "Movie Countdown Video File"
 msgstr ""
 
 msgctxt "#32391"
-msgid "Movie Coundown Video Folder"
+msgid "Movie Countdown Video Folder"
 msgstr ""
 
 msgctxt "#32392"
-msgid "Movie Coundown Video"
+msgid "Movie Countdown Video"
 msgstr ""
 
 #Misc settings
