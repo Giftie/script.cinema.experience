@@ -111,35 +111,33 @@ class Main:
         index_count = 1
         for feature in range( 1, self.playlistsize ):
             mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie = _get_queued_video_info( feature = index_count )
+            audio_videos_folder        = video_settings[ "audio_videos_folder" ]
+            rating_videos_folder       = video_settings[ "rating_videos_folder" ]
+            intermission_video         = extra_settings[ "intermission_video" ]
+            enable_audio               = video_settings[ "enable_audio" ]
+            enable_ratings             = video_settings[ "enable_ratings" ]
             if is_3d_movie and _3d_settings[ "enable_3d_intro" ]:
-                if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ]:
+                if _3d_settings[ "3d_audio_videos_folder" ] and video_settings[ "enable_audio" ] and not _3d_settings[ "3d_override" ]:
                     audio_videos_folder        = _3d_settings[ "3d_audio_videos_folder" ]
-                elif video_settings[ "enable_audio" ]:
-                    audio_videos_folder        = video_settings[ "audio_videos_folder" ]
-                if _3d_settings[ "3d_ratings_videos_folder" ] and video_settings[ "enable_ratings" ]:
+                elif _3d_settings[ "3d_override" ]:
+                    audio_videos_folder        = ""
+                if _3d_settings[ "3d_ratings_videos_folder" ] and video_settings[ "enable_ratings" ] and not _3d_settings[ "3d_override" ]:
                     rating_videos_folder      = _3d_settings[ "3d_rating_videos_folder" ]
-                elif video_settings[ "enable_ratings" ]:
-                    rating_videos_folder      = video_settings[ "rating_videos_folder" ]
-                if _3d_settings[ "3d_intermission_video" ]:
+                elif _3d_settings[ "3d_override" ]:
+                    rating_videos_folder      = ""
+                if _3d_settings[ "3d_intermission_video" ] and extra_settings[ "intermission_video" ] and not _3d_settings[ "3d_override" ]:
                     intermission_video_file   = _3d_settings[ "3d_intermission_video_file" ]
                     intermission_video_folder = _3d_settings[ "3d_intermission_video_folder" ]
                     intermission_video        = _3d_settings[ "3d_intermission_video" ]
                     intermission_video_type   = _3d_settings[ "3d_intermission_video_type" ]
-                else:
-                    intermission_video_file   = extra_settings[ "intermission_video_file" ]
-                    intermission_video_folder = extra_settings[ "intermission_video_folder" ]
-                    intermission_video        = extra_settings[ "intermission_video" ]
-                    intermission_video_type   = extra_settings[ "intermission_video_type" ]
-            else:
-                audio_videos_folder           = video_settings[ "audio_videos_folder" ]
-                rating_videos_folder          = video_settings[ "rating_videos_folder" ]
-                intermission_video_file       = extra_settings[ "intermission_video_file" ]
-                intermission_video_folder     = extra_settings[ "intermission_video_folder" ]
-                intermission_video            = extra_settings[ "intermission_video" ]
-                intermission_video_type       = extra_settings[ "intermission_video_type" ]            
+                elif _3d_settings[ "3d_override" ]:
+                    intermission_video_file   = ""
+                    intermission_video_folder = ""
+                    intermission_video        = 0
+                    intermission_video_type   = ""
             #count = index_count
             # add intermission video
-            if extra_settings[ "intermission_video" ] > 0:
+            if intermission_video > 0:
                 utils.log( "Inserting intermission Video(s): %s" % intermission_video, xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -159,14 +157,14 @@ class Main:
                 elif xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size and intermission_video == 1:
                     index_count += extra_settings[ "intermission_video" ]
             # get rating video
-            if video_settings[ "enable_ratings" ] and extra_settings[ "intermission_ratings" ] and rating_videos_folder != "":
+            if enable_ratings and extra_settings[ "intermission_ratings" ] and rating_videos_folder:
                 utils.log( "Inserting Intermission Rating Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
                 utils.log( "    p_size: %d" % p_size )
                 _get_special_items(    playlist=self.playlist,
                                           items=1 * ( rating_videos_folder != "" ),
-                                           path=rating_videos_folder
+                                           path=rating_videos_folder,
                                            mpaa=mpaa,
                                           genre="Movie Rating",
                                          writer="Movie Rating",
@@ -178,7 +176,7 @@ class Main:
                 if xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > p_size:
                     index_count += 1
             # get Dolby/DTS videos
-            if video_settings[ "enable_audio" ]  and extra_settings[ "intermission_audio" ] and audio_videos_folder:
+            if enable_audio and extra_settings[ "intermission_audio" ] and audio_videos_folder:
                 utils.log( "Inserting Intermission Audio Format Video", xbmc.LOGNOTICE )
                 utils.log( "    playlist Position: %d" % index_count )
                 p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -203,63 +201,69 @@ class Main:
     def _create_playlist( self, mpaa, audio, genre, movie, equivalent_mpaa, is_3d_movie ):
         # TODO: try to get a local thumb for special videos?
         utils.log( "Building Cinema Experience Playlist", xbmc.LOGNOTICE )
+        audio_videos_folder        = video_settings[ "audio_videos_folder" ]
+        rating_videos_folder       = video_settings[ "rating_videos_folder" ]
+        fpv_intro                  = video_settings[ "fpv_intro" ]
+        fpv_intro_type             = video_settings[ "fpv_intro_type" ]
+        fpv_intro_file             = video_settings[ "fpv_intro_file" ]
+        fpv_intro_folder           = video_settings[ "fpv_intro_folder" ]
+        fpv_outro                  = video_settings[ "fpv_outro" ]
+        fpv_outro_type             = video_settings[ "fpv_outro_type" ]
+        fpv_outro_file             = video_settings[ "fpv_outro_file" ]
+        fpv_outro_folder           = video_settings[ "fpv_outro_folder" ]
+        countdown_video            = video_settings[ "countdown_video" ]
+        countdown_video_type       = video_settings[ "countdown_video_type" ]
+        countdown_video_file       = video_settings[ "countdown_video_file" ]
+        countdown_video_folder     = video_settings[ "countdown_video_folder" ]
+        enable_audio               = video_settings[ "enable_audio" ]
+        enable_ratings             = video_settings[ "enable_ratings" ]
         # setup for 3d videos
         if is_3d_movie and _3d_settings[ "enable_3d_intro" ]:
             if _3d_settings[ "3d_enable_audio" ] and video_settings[ "enable_audio" ]:
                 audio_videos_folder     = _3d_settings[ "3d_audio_videos_folder" ]
             elif not ( _3d_settings[ "3d_override" ] ) and video_settings[ "enable_audio" ]:
                 audio_videos_folder     = video_settings[ "audio_videos_folder" ]
+            else:
+                audio_videos_folder     = ""
             if _3d_settings[ "3d_enable_ratings" ] and video_settings[ "enable_ratings" ]:
                 rating_videos_folder   = _3d_settings[ "3d_rating_videos_folder" ]
             elif not ( _3d_settings[ "3d_override" ] ) and video_settings[ "enable_ratings" ]:
                 rating_videos_folder   = video_settings[ "rating_videos_folder" ]
+            else:
+                enable_ratings         = False
+                rating_videos_folder   = ""
             if _3d_settings[ "3d_fpv_intro" ]:
                 fpv_intro_file         = _3d_settings[ "3d_fpv_intro_file" ]
                 fpv_intro_folder       = _3d_settings[ "3d_fpv_intro_folder" ]
                 fpv_intro              = _3d_settings[ "3d_fpv_intro" ]
                 fpv_intro_type         = _3d_settings[ "3d_fpv_intro_type" ]
-            elif not ( _3d_settings[ "3d_override" ] ):
-                fpv_intro_file         = video_settings[ "fpv_intro_file" ]
-                fpv_intro_folder       = video_settings[ "fpv_intro_folder" ]
-                fpv_intro              = video_settings[ "fpv_intro" ]
-                fpv_intro_type         = video_settings[ "fpv_intro_type" ]
+            elif  _3d_settings[ "3d_override" ]:
+                fpv_intro_file         = ""
+                fpv_intro_folder       = ""
+                fpv_intro              = 0
+                fpv_intro_type         = ""
             if _3d_settings[ "3d_outro" ]:
                 fpv_outro_file         = _3d_settings[ "3d_fpv_outro_file" ]
                 fpv_outro_folder       = _3d_settings[ "3d_fpv_outro_folder" ]
                 fpv_outro              = _3d_settings[ "3d_fpv_outro" ]
                 fpv_outro_type         = _3d_settings[ "3d_fpv_outro_type" ]
-            elif not ( _3d_settings[ "3d_override" ] ):
-                fpv_outro_file         = video_settings[ "fpv_outro_file" ]
-                fpv_outro_folder       = video_settings[ "fpv_outro_folder" ]
-                fpv_outro              = video_settings[ "fpv_outro" ]
-                fpv_outro_type         = video_settings[ "fpv_outro_type" ]
+            elif _3d_settings[ "3d_override" ]:
+                fpv_outro_file         = ""
+                fpv_outro_folder       = ""
+                fpv_outro              = 0
+                fpv_outro_type         = ""
             if _3d_settings[ "3d_countdown_video" ]:
                 countdown_video        = _3d_settings[ "3d_countdown_video" ]
                 countdown_video_type   = _3d_settings[ "3d_countdown_video_type" ]
                 countdown_video_file   = _3d_settings[ "3d_countdown_video_file" ]
                 countdown_video_folder = _3d_settings[ "3d_countdown_video_folder" ]
-            elif not ( _3d_settings[ "3d_override" ] ):
-                countdown_video        = video_settings[ "countdown_video" ]
-                countdown_video_type   = video_settings[ "countdown_video_type" ]
-                countdown_video_file   = video_settings[ "countdown_video_file" ]
-                countdown_video_folder = video_settings[ "countdown_video_folder" ]
-        else:
-            audio_videos_folder        = video_settings[ "audio_videos_folder" ]
-            rating_videos_folder       = video_settings[ "rating_videos_folder" ]
-            fpv_intro                  = video_settings[ "fpv_intro" ]
-            fpv_intro_type             = video_settings[ "fpv_intro_type" ]
-            fpv_intro_file             = video_settings[ "fpv_intro_file" ]
-            fpv_intro_folder           = video_settings[ "fpv_intro_folder" ]
-            fpv_outro                  = video_settings[ "fpv_outro" ]
-            fpv_outro_type             = video_settings[ "fpv_outro_type" ]
-            fpv_outro_file             = video_settings[ "fpv_outro_file" ]
-            fpv_outro_folder           = video_settings[ "fpv_outro_folder" ]
-            countdown_video            = video_settings[ "countdown_video" ]
-            countdown_video_type       = video_settings[ "countdown_video_type" ]
-            countdown_video_file       = video_settings[ "countdown_video_file" ]
-            countdown_video_folder     = video_settings[ "countdown_video_folder" ]
+            elif _3d_settings[ "3d_override" ]:
+                countdown_video        = ""
+                countdown_video_type   = ""
+                countdown_video_file   = 0
+                countdown_video_folder = ""
         # get Dolby/DTS videos
-        if video_settings[ "enable_audio" ] and audio_videos_folder:
+        if enable_audio and audio_videos_folder:
             utils.log( "Adding Audio Format Video", xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
@@ -273,7 +277,7 @@ class Main:
                 # Insert Audio Format Label into Trigger List
                 self.trigger_list.insert( 0, "Audio Format" )
         # get rating video
-        if video_settings[ "enable_ratings" ]:
+        if enable_ratings:
             utils.log( "Adding Ratings Video", xbmc.LOGNOTICE )
             utils.log( "    Path: %s" % rating_videos_folder )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
@@ -288,7 +292,7 @@ class Main:
                 # Insert Rating Label into Trigger List
                 self.trigger_list.insert( 0, "MPAA Rating" )
         # get feature presentation intro videos
-        if video_settings[ "fpv_intro" ] > 0:
+        if fpv_intro > 0:
             utils.log( "Adding Feature Presentation Intro Videos: %s Videos" % fpv_intro, xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
@@ -302,7 +306,7 @@ class Main:
                 # Insert Feature Presentation Label into Trigger List
                 self.trigger_list.insert( 0, "Feature Presentation Intro" )
         # Add Countdown video
-        if video_settings[ "countdown_video" ] > 0:
+        if countdown_video > 0:
             utils.log( "Adding Countdown Videos: %s Video(s)" % countdown_video, xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
@@ -452,7 +456,7 @@ class Main:
                 # Insert Trivia Outro Label into Trigger List
                 self.trigger_list.insert( 0, "Trivia Outro" )
         # get feature presentation outro videos
-        if video_settings[ "fpv_outro" ] > 0:
+        if fpv_outro > 0:
             utils.log( "Adding Feature Presentation Outro Videos: %s Videos" % fpv_outro, xbmc.LOGNOTICE )
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
