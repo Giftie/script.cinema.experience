@@ -283,7 +283,8 @@ class Main:
             p_size = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size()
             _get_special_items(    playlist=self.playlist,
                                       items=1 * ( rating_videos_folder != "" ),
-                                       path=rating_videos_folder + mpaa + ".avi",
+                                       path=rating_videos_folder,
+                                       mpaa=mpaa,
                                       genre="Movie Rating",
                                      writer="Movie Rating",
                                       index=0
