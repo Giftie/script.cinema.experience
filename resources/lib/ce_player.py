@@ -248,7 +248,6 @@ class Script():
                     utils.log( "Failed to Load mq_ce_play module", xbmc.LOGNOTICE )
                 except:
                     traceback.print_exc()
-    #            pDialog.close()
                 self.trivia_intro()        
                 if playlist.size() > 0:
                     self._wait_until_end()
@@ -270,7 +269,7 @@ class Script():
             _rebuild_playlist( plist )
             import xbmcscript_player as script
             script.Main()
-            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
+            #xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
             #xbmc.sleep(500) # wait .5 seconds
             #xbmc.Player().play( playlist )
         elif trivia_settings[ "trivia_folder" ] and trivia_settings[ "trivia_mode" ] == 1:  # Start Slide Show
@@ -284,7 +283,7 @@ class Script():
             slide_playlist = _fetch_slides( equivalent_mpaa )
             self.trivia_intro()
             if playlist.size() > 0:
-                Launch_automation().launch_automation( triggers[1] ) # Trivia Intro
+                Launch_automation().launch_automation( "Trivia Intro" ) # Trivia Intro
                 xbmc.sleep( 500 ) # wait .5 seconds 
                 self._wait_until_end()
             #xbmc.sleep(500) # wait .5 seconds 
@@ -295,14 +294,13 @@ class Script():
             __builtin__.movie_genre = genre
             from xbmcscript_trivia import Trivia
             utils.log( "Starting Trivia script", xbmc.LOGNOTICE )
-            Launch_automation().launch_automation( triggers[2] ) # Trivia Start
+            Launch_automation().launch_automation( "Trivia" ) # Trivia Start
             ui = Trivia( "script-CExperience-trivia.xml", __addon__.getAddonInfo('path'), "Default", "720p" )
             ui.doModal()
             del ui
             # we need to activate the video window
             #xbmc.sleep(5) # wait .005 seconds
-            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
-            #xbmc.Player().play( playlist )
+            #xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
         elif trivia_settings[ "trivia_mode" ] == 0: # No Trivia
             # no trivia slide show so play the video
             self.start_downloader( mpaa, genre, equivalent_mpaa )
@@ -310,6 +308,6 @@ class Script():
             # play the video playlist
             import xbmcscript_player as script
             script.Main()
-            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
-            xbmc.sleep( 500 ) # wait .5 seconds
-            #xbmc.Player().play( playlist )
+            #xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
+            #xbmc.sleep( 500 ) # wait .5 seconds
+            
