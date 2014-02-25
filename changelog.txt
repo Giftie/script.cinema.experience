@@ -1,6 +1,9 @@
 3.0.11/4.0.11
-- add       - separate slide testing, add more logging
 - fix       - Allow Trivia Limit slides to function properly.
+- change    - allow any video file extension for Movie Ratings(previously only AVI extensions were allowed)
+- fix       - properly disable 2D videos when 3D version and setting is enabled
+- change    - slight code reduction
+- fix       - fix extension testing.  Fixes playlist not properly handled and some other issues
 
 3.0.10/4.0.10
 - fix       - correct Import.
