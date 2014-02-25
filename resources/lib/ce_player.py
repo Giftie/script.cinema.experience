@@ -57,6 +57,8 @@ class Script():
         early_exit = False
         movie_next = False
         prev_trigger = None
+        self.video_window = xbmcgui.WindowXML( "script_CExperience-video.xml", __addon__.getAddonInfo('path'), "Default", "720p" )
+        self.video_window.show()
         if library_view != "oldway":
             xbmc.executebuiltin( "ActivateWindow(videolibrary,%s,return)" % library_view )
             # wait until Video Library shows
@@ -102,6 +104,7 @@ class Script():
             count = -1
             stop_check = 0
             paused = False
+            self.video_window.close()
             # wait until fullscreen video is shown
             while not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ):
                 pass
