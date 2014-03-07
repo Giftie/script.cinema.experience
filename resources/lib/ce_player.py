@@ -301,7 +301,7 @@ class Script():
             del ui
             # we need to activate the video window
             #xbmc.sleep(5) # wait .005 seconds
-            #xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
+            xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
         elif trivia_settings[ "trivia_mode" ] == 0: # No Trivia
             # no trivia slide show so play the video
             self.start_downloader( mpaa, genre, equivalent_mpaa )
