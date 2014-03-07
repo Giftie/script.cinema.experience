@@ -212,16 +212,15 @@ class Script():
             
     def _wait_until_end( self ): # wait until the end of the playlist(for Trivia Intro)
         utils.log( "Waiting Until End Of Video", xbmc.LOGNOTICE )
+        xbmc.sleep( 5000 )
         try:
             self.psize = int( xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).size() ) - 1
             utils.log( "Playlist Size: %s" % ( self.psize + 1 ) )
             while xbmc.PlayList( xbmc.PLAYLIST_VIDEO ).getposition() < self.psize:
                 pass
             utils.log( "Video TotalTime: %s" % self.player.getTotalTime() )
-            while self.player.getTime() < ( self.player.getTotalTime() - 1 ):
+            while xbmcgui.Window( 10025 ).getProperty( "CinemaExperiencePlaying" ) != "False":
                 pass
-            utils.log( "Video getTime: %s"  % self.player.getTime() )
-            #xbmc.sleep(400)
         except:
             traceback.print_exc()
             utils.log( "Video either stopped or skipped, Continuing on..." )
@@ -287,7 +286,6 @@ class Script():
             self.trivia_intro()
             if playlist.size() > 0:
                 Launch_automation().launch_automation( "Trivia Intro" ) # Trivia Intro
-                xbmc.sleep( 500 ) # wait .5 seconds 
                 self._wait_until_end()
             #xbmc.sleep(500) # wait .5 seconds 
             xbmc.Player().stop()
