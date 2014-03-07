@@ -2,16 +2,13 @@
     <animation effect="fade" time="250">WindowOpen</animation>
     <animation effect="fade" time="250">WindowClose</animation>
     <controls>
-        <control type="group">
+        <control type="image">  <!-- Main window -->
             <posx>0</posx>
             <posy>0</posy>
-            <control type="image">  <!-- Main window -->
-                <posx>0</posx>
-                <posy>0</posy>
-                <width>1280</width>
-                <height>720</height>
-                <texture>speakergrill.png</texture>
-            </control>
+            <width>1280</width>
+            <height>720</height>
+            <texture>ce_black.png</texture>
+            <visible>!Player.HasVideo</visible>
         </control>
         <control type="videowindow" id="32000">
             <description>Simulated full screen video</description>
@@ -22,3 +19,4 @@
             <visible>true</visible>
         </control>
     </controls>
+ </window>
