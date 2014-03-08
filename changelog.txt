@@ -1,4 +1,11 @@
-3.0.11/4.0.11
+3.0.12/4.0.12
+- change    - smooth out transitions from Video Library -> Trivia -> Trivia Outro
+- change    - improve function that keeps the script running when the last video is played.
+- change    - remove unneeded Full Screen Video Activation, hopefull not needed on all skins.
+- fix       - allow MPAA ratings to not begin with 'Rated' Fixes some external library data fetching
+- change    - move home automation Script End triggering
+
+ 3.0.11/4.0.11
 - fix       - Allow Trivia Limit slides to function properly.
 - change    - allow any video file extension for Movie Ratings(previously only AVI extensions were allowed)
 - fix       - properly disable 2D videos when 3D version and setting is enabled
