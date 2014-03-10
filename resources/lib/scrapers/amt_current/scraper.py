@@ -12,8 +12,9 @@ from datetime import datetime
 import xbmc, xbmcvfs
 
 #__useragent__ = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
-__useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
+#__useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
 #__useragent__ = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.6"
+__useragent__ = "iTunes"
 
 class _urlopener( urllib.FancyURLopener ):
     version = __useragent__
@@ -96,7 +97,7 @@ class _Parser:
             moviedata.sort()
             root[:] = [item[-1] for item in moviedata]
 
-            agent = '|User-Agent=%s' % urllib.quote_plus( __useragent__ )
+            agent = '?|User-Agent=%s' % urllib.quote_plus( __useragent__ )
 
             for movieinfo in root.findall('movieinfo'):
                 trailer = movieinfo.findtext( 'preview/*' )

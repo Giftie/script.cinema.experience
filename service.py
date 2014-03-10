@@ -86,6 +86,7 @@ class CE_Player( xbmc.Player ):
         xbmc.sleep( 500 )
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Started' )
+            xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "True" )
     
     def onPlayBackEnded( self ):
         # Will be called when xbmc stops playing a file
@@ -96,6 +97,7 @@ class CE_Player( xbmc.Player ):
         # Will be called when user stops xbmc playing a file
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Stopped" )
+            xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "False" )
     
     def onPlayBackPaused( self ):
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
