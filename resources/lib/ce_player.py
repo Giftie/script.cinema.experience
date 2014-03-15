@@ -112,12 +112,11 @@ class Script():
             self.player.play( playlist )
             count = -1
             stop_check = 0
-            paused = False
-            self.video_window.close()
+            paused = False            
             # wait until fullscreen video is shown
             while not xbmc.getCondVisibility( "Window.IsActive(fullscreenvideo)" ):
                 pass
-            while not playlist.getposition() == ( playlist.size() - 1 ):
+            while ( not playlist.getposition() == ( playlist.size() - 1 ) or xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True" ):
                 if playlist.getposition() > count:
                     try:
                         utils.log( "Item From Trigger List: %s" % trigger_list[ playlist.getposition() ], xbmc.LOGNOTICE )
@@ -339,7 +338,8 @@ class Script():
             ui.doModal()
             del ui
             # we need to activate the video window
-            #xbmc.sleep(5) # wait .005 seconds
+            xbmc.sleep(1000)
+            del self.video_window
             xbmc.executebuiltin( "XBMC.ActivateWindow(fullscreenvideo)" )
         elif trivia_settings[ "trivia_mode" ] == 0: # No Trivia
             # no trivia slide show so play the video

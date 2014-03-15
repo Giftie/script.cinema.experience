@@ -69,12 +69,15 @@ class CE_Monitor( xbmc.Monitor ):
                             Launch_automation().launch_automation( trigger = "Pause", prev_trigger = "Playing", mode = "normal" )
                     elif method == "Player.OnPlay" and self.previous_method == "Player.OnPause":
                         utils.log( 'Playback Resumed' )
+                        xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "True" )
                         if ha_settings[ "ha_enable" ]:
                             Launch_automation().launch_automation( trigger = "Resume", prev_trigger = "Paused", mode = "normal" )
                     elif method == "Player.OnStop":
                         utils.log( "Playback Stopped" )
+                        xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "False" )   
                     elif method == "Player.OnPlay":
                         utils.log( 'Playback Started' )
+                        xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "True" )
                     self.previous_method = method
                     
 class CE_Player( xbmc.Player ):
@@ -86,18 +89,19 @@ class CE_Player( xbmc.Player ):
         xbmc.sleep( 500 )
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( 'Playback Started' )
-            xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "True" )
+            #xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "True" )
     
     def onPlayBackEnded( self ):
         # Will be called when xbmc stops playing a file
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Ended" )
+            #xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "False" )
     
     def onPlayBackStopped( self ):
         # Will be called when user stops xbmc playing a file
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
             utils.log( "Playback Stopped" )
-            xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "False" )
+            #xbmcgui.Window( 10025 ).setProperty( "CinemaExperiencePlaying", "False" )
     
     def onPlayBackPaused( self ):
         if xbmcgui.Window( 10025 ).getProperty( "CinemaExperienceRunning" ) == "True":
