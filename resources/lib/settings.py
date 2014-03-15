@@ -47,15 +47,13 @@ class settings():
                                           }
                                   
         self.trailer_settings           = {       "trailer_count": ( 0, 1, 2, 3, 4, 5, 10, )[int( float( __addon__.getSetting( "trailer_count" ) ) ) ],
-                                                "trailer_scraper": ( "amt_database", "amt_current", "local", "xbmc_library", )[int( float( __addon__.getSetting( "trailer_scraper" ) ) ) ],
+                                                "trailer_scraper": ( "amt_current", "local", "xbmc_library", )[int( float( __addon__.getSetting( "trailer_scraper" ) ) ) ],
                                               "trailer_play_mode": int( float( __addon__.getSetting( "trailer_play_mode" ) ) ),
                                         "trailer_download_folder": xbmc.translatePath( __addon__.getSetting( "trailer_download_folder" ) ).decode('utf-8'),
                                                  "trailer_folder": xbmc.translatePath( __addon__.getSetting( "trailer_folder" ) ).decode('utf-8'),
-                                            "trailer_amt_db_file": xbmc.translatePath( __addon__.getSetting( "trailer_amt_db_file" ) ).decode('utf-8'),
                                             "trailer_newest_only": eval( __addon__.getSetting( "trailer_newest_only" ) ),
                                                 "trailer_quality": ( "Standard", "480p", "720p", "1080p" )[ int( float( __addon__.getSetting( "trailer_quality" ) ) ) ],
                                             "trailer_quality_url": ( "", "_480p", "_720p", "_720p", )[ int( float( __addon__.getSetting( "trailer_quality" ) ) ) ],
-                                                "trailer_hd_only": eval( __addon__.getSetting( "trailer_hd_only" ) ),
                                              "trailer_limit_mpaa": eval( __addon__.getSetting( "trailer_limit_mpaa" ) ),
                                             "trailer_limit_genre": eval( __addon__.getSetting( "trailer_limit_genre" ) ),
                                                  "trailer_rating": __addon__.getSetting( "trailer_rating" ),
