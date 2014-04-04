@@ -47,54 +47,56 @@ def _get_slides( paths, movie_mpaa ):
     for path in paths:
         # get the directory listing
         folders, file_entries = xbmcvfs.listdir( path.decode( "utf-8" ) )
-        # sort in case
-        file_entries.sort()
-        # get a slides.xml if it exists
-        slidesxml_exists, mpaa, question_format, clue_format, answer_format, still_format = _get_slides_xml( path )
-        if slidesxml_exists:
-            # check if rating is ok
-            utils.log( "Movie MPAA: %s" % movie_mpaa )
-            utils.log( "Slide MPAA: %s" % mpaa )
-            if ( slide_settings[ "trivia_limit_query" ] and mpaa_ratings.get( movie_mpaa, -1 ) < mpaa_ratings.get( mpaa, -1 ) ):
-                utils.log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE )
-                continue
-        # initialize these to True so we add a new list item to start
-        question = clue = answer = still = True
-        # enumerate through our file_entries list and combine question, clue, answer
-        for entry in file_entries:
-            # slides.xml was included, so check it
-            file_entry = os.path.join( path.decode( "utf-8" ), entry.decode( "utf-8" ) )
-            if ( slidesxml_exists ):
-                # question
-                if ( question_format and re.search( question_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
-                    if ( question ):
-                        tmp_slides += [ [ "", "", "" ] ]
-                        clue = answer = still = False
-                    tmp_slides[ -1 ][ 0 ] = "__question__" + file_entry
-                    # clue
-                elif ( clue_format and re.search( clue_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
-                    if ( clue ):
-                        tmp_slides += [ [ "", "", "" ] ]
-                        question = answer = still = False
-                    tmp_slides[ -1 ][ 1 ] = "__clue__" + file_entry
-                # answer
-                elif ( answer_format and re.search( answer_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
-                    if ( answer ):
-                        tmp_slides += [ [ "", "", "" ] ]
-                        question = clue = still = False
-                    tmp_slides[ -1 ][ 2 ] = "__answer__" + file_entry
-                    # still
-                elif ( still_format and re.search( still_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
-                    if ( still ):
-                        tmp_slides += [ [ "", "", "" ] ]
-                        clue = answer = question = False
-                    tmp_slides[ -1 ][ 0 ] = "__still__" + file_entry
-            # add the file as a question TODO: maybe check for valid picture format?
-            elif ( file_entry and ( os.path.splitext( file_entry )[ 1 ].lower() ).replace( ".", "" ) in xbmc.getSupportedMedia( "picture" ) ):
-                tmp_slides += [ [ "", "", "__still__" + file_entry ] ] 
-    # if there are folders call again (we want recursive)
-    if ( folders ):
-        tmp_slides.extend( _get_slides( absolute_folder_paths( folders, path ), movie_mpaa ) )
+        # only check if there are files present.
+        if file_entries:
+            # sort in case
+            file_entries.sort()
+            # get a slides.xml if it exists
+            slidesxml_exists, mpaa, question_format, clue_format, answer_format, still_format = _get_slides_xml( path )
+            if slidesxml_exists:
+                # check if rating is ok
+                utils.log( "Movie MPAA: %s" % movie_mpaa )
+                utils.log( "Slide MPAA: %s" % mpaa )
+                if ( slide_settings[ "trivia_limit_query" ] and mpaa_ratings.get( movie_mpaa, -1 ) < mpaa_ratings.get( mpaa, -1 ) ):
+                    utils.log( "Slide Rating above movie rating - skipping whole folder", xbmc.LOGNOTICE )
+                    continue
+            # initialize these to True so we add a new list item to start
+            question = clue = answer = still = True
+            # enumerate through our file_entries list and combine question, clue, answer
+            for entry in file_entries:
+                # slides.xml was included, so check it
+                file_entry = os.path.join( path.decode( "utf-8" ), entry.decode( "utf-8" ) )
+                if ( slidesxml_exists ):
+                    # question
+                    if ( question_format and re.search( question_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                        if ( question ):
+                            tmp_slides += [ [ "", "", "" ] ]
+                            clue = answer = still = False
+                        tmp_slides[ -1 ][ 0 ] = "__question__" + file_entry
+                        # clue
+                    elif ( clue_format and re.search( clue_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                        if ( clue ):
+                            tmp_slides += [ [ "", "", "" ] ]
+                            question = answer = still = False
+                        tmp_slides[ -1 ][ 1 ] = "__clue__" + file_entry
+                    # answer
+                    elif ( answer_format and re.search( answer_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                        if ( answer ):
+                            tmp_slides += [ [ "", "", "" ] ]
+                            question = clue = still = False
+                        tmp_slides[ -1 ][ 2 ] = "__answer__" + file_entry
+                        # still
+                    elif ( still_format and re.search( still_format, os.path.basename( file_entry ), re.IGNORECASE ) ):
+                        if ( still ):
+                            tmp_slides += [ [ "", "", "" ] ]
+                            clue = answer = question = False
+                        tmp_slides[ -1 ][ 0 ] = "__still__" + file_entry
+                # add the file as a question TODO: maybe check for valid picture format?
+                elif ( file_entry and ( os.path.splitext( file_entry )[ 1 ].lower() ).replace( ".", "" ) in xbmc.getSupportedMedia( "picture" ) ):
+                    tmp_slides += [ [ "", "", "__still__" + file_entry ] ] 
+            # if there are folders call again (we want recursive)
+        if ( folders ):
+            tmp_slides.extend( _get_slides( absolute_folder_paths( folders, path ), movie_mpaa ) )
     return tmp_slides
 
 def _get_slides_xml( path ):
