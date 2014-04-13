@@ -1,3 +1,8 @@
+3.0.13/4.0.13
+- add       - continue slideshow if last slide is not a slide or answer
+- fix       - correct indentation in slides.py module, fixes trivia folders deeper than two levels
+- change    - only attempt to process slide folder if there are files found
+
 3.0.12/4.0.12
 - change    - smooth out transitions from Video Library -> Trivia -> Trivia Outro
 - change    - improve function that keeps the script running when the last video is played.
