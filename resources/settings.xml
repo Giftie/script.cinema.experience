@@ -82,6 +82,7 @@
         <setting id="trailer_unwatched_movie_only" type="bool" visible="eq(-18,3)" label="Only use trailers from unwatched movies" default="true" />
         <setting id="trailer_unwatched_only" type="bool" visible="!eq(-19,0)" label="32190" default="false" />
         <setting type="action" label="32191" visible="!eq(-20,0)" enable="eq(-1,true)" action="RunScript($CWD/addon.py,ClearWatchedTrailers)" />
+        <setting id="trailer_not_movie" label="32189" visible="!eq(-21,0) + eq(-14,3)" enable="eq(-14,3)" default="true" />
     </category>
 
 <!-- Feature Presentations -->

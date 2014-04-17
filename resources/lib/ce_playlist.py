@@ -405,6 +405,7 @@ def _get_queued_video_info( feature = 0 ):
         movie_title = movie_detail['title']
         path = movie_detail['file']
         mpaa = movie_detail['mpaa']
+        movie_id = plist[feature]['id']
         genre = utils.list_to_string( movie_detail['genre'] )
         try:
             audio = movie_detail['streamdetails']['audio'][0]['codec']
@@ -414,11 +415,13 @@ def _get_queued_video_info( feature = 0 ):
     except:
         traceback.print_exc()
         movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa = ""
+        movie_id = 0
     is_3d_movie = test_for_3d( path )
     # spew queued video info to log
     utils.log( "Queued Movie Information" )
     utils.log( "%s" % log_sep )
     utils.log( "Title: %s" % movie_title )
+    utils.log( "Database ID: %s" % movie_id
     utils.log( "Path: %s" % path )
     utils.log( "Genre: %s" % genre )
     utils.log( "Rating: %s" % short_mpaa )
@@ -431,7 +434,7 @@ def _get_queued_video_info( feature = 0 ):
             utils.log( "Folder: %s" % ( video_settings[ "audio_videos_folder" ] + audio_formats.get( audio, "Other" ) + video_settings[ "audio_videos_folder" ][ -1 ], ) )
     utils.log( "%s" % log_sep )
     # return results
-    return short_mpaa, audio, genre, path, equivalent_mpaa, is_3d_movie
+    return short_mpaa, audio, genre, movie_id, equivalent_mpaa, is_3d_movie
 
 def test_for_3d( path ):
     is_3d_movie = re.findall( _3d_settings[ "3d_movie_tags" ], path )
