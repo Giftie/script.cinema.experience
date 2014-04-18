@@ -193,7 +193,8 @@ class settings():
                                                           "dtshr": "DTS-HR",
                                                             "ac3": "Dolby",
                                                        "a_truehd": "Dolby TrueHD",
-                                                         "truehd": "Dolby TrueHD"
+                                                         "truehd": "Dolby TrueHD",
+                                                         "a_eac3": "Dolby Digital Plus"
                                        }
         self.triggers               = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
                                     "Coming Attractions Outro", "Movie Theater Intro", "Countdown", "3D Movie Trailer", "Feature Presentation Intro", "Audio Format", 
