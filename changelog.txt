@@ -2,6 +2,8 @@
 - add       - continue slideshow if last slide is not a slide or answer
 - fix       - correct indentation in slides.py module, fixes trivia folders deeper than two levels
 - change    - only attempt to process slide folder if there are files found
+- add       - add handling of Dolby Digital Plus audio format
+- add       - allow trailer for selected movie to not play
 
 3.0.12/4.0.12
 - change    - smooth out transitions from Video Library -> Trivia -> Trivia Outro
