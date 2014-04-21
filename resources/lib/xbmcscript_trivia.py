@@ -172,6 +172,7 @@ class Trivia( xbmcgui.WindowXML ):
     def _exit_trivia( self ):
         if self.slide_type not in ( "answer", "still" ) and not self.image_count > len( self.slide_playlist ) -1:
             self.image_count += 1
+            self._cancel_timers()
             self._show_slide( exiting=True )
         import xbmcscript_player as script
         script.Main()
