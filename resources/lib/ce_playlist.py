@@ -421,7 +421,7 @@ def _get_queued_video_info( feature = 0 ):
     utils.log( "Queued Movie Information" )
     utils.log( "%s" % log_sep )
     utils.log( "Title: %s" % movie_title )
-    utils.log( "Database ID: %s" % movie_id
+    utils.log( "Database ID: %s" % movie_id )
     utils.log( "Path: %s" % path )
     utils.log( "Genre: %s" % genre )
     utils.log( "Rating: %s" % short_mpaa )
