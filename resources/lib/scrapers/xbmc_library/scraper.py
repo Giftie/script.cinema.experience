@@ -87,9 +87,11 @@ class Main:
                     # add trailer to our final list
                     if trailer[ 'trailer' ]:
                         if trailer['trailer'].startswith( 'plugin://' ) and self.settings['trailer_skip_youtube']:
+                            utils.log( "Trailer contains plugin://.  Skipping", xbmc.LOGNOTICE )
                             continue
                         else:
                             if trailer[ "movieid" ] == self.movie and self.settings[ 'trailer_not_movie' ]:
+                                utils.log( "Trailer matches selected movie.  Skipping", xbmc.LOGNOTICE )
                                 continue
                             else:
                                 trailer_info = ( xbmc.getCacheThumbName( trailer['trailer'] ), # id

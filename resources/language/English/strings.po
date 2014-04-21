@@ -179,7 +179,11 @@ msgctxt "#32191"
 msgid "   - Reset Trailers watched status"
 msgstr ""
 
-#empty strings from id 32192 to 32194
+msgctxt "#32192"
+msgid "    - Only use trailers from unwatched movies"
+msgstr ""
+
+#empty strings from id 32193 to 32194
 
 msgctxt "#32195"
 msgid "- Coming Attractions Intro"
