@@ -59,7 +59,8 @@ class settings():
                                                  "trailer_rating": __addon__.getSetting( "trailer_rating" ),
                                    "trailer_unwatched_movie_only": eval( __addon__.getSetting( "trailer_unwatched_movie_only" ) ),
                                          "trailer_unwatched_only": eval( __addon__.getSetting( "trailer_unwatched_only" ) ),
-                                           "trailer_skip_youtube": eval( __addon__.getSetting( "trailer_skip_youtube" ) )
+                                           "trailer_skip_youtube": eval( __addon__.getSetting( "trailer_skip_youtube" ) ),
+                                              "trailer_not_movie": eval( __addon__.getSetting( "trailer_not_movie" ) )
                                           }
 
         self.video_settings             = {           "mte_intro": ( 0, 1, 1, 2, 3, 4, 5, )[ int( float( __addon__.getSetting( "mte_intro" ) ) ) ],
@@ -192,7 +193,8 @@ class settings():
                                                           "dtshr": "DTS-HR",
                                                             "ac3": "Dolby",
                                                        "a_truehd": "Dolby TrueHD",
-                                                         "truehd": "Dolby TrueHD"
+                                                         "truehd": "Dolby TrueHD",
+                                                         "a_eac3": "Dolby Digital Plus"
                                        }
                                        
         self.triggers               = ( "Script Start", "Trivia Intro", "Trivia", "Trivia Outro", "Coming Attractions Intro", "Movie Trailer", 
