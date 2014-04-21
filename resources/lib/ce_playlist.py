@@ -418,7 +418,9 @@ def _get_queued_video_info( feature = 0 ):
         equivalent_mpaa, short_mpaa = get_equivalent_rating( mpaa )
     except:
         traceback.print_exc()
-        movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa, movie_id = ""
+        movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa = short_mpaa = ""
+        movie_id = 0
+    is_3d_movie = test_for_3d( path )
         movie_title = path = mpaa = audio = genre = movie = equivalent_mpaa, short_mpaa, stereomode = ""
     if not stereomode in ( "mono", "" ):
         is_3d_movie = True
