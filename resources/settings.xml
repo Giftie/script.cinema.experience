@@ -79,10 +79,10 @@
         <setting id="trailer_limit_mpaa" type="bool" visible="!eq(-15,0)" label="32140" default="true" />
         <setting id="trailer_limit_genre" type="bool" visible="!eq(-16,0)" label="32141" default="true" />
         <setting id="trailer_rating" type="labelenum"  visible="!eq(-17,0) + !eq(-8,2)" enable="eq(-2,false)" values="G|PG|PG-13|R|NC-17|--" label="32150" default="--" />
-        <setting id="trailer_unwatched_movie_only" type="bool" visible="eq(-18,3)" label="Only use trailers from unwatched movies" default="true" />
-        <setting id="trailer_unwatched_only" type="bool" visible="!eq(-19,0)" label="32190" default="false" />
-        <setting type="action" label="32191" visible="!eq(-20,0)" enable="eq(-1,true)" action="RunScript($CWD/addon.py,ClearWatchedTrailers)" />
-        <setting id="trailer_not_movie" label="32189" visible="!eq(-21,0) + eq(-14,3)" enable="eq(-14,3)" default="true" />
+        <setting id="trailer_unwatched_movie_only" type="bool" visible="eq(-18,0) + eq(-11,2)" label="Only use trailers from unwatched movies" default="true" />
+        <setting id="trailer_not_movie" label="32189" visible="!eq(-19,0) + eq(-12,2)" enable="eq(-12,2)" default="true" />
+        <setting id="trailer_unwatched_only" type="bool" visible="!eq(-20,0)" label="32190" default="false" />
+        <setting type="action" label="32191" visible="!eq(-21,0)" enable="eq(-1,true)" action="RunScript($CWD/addon.py,ClearWatchedTrailers)" />
     </category>
 
 <!-- Feature Presentations -->
