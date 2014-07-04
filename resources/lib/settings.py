@@ -51,7 +51,6 @@ class settings():
                                               "trailer_play_mode": int( float( __addon__.getSetting( "trailer_play_mode" ) ) ),
                                         "trailer_download_folder": xbmc.translatePath( __addon__.getSetting( "trailer_download_folder" ) ).decode('utf-8'),
                                                  "trailer_folder": xbmc.translatePath( __addon__.getSetting( "trailer_folder" ) ).decode('utf-8'),
-                                            "trailer_newest_only": eval( __addon__.getSetting( "trailer_newest_only" ) ),
                                                 "trailer_quality": ( "Standard", "480p", "720p", "1080p" )[ int( float( __addon__.getSetting( "trailer_quality" ) ) ) ],
                                             "trailer_quality_url": ( "", "_480p", "_720p", "_720p", )[ int( float( __addon__.getSetting( "trailer_quality" ) ) ) ],
                                              "trailer_limit_mpaa": eval( __addon__.getSetting( "trailer_limit_mpaa" ) ),
