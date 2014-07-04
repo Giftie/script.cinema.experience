@@ -23,7 +23,7 @@ msgstr ""
 #empty string with id 32001
 
 msgctxt "#32002"
-msgid "nuka1195, Giftie, ackbarr"
+msgid "Giftie"
 msgstr ""
 
 #Movie Trailers settings
